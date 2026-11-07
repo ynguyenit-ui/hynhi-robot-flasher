@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hynhi Robot | Firmware & Theme</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+<body>
+<aside>
+  <a class="brand" href="#gioi-thieu"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>Trung tâm cấu hình</small></span></a>
+  <nav aria-label="Danh mục"><a href="#gioi-thieu">01 · Giới thiệu</a><a href="#so-do">02 · Sơ đồ chân</a><a href="#firmware">03 · Nạp firmware</a><a href="#theme">04 · Màn chờ & Emoji</a></nav>
+  <small>ESP32-S3 · N16R8</small>
+</aside>
+<main>
+<section id="gioi-thieu" class="hero">
+  <div><p class="eyebrow">HYNHI DESK EMOJI</p><h1>Robot để bàn của bạn</h1>
+  <p>Trò chuyện bằng giọng nói, hiển thị biểu cảm, nghe nhạc, điều khiển SmartLife và làm việc cùng máy tính qua Wi-Fi.</p>
+  <a class="button" href="#firmware">Nạp firmware Fix81</a></div>
+  <img src="images/logo.png" alt="Logo Hynhi Robot">
+</section>
+<section id="so-do">
+  <p class="eyebrow">PHẦN CỨNG</p><h2>Sơ đồ đấu nối GPIO</h2>
+  <p>Chạm một module để xem các chân nối tới ESP32-S3. Ảnh là ví dụ nhận diện module. Đối chiếu tên chân in trên bo bạn đang dùng.</p>
+  <label for="wiring-profile">Cấu hình chân</label>
+  <select id="wiring-profile"><option value="saved">Robot hiện tại · Fix81</option><option value="default">Mặc định firmware</option></select>
+  <div id="modules" class="module-list" aria-label="Chọn module"></div>
+  <div class="diagram"><div class="board"><img src="https://lafvintech.com/cdn/shop/files/LA066A3-1_800x.jpg?v=1779175185" alt="Ảnh tham khảo bo ESP32-S3"><strong>ESP32-S3 N16R8</strong></div><svg id="wires" viewBox="0 0 380 150" role="img" aria-label="Sơ đồ các dây tín hiệu"></svg><div class="board"><img id="module-photo" alt=""><strong id="module-title"></strong></div></div>
+  <p id="module-note"></p><p><a id="module-source" target="_blank" rel="noopener noreferrer">Nguồn ảnh module ↗</a></p>
+  <details><summary>Nguồn và chân tùy chọn</summary><p>Các dây trong sơ đồ là dây tín hiệu. Dùng điện áp theo đúng phiên bản module và nối GND chung. Với OLED, APDS, ToF và động cơ, cấu hình mặc định chưa gán chân. Hồ sơ Robot hiện tại lấy chân đã lưu trên Fix81.</p></details>
+</section>
+<section id="firmware">
+  <p class="eyebrow">USB · ESP32-S3</p><h2>Kết nối và nạp firmware</h2>
+  <p>Cắm cáp USB có dữ liệu. Chọn cổng robot trong Chrome hoặc Edge, sau đó chọn Install trong hộp nạp. Trình nạp tự dùng địa chỉ từ bản build và kiểm tra kết quả ghi.</p>
+  <div class="actions"><esp-web-install-button id="installer" manifest="firmware/manifest.json"><button slot="activate" class="button">Kết nối và nạp Fix81</button><span slot="unsupported">Mở trang bằng Chrome hoặc Edge trên máy tính có Web Serial.</span><span slot="not-allowed">Mở trang qua HTTPS hoặc localhost để dùng USB.</span></esp-web-install-button><a href="firmware/manifest.json">Xem gói nạp</a></div>
+  <p id="flash-status" role="status">Đang kiểm tra gói firmware…</p>
+</section>
+<section id="theme">
+  <p class="eyebrow">GIAO DIỆN</p><h2>Nạp theme cho robot</h2>
+  <div class="theme-grid">
+    <div><label for="clock-style">Màn hình chờ</label><select id="clock-style"><option value="0">Đồng hồ lật</option><option value="1" selected>Modular</option><option value="2">Robot mini</option></select><div id="clock-preview" class="screen modular"><span>THỨ BẢY</span><strong>14:37</strong><small>HYNHI ROBOT</small></div></div>
+    <div><label for="emoji-style">Bộ Emoji</label><select id="emoji-style"><option value="0">Emoji bé trai</option><option value="1" selected>Emoji bé gái · Pink Brows</option></select><div class="screen emoji"><img id="emoji-preview" src="images/girl.gif" alt="Xem trước Emoji bé gái"></div></div>
+  </div>
+  <form id="theme-form"><label for="robot-address">Địa chỉ cấu hình robot</label><input id="robot-address" value="192.168.1.8:8080" required autocomplete="off"><button type="submit" class="button">Mở robot để áp dụng theme</button></form>
+  <p id="theme-status" role="status">Robot cần chạy Fix81 và ở cùng mạng Wi-Fi. Trang cấu hình sẽ hiện nút áp dụng lựa chọn.</p>
+</section>
+<footer>Hynhi Desk Emoji · Firmware Fix81 · <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
