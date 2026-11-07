@@ -11,35 +11,38 @@ const modules=[
  {name:'ToF VL53L0X',photo:'https://thepihut.com/cdn/shop/products/adafruit-vl53l0x-time-of-flight-distance-sensor-30-to-1000mm-adafruit-ada3317-28610220818627.jpg?v=1646678165&width=1200',source:'https://thepihut.com/products/adafruit-vl53l0x-time-of-flight-distance-sensor-30-to-1000mm',pins:[],saved:[['10','SDA'],['11','SCL']],note:'Cảm biến khoảng cách và mép bàn.'},
  {name:'L298N',photo:'https://makerhub.my/assets/uploads/LN298NBF521864A.png',source:'https://makerhub.my/shop/actuator/l298n-motor-driver-module-arduino-compatible-dual-h-bridge-dual-dc-motor-control-for-arduino-robotic-car-project/',pins:[],saved:[['8','IN1'],['21','IN2'],['1','IN3'],['2','IN4']],note:'Tín hiệu điều khiển hai động cơ.'}
 ];
-const ns='http://www.w3.org/2000/svg';
-const buttons=document.querySelector('#modules');
 const profile=document.querySelector('#wiring-profile');
-let selected=0;
-function draw(module,index){
-  selected=index;
-  const pins=profile.value==='saved'?(module.saved??module.pins):module.pins;
-  document.querySelector('#module-title').textContent=module.name;
-  const photo=document.querySelector('#module-photo');
-  photo.hidden=!module.photo;
-  if(module.photo){photo.src=module.photo;photo.alt='Ảnh module '+module.name;}
-  document.querySelector('#module-note').textContent=module.note+(pins.length?'':' Chưa gán chân trong hồ sơ này.');
-  document.querySelector('#module-source').href=module.source;
-  Array.from(buttons.children).forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
-  const svg=document.querySelector('#wires');svg.replaceChildren();
-  pins.forEach(([gpio,signal],i)=>{
-    const y=24+i*31;
-    const wire=document.createElementNS(ns,'line');
-    wire.setAttribute('x1','92');wire.setAttribute('x2','275');wire.setAttribute('y1',y);wire.setAttribute('y2',y);
-    wire.setAttribute('stroke',['#50e0a3','#63aefc','#efbd73','#d785fb'][i]);
-    wire.setAttribute('stroke-width','3');svg.append(wire);
-    for(const [x,label] of [[6,'GPIO '+gpio],[286,signal]]){
-      const text=document.createElementNS(ns,'text');text.setAttribute('x',x);text.setAttribute('y',y+4);text.setAttribute('fill','#e6edf6');text.setAttribute('font-size','15');text.textContent=label;svg.append(text);
-    }
+const map=document.querySelector('.wiring-map');
+function draw(){
+  const board=document.createElement('div');
+  board.className='map-board';
+  board.innerHTML='<img loading="lazy" src="https://lafvintech.com/cdn/shop/files/LA066A3-1_800x.jpg?v=1779175185" alt=""><strong>ESP32-S3</strong>';
+  const columns=[document.createElement('div'),document.createElement('div')];
+  columns.forEach(column=>column.className='map-column');
+  modules.forEach((module,index)=>{
+    const pins=profile.value==='saved'?(module.saved??module.pins):module.pins;
+    const card=document.createElement('div');
+    card.className='map-module';
+    const image=document.createElement('img');
+    image.loading='lazy';image.src=module.photo;image.alt='';
+    const name=document.createElement('a');
+    name.href=module.source;name.target='_blank';name.rel='noopener noreferrer';name.textContent=module.name;
+    const signals=document.createElement('div');
+    signals.className='signals';
+    pins.forEach(([gpio,signal],pinIndex)=>{
+      const line=document.createElement('span');
+      line.textContent=signal+' · GPIO'+gpio;
+      line.style.setProperty('--wire',['#3cbca1','#4597df','#d6a34d','#ae71cb'][pinIndex]);
+      signals.append(line);
+    });
+    if(!pins.length)signals.textContent='Chưa gán GPIO';
+    card.append(image,name,signals);
+    columns[index<5?0:1].append(card);
   });
+  map.replaceChildren(columns[0],board,columns[1]);
 }
-modules.forEach((module,index)=>{const b=document.createElement('button');b.type='button';b.textContent=module.name;b.onclick=()=>draw(module,index);buttons.append(b);});
-profile.onchange=()=>draw(modules[selected],selected);
-draw(modules[0],0);
+profile.addEventListener('change',draw);
+draw();
 const clock=document.querySelector('#clock-style'),emoji=document.querySelector('#emoji-style');
 clock.onchange=()=>{const preview=document.querySelector('#clock-preview');preview.className='screen '+['flip','modular','mini'][Number(clock.value)];preview.lastElementChild.textContent=clock.value==='2'?'🤖 HYNHI ROBOT':'HYNHI ROBOT';};
 emoji.onchange=()=>{const preview=document.querySelector('#emoji-preview');preview.src=emoji.value==='1'?'images/girl.gif':'images/boy.gif';preview.alt=emoji.selectedOptions[0].textContent;};
