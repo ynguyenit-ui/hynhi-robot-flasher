@@ -23,3 +23,15 @@ summary{cursor:pointer;font-weight:700;margin-bottom:10px}
  .wiring-map{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px}
  .map-board{grid-column:1/-1;grid-row:1}.map-board img{max-height:86px}
 }
+
+.screen.analog,.screen.black-modular{background:#000}
+.screen.analog{position:relative}
+.screen.analog::before{content:"";position:absolute;inset:13%;border-radius:50%;border:3px dotted #777}
+.screen.analog strong{position:absolute;inset:0}
+.screen.analog strong::before,.screen.analog strong::after{content:"";position:absolute;left:49%;bottom:50%;width:3%;height:29%;border-radius:5px;background:white;transform-origin:50% 100%;transform:rotate(54deg)}
+.screen.analog strong::after{height:20%;transform:rotate(-52deg)}
+.screen.analog span{position:absolute;top:22%;color:#ff7478}
+.screen.analog small{position:absolute;bottom:8%;color:#56d9e1}
+.screen.black-modular{align-items:flex-end;justify-content:flex-start;padding:9%;gap:6%}
+.screen.black-modular span{color:#ff7478}
+.screen.black-modular small{align-self:stretch;border-radius:6px;background:#112d38;color:#56d9e1;padding:9%;text-align:center}

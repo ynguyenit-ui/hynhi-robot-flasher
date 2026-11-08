@@ -44,7 +44,14 @@ function draw(){
 profile.addEventListener('change',draw);
 draw();
 const clock=document.querySelector('#clock-style'),emoji=document.querySelector('#emoji-style');
-clock.onchange=()=>{const preview=document.querySelector('#clock-preview');preview.className='screen '+['flip','modular','mini'][Number(clock.value)];preview.lastElementChild.textContent=clock.value==='2'?'🤖 HYNHI ROBOT':'HYNHI ROBOT';};
+clock.onchange=()=>{
+  const preview=document.querySelector('#clock-preview');
+  preview.className='screen '+['flip','modular','mini','analog','black-modular'][Number(clock.value)];
+  preview.firstElementChild.textContent=clock.value==='4'?'THỨ 7  08':'THỨ 7';
+  preview.children[1].textContent=clock.value==='3'?'':'10:09';
+  preview.lastElementChild.textContent=clock.value==='2'?'HYNHI ROBOT':'THỜI TIẾT';
+};
+clock.onchange();
 emoji.onchange=()=>{const preview=document.querySelector('#emoji-preview');preview.src=emoji.value==='1'?'images/girl.gif':'images/boy.gif';preview.alt=emoji.selectedOptions[0].textContent;};
 document.querySelector('#theme-form').onsubmit=event=>{
   event.preventDefault();
