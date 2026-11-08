@@ -49,7 +49,16 @@ clock.onchange=()=>{
   preview.className='screen '+['flip','modular','mini','analog','black-modular'][Number(clock.value)];
   preview.firstElementChild.textContent=clock.value==='4'?'THỨ 7  08':'THỨ 7';
   preview.children[1].textContent=clock.value==='3'?'':'10:09';
-  preview.lastElementChild.textContent=clock.value==='2'?'HYNHI ROBOT':'THỜI TIẾT';
+  preview.querySelector('small').textContent=clock.value==='2'?'HYNHI ROBOT':'THỜI TIẾT';
+  preview.querySelector('.watch-complications')?.remove();
+  if(Number(clock.value)>=3){
+    const details=document.createElement('div');
+    details.className='watch-complications';
+    const labels=clock.value==='3'?['UV --','AQI --','26°','☀','62%','dB --','Mưa --']:['☀','Chưa có dữ liệu nhịp tim','TEMP','AQI --','HUM'];
+    for(const label of labels){const item=document.createElement('span');item.textContent=label;details.append(item);}
+    preview.append(details);
+  }
+
 };
 clock.onchange();
 emoji.onchange=()=>{const preview=document.querySelector('#emoji-preview');preview.src=emoji.value==='1'?'images/girl.gif':'images/boy.gif';preview.alt=emoji.selectedOptions[0].textContent;};

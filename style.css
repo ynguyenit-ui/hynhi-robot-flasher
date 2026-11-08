@@ -35,3 +35,23 @@ summary{cursor:pointer;font-weight:700;margin-bottom:10px}
 .screen.black-modular{align-items:flex-end;justify-content:flex-start;padding:9%;gap:6%}
 .screen.black-modular span{color:#ff7478}
 .screen.black-modular small{align-self:stretch;border-radius:6px;background:#112d38;color:#56d9e1;padding:9%;text-align:center}
+
+.screen.analog strong{z-index:2}
+.watch-complications{position:absolute;inset:0;font-size:.72em}
+.watch-complications span{position:absolute;color:white}
+.analog .watch-complications span:nth-child(1){top:8%;left:9%;color:#db52e1}
+.analog .watch-complications span:nth-child(2){top:8%;right:8%;color:#ff9271}
+.analog .watch-complications span:nth-child(3),.analog .watch-complications span:nth-child(4),.analog .watch-complications span:nth-child(5){display:grid;place-items:center;border-radius:50%;width:21%;aspect-ratio:1}
+.analog .watch-complications span:nth-child(3){top:39%;left:19%;border:3px solid #ff9336;background:#1d1006}
+.analog .watch-complications span:nth-child(4){top:39%;right:19%;background:#112d38;color:#ffe06d}
+.analog .watch-complications span:nth-child(5){top:60%;left:39%;border:3px solid #0ed588;background:#06241b}
+.analog .watch-complications span:nth-child(6){bottom:10%;left:9%;color:#0ed588}
+.analog .watch-complications span:nth-child(7){bottom:10%;right:8%;color:#45a6cc}
+.screen.black-modular{position:relative}
+.screen.black-modular small,.screen.analog small{visibility:hidden}
+.black-modular .watch-complications span:first-child{top:18%;left:7%;border-radius:50%;background:#112d38;color:#ffe06d;padding:5%}
+.black-modular .watch-complications span:nth-child(2){top:53%;left:5%;width:90%;text-align:center;padding:5% 0;background:repeating-linear-gradient(90deg,#141b21 0 8%,#343c46 8% 8.7%)}
+.black-modular .watch-complications span:nth-child(n+3){bottom:5%;width:19%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:#185963}
+.black-modular .watch-complications span:nth-child(3){left:10%}
+.black-modular .watch-complications span:nth-child(4){left:41%;background:#713b63}
+.black-modular .watch-complications span:nth-child(5){left:72%;background:#325d16}

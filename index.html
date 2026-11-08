@@ -12,12 +12,12 @@
 <section id="firmware">
   <p class="eyebrow">HYNHI DESK EMOJI · USB</p><h1>Nạp firmware</h1>
   <p>Cắm cáp USB dữ liệu, chọn cổng robot rồi bấm Install trong Chrome hoặc Edge.</p>
-  <div class="actions"><esp-web-install-button id="installer" manifest="firmware/manifest.json"><button slot="activate" class="button">Kết nối và nạp Fix84</button><span slot="unsupported">Mở trang bằng Chrome hoặc Edge trên máy tính có Web Serial.</span><span slot="not-allowed">Mở trang qua HTTPS hoặc localhost để dùng USB.</span></esp-web-install-button><a href="firmware/manifest.json">Xem gói nạp</a></div>
+  <div class="actions"><esp-web-install-button id="installer" manifest="firmware/manifest.json"><button slot="activate" class="button">Kết nối và nạp Fix85</button><span slot="unsupported">Mở trang bằng Chrome hoặc Edge trên máy tính có Web Serial.</span><span slot="not-allowed">Mở trang qua HTTPS hoặc localhost để dùng USB.</span></esp-web-install-button><a href="firmware/manifest.json">Xem gói nạp</a></div>
   <p id="flash-status" role="status">Đang kiểm tra gói firmware…</p>
   <details class="wiring">
     <summary>Sơ đồ đấu nối GPIO</summary>
     <label for="wiring-profile">Cấu hình chân</label>
-    <select id="wiring-profile"><option value="saved">Robot hiện tại · Fix84</option><option value="default">Mặc định firmware</option></select>
+    <select id="wiring-profile"><option value="saved">Robot hiện tại · Fix85</option><option value="default">Mặc định firmware</option></select>
     <div class="wiring-map" aria-label="Sơ đồ tín hiệu ESP32-S3"></div>
     <p class="hint">GPIO tín hiệu. Nối GND chung và đối chiếu nguồn với module thực tế.</p>
   </details>
@@ -25,47 +25,16 @@
 <section id="theme">
   <h2>Nạp theme</h2>
   <div class="theme-grid">
-    <div><label for="clock-style">Màn hình chờ</label><select id="clock-style"><option value="0">Đồng hồ lật</option><option value="1" selected>Modular</option><option value="2">Robot mini</option><option value="3">Analog vòng màu</option><option value="4">Modular nền đen</option></select><div id="clock-preview" class="screen modular"><span>THỨ BẢY</span><strong>14:37</strong><small>HYNHI ROBOT</small></div></div>
+    <div><label for="clock-style">Màn hình chờ</label><select id="clock-style"><option value="0">Đồng hồ lật</option><option value="1" selected>Modular</option><option value="2">Robot mini</option><option value="3">Infograph</option><option value="4">Infograph Modular</option></select><div id="clock-preview" class="screen modular"><span>THỨ BẢY</span><strong>14:37</strong><small>HYNHI ROBOT</small></div></div>
     <div><label for="emoji-style">Bộ Emoji</label><select id="emoji-style"><option value="0">Emoji bé trai</option><option value="1" selected>Emoji bé gái · Pink Brows</option></select><div class="screen emoji"><img id="emoji-preview" src="images/girl.gif" alt="Xem trước Emoji bé gái"></div></div>
   </div>
   <form id="theme-form"><label for="robot-address">Địa chỉ cấu hình robot</label><input id="robot-address" value="192.168.1.8:8080" required autocomplete="off"><button type="submit" class="button">Nạp theme vào ESP32</button></form>
-  <p id="theme-status" role="status">Qua Wi-Fi trên Fix84. Bấm Áp dụng ở trang robot để lưu theme và khởi động lại.</p>
+  <p id="theme-status" role="status">Qua Wi-Fi trên Fix85. Bấm Áp dụng ở trang robot để lưu theme và khởi động lại.</p>
 </section>
-<footer>Hynhi Desk Emoji · Firmware Fix84 · <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
+<footer>Hynhi Desk Emoji · Firmware Fix85 · <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
 </main>
 <script src="app.js"></script>
 
-<div id="hynhi-typography" style="display:flex;gap:.5em;flex-wrap:wrap;align-items:center;padding:.5em">
-  <label>Font <select id="hynhi-font"><option>Arial</option><option>Tahoma</option><option>Times New Roman</option></select></label>
-  <label>Cỡ chữ <select id="hynhi-size"><option>10</option><option>12</option><option>14</option><option>15</option><option selected>16</option></select></label>
-</div>
-<script>
-(() => {
-  const font = document.querySelector('#hynhi-font');
-  const size = document.querySelector('#hynhi-size');
-  const style = document.createElement('style');
-  document.head.append(style);
-  const restore = (field, key) => {
-    try {
-      const value = localStorage.getItem(key);
-      if (Array.from(field.options).some(option => option.value === value)) field.value = value;
-    } catch {}
-  };
-  const apply = () => {
-    const family = JSON.stringify(font.value);
-    const pixels = Number(size.value);
-    style.textContent = 'html, body, button, input, select, textarea {font-family:' + family +
-      ' !important} html, body {font-size:' + pixels + 'px !important}';
-  };
-  for (const [field, key] of [[font, 'hynhi.ui.font'], [size, 'hynhi.ui.size']]) {
-    restore(field, key);
-    field.addEventListener('change', () => {
-      try { localStorage.setItem(key, field.value); } catch {}
-      apply();
-    });
-  }
-  apply();
-})();
-</script>
+
 </body>
 </html>
