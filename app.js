@@ -75,6 +75,13 @@ document.querySelector('#theme-form').onsubmit=event=>{
     location.href=target.href;
   }catch{status.textContent='Địa chỉ robot không hợp lệ.';}
 };
-fetch('firmware/manifest.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(manifest=>{
-  document.querySelector('#flash-status').textContent='Gói '+manifest.version+' · '+manifest.builds[0].chipFamily+' · '+manifest.builds[0].parts.length+' phần nạp.';
-}).catch(()=>{document.querySelector('#flash-status').textContent='Chưa tìm thấy manifest firmware.';});
+function loadVariant(v){
+  const installer=document.querySelector('#installer'),link=document.querySelector('#manifest-link');
+  installer.setAttribute('manifest','firmware/'+v+'/manifest.json');link.href='firmware/'+v+'/manifest.json';
+  profile.value=v==='default'?'default':'saved';profile.dispatchEvent(new Event('change'));
+  fetch('firmware/'+v+'/manifest.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(manifest=>{
+    document.querySelector('#flash-status').textContent='Gói '+manifest.version+' · '+manifest.builds[0].chipFamily+' · '+manifest.builds[0].parts.length+' phần nạp.';
+  }).catch(()=>{document.querySelector('#flash-status').textContent='Chưa tìm thấy gói firmware cho bản này.';});
+}
+for(const radio of document.querySelectorAll('input[name=variant]'))radio.addEventListener('change',()=>loadVariant(radio.value));
+loadVariant('custom');

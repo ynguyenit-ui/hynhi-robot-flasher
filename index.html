@@ -12,12 +12,17 @@
 <section id="firmware">
   <p class="eyebrow">HYNHI DESK EMOJI · USB</p><h1>Nạp firmware</h1>
   <p>Cắm cáp USB dữ liệu, chọn cổng robot rồi bấm Install trong Chrome hoặc Edge.</p>
-  <div class="actions"><esp-web-install-button id="installer" manifest="firmware/manifest.json"><button slot="activate" class="button">Kết nối và nạp Fix85</button><span slot="unsupported">Mở trang bằng Chrome hoặc Edge trên máy tính có Web Serial.</span><span slot="not-allowed">Mở trang qua HTTPS hoặc localhost để dùng USB.</span></esp-web-install-button><a href="firmware/manifest.json">Xem gói nạp</a></div>
+  <fieldset class="variant"><legend>Cấu hình chân</legend>
+    <label><input type="radio" name="variant" value="custom" checked><span><b>Chân custom</b><small>Robot Hynhi hiện tại: màn ST7789, cảm biến, động cơ L298N</small></span></label>
+    <label><input type="radio" name="variant" value="default"><span><b>Chân mặc định</b><small>Bản cơ bản: màn hình, micro, loa, servo, nút chạm</small></span></label>
+    <p class="hint">Cả hai bản giữ nguyên chân micro ICS-43434 và loa MAX98357A / PCM5102A. Khi đổi bản, chọn xóa bộ nhớ khi trình nạp hỏi.</p>
+  </fieldset>
+  <div class="actions"><esp-web-install-button id="installer" manifest="firmware/custom/manifest.json"><button slot="activate" class="button">Kết nối và nạp firmware</button><span slot="unsupported">Mở trang bằng Chrome hoặc Edge trên máy tính có Web Serial.</span><span slot="not-allowed">Mở trang qua HTTPS hoặc localhost để dùng USB.</span></esp-web-install-button><a id="manifest-link" href="firmware/custom/manifest.json">Xem gói nạp</a></div>
   <p id="flash-status" role="status">Đang kiểm tra gói firmware…</p>
   <details class="wiring">
     <summary>Sơ đồ đấu nối GPIO</summary>
     <label for="wiring-profile">Cấu hình chân</label>
-    <select id="wiring-profile"><option value="saved">Robot hiện tại · Fix85</option><option value="default">Mặc định firmware</option></select>
+    <select id="wiring-profile"><option value="saved">Chân custom · robot hiện tại</option><option value="default">Chân mặc định</option></select>
     <div class="wiring-map" aria-label="Sơ đồ tín hiệu ESP32-S3"></div>
     <p class="hint">GPIO tín hiệu. Nối GND chung và đối chiếu nguồn với module thực tế.</p>
   </details>
@@ -31,7 +36,7 @@
   <form id="theme-form"><label for="robot-address">Địa chỉ cấu hình robot</label><input id="robot-address" value="192.168.1.8:8080" required autocomplete="off"><button type="submit" class="button">Nạp theme vào ESP32</button></form>
   <p id="theme-status" role="status">Qua Wi-Fi trên Fix85. Bấm Áp dụng ở trang robot để lưu theme và khởi động lại.</p>
 </section>
-<footer>Hynhi Desk Emoji · Firmware Fix85 · <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
+<footer>Hynhi Desk Emoji · Firmware Fix106 · <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
 </main>
 <script src="app.js"></script>
 
