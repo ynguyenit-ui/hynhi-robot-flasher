@@ -1,0 +1,155 @@
+{
+ "version": 1,
+ "note": "Gói theme màn hình chờ. Thêm gói mới: thêm một mục vào packs. wallpaper là đường dẫn ảnh (PNG/JPG, tương đối so với thư mục này) sẽ được cắt vuông 240x240 và nạp vào robot khi chọn gói.",
+ "packs": [
+  {
+   "id": "emerald",
+   "name": "Ngọc lục bảo",
+   "description": "Xanh lục trên nền xanh đêm",
+   "config": {
+    "accent": "#4ade80",
+    "accent2": "#ff6fae",
+    "top": "#050b1c",
+    "bottom": "#1c2b5a",
+    "wall": false
+   }
+  },
+  {
+   "id": "sunset",
+   "name": "Hoàng hôn",
+   "description": "Cam hồng trên nền tím",
+   "config": {
+    "accent": "#ffb347",
+    "accent2": "#ff5e7e",
+    "top": "#2a0f3a",
+    "bottom": "#7a2b4f",
+    "wall": false
+   }
+  },
+  {
+   "id": "ice",
+   "name": "Băng giá",
+   "description": "Xanh băng lạnh",
+   "config": {
+    "accent": "#7fdcff",
+    "accent2": "#ffffff",
+    "top": "#04101f",
+    "bottom": "#0f3a5c",
+    "wall": false
+   }
+  },
+  {
+   "id": "neon",
+   "name": "Neon",
+   "description": "Hồng neon và xanh lơ",
+   "config": {
+    "accent": "#ff2bd6",
+    "accent2": "#27f3ff",
+    "top": "#070014",
+    "bottom": "#220a45",
+    "wall": false
+   }
+  },
+  {
+   "id": "gold",
+   "name": "Vàng kim",
+   "description": "Vàng đồng sang trọng",
+   "config": {
+    "accent": "#ffd24a",
+    "accent2": "#ff8a3d",
+    "top": "#0a0805",
+    "bottom": "#3a2a0c",
+    "wall": false
+   }
+  },
+  {
+   "id": "sakura",
+   "name": "Anh đào",
+   "description": "Hồng nhạt dịu",
+   "config": {
+    "accent": "#ff8fb1",
+    "accent2": "#ffe0ea",
+    "top": "#1a0a14",
+    "bottom": "#4a1a34",
+    "wall": false
+   }
+  },
+  {
+   "id": "ocean",
+   "name": "Đại dương",
+   "description": "Ngọc lam và vàng",
+   "config": {
+    "accent": "#2dd4bf",
+    "accent2": "#facc15",
+    "top": "#021a1f",
+    "bottom": "#0b4a55",
+    "wall": false
+   }
+  },
+  {
+   "id": "paper",
+   "name": "Trắng tinh",
+   "description": "Nền sáng, chữ đậm",
+   "config": {
+    "accent": "#1f2937",
+    "accent2": "#e11d48",
+    "top": "#e8eef7",
+    "bottom": "#b9c6da",
+    "wall": false
+   }
+  },
+  {
+   "id": "weather",
+   "name": "Thời tiết (DienBien)",
+   "description": "Mặt Thời tiết nền đen, giờ xanh neon",
+   "config": {
+    "face": 9,
+    "legacy": -1,
+    "accent": "#39ff14",
+    "accent2": "#00e5ff",
+    "top": "#000000",
+    "bottom": "#000000",
+    "wall": false,
+    "cycle": false
+   }
+  },
+  {
+   "id": "retro-lcd",
+   "name": "LCD cổ điển",
+   "description": "Đồng hồ điện tử bảy đoạn",
+   "config": {
+    "face": 7,
+    "legacy": -1,
+    "accent": "#7bd88f",
+    "accent2": "#2d5a3a",
+    "top": "#101820",
+    "bottom": "#1b2a33",
+    "wall": false,
+    "cycle": false
+   }
+  },
+  {
+   "id": "matrix",
+   "name": "Mưa số",
+   "description": "Ma trận xanh",
+   "config": {
+    "face": 8,
+    "legacy": -1,
+    "accent": "#00ff66",
+    "accent2": "#b6ffd1",
+    "top": "#000a05",
+    "bottom": "#001a0d",
+    "wall": false,
+    "cycle": false
+   }
+  },
+  {
+   "id": "mini",
+   "name": "Robot Mini (bản cũ)",
+   "description": "Đồng hồ LVGL cũ có nhân vật robot",
+   "config": {
+    "legacy": 2
+   }
+  }
+ ]
+}
