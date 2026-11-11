@@ -1,54 +1,62 @@
 <!doctype html>
 <html lang="vi">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hynhi Robot | Firmware & Theme</title>
+<title>Hynhi Robot | Nạp firmware</title>
+<meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
 <link rel="stylesheet" href="style.css">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+</head>
 <body>
-<header class="top"><a class="brand" href="#firmware"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8 Camera</small></span></a><nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#theme">Nạp theme</a></nav></header>
-<main>
-<section id="firmware">
-  <p class="eyebrow">HYNHI DESK EMOJI · USB</p><h1>Nạp firmware</h1>
-  <p>Cắm cáp USB dữ liệu, chọn cổng robot rồi bấm Install trong Chrome hoặc Edge.</p>
-  <fieldset class="variant"><legend>Cấu hình chân</legend>
-    <label><input type="radio" name="variant" value="custom" checked><span><b>Chân custom</b><small>Robot Hynhi hiện tại: màn ST7789, cảm biến, động cơ L298N</small></span></label>
-    <label><input type="radio" name="variant" value="default"><span><b>Chân mặc định</b><small>Bản cơ bản: màn hình, micro, loa, servo, nút chạm</small></span></label>
-    <p class="hint">Cả hai bản giữ nguyên chân micro ICS-43434 và loa MAX98357A / PCM5102A. Khi đổi bản, chọn xóa bộ nhớ khi trình nạp hỏi.</p>
-  </fieldset>
-  <div class="actions"><esp-web-install-button id="installer" manifest="firmware/custom/manifest.json"><button slot="activate" class="button">Kết nối và nạp firmware</button><span slot="unsupported">Mở trang bằng Chrome hoặc Edge trên máy tính có Web Serial.</span><span slot="not-allowed">Mở trang qua HTTPS hoặc localhost để dùng USB.</span></esp-web-install-button><a id="manifest-link" href="firmware/custom/manifest.json">Xem gói nạp</a></div>
-  <p id="flash-status" role="status">Đang kiểm tra gói firmware…</p>
-  <details class="wiring">
-    <summary>Sơ đồ đấu nối GPIO</summary>
-    <label for="wiring-profile">Cấu hình chân</label>
-    <select id="wiring-profile"><option value="saved">Chân custom · robot hiện tại</option><option value="default">Chân mặc định</option></select>
-    <div class="wiring-map" aria-label="Sơ đồ tín hiệu ESP32-S3"></div>
-    <p class="hint">GPIO tín hiệu. Nối GND chung và đối chiếu nguồn với module thực tế.</p>
-  </details>
-</section>
-<section id="theme">
-  <h2>Nạp theme</h2>
-  <div class="theme-grid">
-    <div><label for="clock-style">Màn hình chờ</label><select id="clock-style"><option value="0">Đồng hồ lật</option><option value="1" selected>Modular</option><option value="2">Robot mini</option><option value="3">Infograph</option><option value="4">Infograph Modular</option></select><div id="clock-preview" class="screen modular"><span>THỨ BẢY</span><strong>14:37</strong><small>HYNHI ROBOT</small></div></div>
-    <div><label for="emoji-style">Bộ Emoji</label><select id="emoji-style"><option value="0">Emoji bé trai</option><option value="1" selected>Emoji bé gái · Pink Brows</option></select><div class="screen emoji"><img id="emoji-preview" src="images/girl.gif" alt="Xem trước Emoji bé gái"></div></div>
-  </div>
-  <form id="theme-form"><label for="robot-address">Địa chỉ cấu hình robot</label><input id="robot-address" value="192.168.1.8:8080" required autocomplete="off"><button type="submit" class="button">Nạp theme vào ESP32</button></form>
-  <p id="theme-status" role="status">Qua Wi-Fi trên Fix85. Bấm Áp dụng ở trang robot để lưu theme và khởi động lại.</p>
-</section>
-<section id="desktop">
-<h2>Điều khiển máy tính (Windows)</h2>
-<p>Muốn nói "mở YouTube trên máy tính", "đọc trang Chrome"… robot cần chương trình nhỏ chạy trên PC cùng WiFi. Chỉ cài một lần:</p>
-<ol>
-<li><a href="desktop/HynhiDesktopBridge.zip" download>Tải HynhiDesktopBridge.zip</a> và giải nén.</li>
-<li>Bấm đúp <b>Cai-Dat.cmd</b> (tự cài Python nếu thiếu, cần Internet, 2–5 phút).</li>
-<li>Giữ robot và PC cùng WiFi. Khoảng 1 phút robot tự ghép nối, không cần nhập gì.</li>
-</ol>
-</section>
-<footer>Hynhi Desk Emoji · Firmware Fix106 · <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
+<header class="top">
+  <a class="brand" href="#top"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8</small></span></a>
+  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#wiring">Sơ đồ đấu nối</a></nav>
+</header>
+
+<main id="top">
+  <section id="firmware" class="card hero">
+    <div class="hero-text">
+      <p class="eyebrow">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
+      <h1>Nạp firmware<br>cho Hynhi Robot</h1>
+      <p class="lead">Cắm cáp USB vào robot, bấm nút bên dưới và chọn cổng COM. Dùng Chrome hoặc Edge trên máy tính.</p>
+      <div class="actions">
+        <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
+          <button slot="activate" class="button">Kết nối và nạp firmware</button>
+          <span slot="unsupported" class="warn">Trình duyệt này không hỗ trợ Web Serial. Hãy mở bằng Chrome hoặc Edge trên máy tính.</span>
+          <span slot="not-allowed" class="warn">Cần mở trang qua HTTPS để dùng cổng USB.</span>
+        </esp-web-install-button>
+      </div>
+      <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
+    </div>
+    <ol class="steps">
+      <li><b>Cắm cáp USB dữ liệu</b><span>Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
+      <li><b>Bấm “Kết nối”</b><span>Chọn cổng USB Serial / JTAG của robot.</span></li>
+      <li><b>Chọn xóa bộ nhớ</b><span>Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
+      <li><b>Chờ robot khởi động lại</b><span>Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
+    </ol>
+  </section>
+
+  <section id="wiring" class="card">
+    <p class="eyebrow">CHÂN CUSTOM</p>
+    <h2>Sơ đồ đấu nối GPIO</h2>
+    <p class="lead">Mỗi dây nối một chân tín hiệu của module với GPIO trên ESP32-S3. Mọi module phải chung GND với bo điều khiển.</p>
+    <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
+    <div class="legend" id="legend"></div>
+    <div class="power">
+      <h3>Nguồn và lưu ý</h3>
+      <ul>
+        <li><b>3V3:</b> micro ICS-43434, màn ST7789, APDS-9930, VL53L0X, OLED, TTP223.</li>
+        <li><b>5V:</b> ampli MAX98357A, servo MG90S và mạch L298N (nên cấp nguồn riêng cho servo và động cơ).</li>
+        <li><b>GND chung</b> cho tất cả module. Giữ jumper ENA/ENB trên L298N.</li>
+        <li>GPIO0 vừa là nút BOOT vừa là chân TTP223: giữ chân này ở mức cao khi cấp nguồn.</li>
+        <li>Bo mạch không dùng GPIO46 cho các cảm biến I²C.</li>
+      </ul>
+    </div>
+  </section>
 </main>
+<footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
 <script src="app.js"></script>
-
-
 </body>
 </html>
