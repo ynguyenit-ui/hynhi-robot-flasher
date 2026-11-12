@@ -7,13 +7,13 @@
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
 <header class="top">
   <a class="brand" href="#top"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8</small></span></a>
-  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#wiring">Sơ đồ đấu nối</a><a href="#tables">Bảng đấu dây</a></nav>
+  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#wiring">Sơ đồ đấu nối</a><a href="#tables">Bảng đấu dây</a><a href="#camera">Robot Camera</a></nav>
 </header>
 
 <main id="top">
@@ -22,6 +22,10 @@
       <p class="eyebrow">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
       <h1>Nạp firmware<br>cho Hynhi Robot</h1>
       <p class="lead">Cắm cáp USB vào robot, bấm nút bên dưới và chọn cổng COM. Dùng Chrome hoặc Edge trên máy tính.</p>
+      <div class="variants" role="radiogroup" aria-label="Chọn firmware">
+        <button type="button" role="radio" aria-checked="true" data-fw="custom"><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
+        <button type="button" role="radio" aria-checked="false" data-fw="cam"><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640 tự nhận</span></button>
+      </div>
       <div class="actions">
         <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
           <button slot="activate" class="button">Kết nối và nạp firmware</button>
@@ -69,8 +73,45 @@
       </ul>
     </div>
   </section>
+  <section id="camera" class="card">
+    <p class="eyebrow">ESP32-S3 CAM N16R8 · OV3660 / OV5640 tự nhận</p>
+    <h2>Chân của Robot Camera</h2>
+    <p class="lead">Camera cắm sẵn trên bo và dùng GPIO4–13, 15–18, nên các module còn lại đấu vào chân khác so với robot để bàn. Mọi chân vẫn đổi được trong tab Chân GPIO.</p>
+    <div class="mods">
+      <article class="mod"><header><div><h4>Màn ST7789</h4><p>SPI · 3,3 V</p></div></header><table><tbody>
+        <tr style="--w:#4597df"><td>SCL / SCLK</td><td class="wire"><i></i></td><td class="gp">GPIO47</td></tr>
+        <tr style="--w:#4597df"><td>SDA / MOSI</td><td class="wire"><i></i></td><td class="gp">GPIO21</td></tr>
+        <tr style="--w:#ff8197"><td>DC</td><td class="wire"><i></i></td><td class="gp">GPIO14</td></tr>
+        <tr style="--w:#ff8197"><td>RES / RST</td><td class="wire"><i></i></td><td class="gp">GPIO3</td></tr></tbody></table></article>
+      <article class="mod"><header><div><h4>Micro INMP441 / ICS-43434</h4><p>I²S · 3,3 V</p></div></header><table><tbody>
+        <tr style="--w:#3cbca1"><td>WS</td><td class="wire"><i></i></td><td class="gp">GPIO41</td></tr>
+        <tr style="--w:#3cbca1"><td>SCK</td><td class="wire"><i></i></td><td class="gp">GPIO42</td></tr>
+        <tr style="--w:#3cbca1"><td>SD</td><td class="wire"><i></i></td><td class="gp">GPIO2</td></tr></tbody></table></article>
+      <article class="mod"><header><div><h4>Ampli MAX98357A + PCM5102A</h4><p>I²S · 5 V · nối song song</p></div></header><table><tbody>
+        <tr style="--w:#3cbca1"><td>BCLK / BCK</td><td class="wire"><i></i></td><td class="gp">GPIO39</td></tr>
+        <tr style="--w:#3cbca1"><td>LRC / LCK</td><td class="wire"><i></i></td><td class="gp">GPIO40</td></tr>
+        <tr style="--w:#3cbca1"><td>DIN</td><td class="wire"><i></i></td><td class="gp">GPIO38</td></tr></tbody></table></article>
+      <article class="mod"><header><div><h4>Servo đầu / cổ</h4><p>PWM · nguồn 5 V riêng</p></div></header><table><tbody>
+        <tr style="--w:#ae71cb"><td>Cổ · dây cam</td><td class="wire"><i></i></td><td class="gp">GPIO1</td></tr>
+        <tr style="--w:#ae71cb"><td>Đầu · dây cam</td><td class="wire"><i></i></td><td class="gp">GPIO46</td></tr></tbody></table></article>
+      <article class="mod"><header><div><h4>VL53L0X · LED · nút chạm</h4><p>VL53L0X dùng chung I²C với camera</p></div></header><table><tbody>
+        <tr style="--w:#d6a34d"><td>VL53L0X · SDA</td><td class="wire"><i></i></td><td class="gp">GPIO4</td></tr>
+        <tr style="--w:#d6a34d"><td>VL53L0X · SCL</td><td class="wire"><i></i></td><td class="gp">GPIO5</td></tr>
+        <tr style="--w:#ae71cb"><td>LED trạng thái</td><td class="wire"><i></i></td><td class="gp">GPIO45</td></tr>
+        <tr style="--w:#ff8197"><td>TTP223 · I/O</td><td class="wire"><i></i></td><td class="gp">GPIO0</td></tr></tbody></table></article>
+    </div>
+    <div class="power">
+      <h3>Lưu ý cho bo camera</h3>
+      <ul>
+        <li>Không còn đủ chân cho mạch động cơ L298N và OLED phụ; hai phần này tắt sẵn. Muốn dùng thì bỏ bớt module khác rồi chọn chân trong tab Chân GPIO.</li>
+        <li>Nạp qua cổng USB gốc của bo (cổng ghi USB / OTG). Nếu trình duyệt không thấy cổng, giữ nút BOOT, bấm RST rồi thả BOOT.</li>
+        <li>Một firmware dùng cho cả OV3660 và OV5640: robot tự nhận loại camera khi khởi động.</li>
+        <li>Nhập khóa Gemini ở tab Thiết bị để robot phân tích ảnh khi được hỏi “bạn nhìn thấy gì?”.</li>
+      </ul>
+    </div>
+  </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>

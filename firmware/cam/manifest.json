@@ -1,0 +1,28 @@
+{
+  "name": "Hynhi Robot Camera",
+  "version": "2.5.2-hynhi3.10.37 · ESP32-S3 CAM (OV3660/OV5640 tự nhận)",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "partition-table.bin",
+          "offset": 32768
+        },
+        {
+          "path": "xiaozhi.bin",
+          "offset": 327680
+        },
+        {
+          "path": "generated_assets.bin",
+          "offset": 10485760
+        }
+      ]
+    }
+  ]
+}

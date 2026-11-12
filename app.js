@@ -148,19 +148,29 @@ function drawTables() {
   }
 }
 
+let firmwareDir = 'custom';
 function loadManifest() {
   const facts = document.getElementById('facts');
-  fetch('firmware/custom/manifest.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw Error(); return r.json(); }).then(async manifest => {
+  const dir = firmwareDir;
+  fetch('firmware/' + dir + '/manifest.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw Error(); return r.json(); }).then(async manifest => {
     const build = manifest.builds[0];
     const items = [manifest.version, build.chipFamily, build.parts.length + ' phần nạp'];
     try {
-      const head = await fetch('firmware/custom/' + build.parts.find(p => p.path === 'xiaozhi.bin').path, { method: 'HEAD' });
+      const head = await fetch('firmware/' + dir + '/' + build.parts.find(p => p.path === 'xiaozhi.bin').path, { method: 'HEAD' });
       const size = Number(head.headers.get('content-length'));
       if (size) items.push('Ứng dụng ' + (size / 1048576).toFixed(1) + ' MB');
     } catch { /* kích thước chỉ để tham khảo */ }
     facts.innerHTML = items.map(t => '<li>' + esc(t) + '</li>').join('');
   }).catch(() => { facts.innerHTML = '<li class="warn">Chưa tìm thấy gói firmware.</li>'; });
 }
+
+/* Chọn firmware: robot để bàn hoặc Robot Camera (OV3660 / OV5640). */
+document.querySelectorAll('.variants button').forEach(button => button.addEventListener('click', () => {
+  document.querySelectorAll('.variants button').forEach(b => b.setAttribute('aria-checked', String(b === button)));
+  firmwareDir = button.dataset.fw;
+  document.getElementById('installer').setAttribute('manifest', 'firmware/' + firmwareDir + '/manifest.json');
+  loadManifest();
+}));
 
 drawMap();
 drawTables();
