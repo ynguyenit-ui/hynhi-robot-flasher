@@ -7,13 +7,13 @@
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
 <header class="top">
   <a class="brand" href="#top"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8</small></span></a>
-  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#wiring">Sơ đồ đấu nối</a></nav>
+  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#wiring">Sơ đồ đấu nối</a><a href="#tables">Bảng đấu dây</a></nav>
 </header>
 
 <main id="top">
@@ -41,23 +41,36 @@
 
   <section id="wiring" class="card">
     <p class="eyebrow">CHÂN CUSTOM</p>
-    <h2>Sơ đồ đấu nối GPIO</h2>
-    <p class="lead">Mỗi dây nối một chân tín hiệu của module với GPIO trên ESP32-S3. Mọi module phải chung GND với bo điều khiển.</p>
+    <h2>Sơ đồ đấu nối</h2>
+    <p class="lead">Mỗi đường màu là một sợi dây tín hiệu từ module về đúng GPIO trên ESP32-S3. Nguồn và GND của từng module xem ở bảng đấu dây bên dưới.</p>
     <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
     <div class="legend" id="legend"></div>
+    <div class="chain" aria-label="Đường âm thanh">
+      <b>Đường âm thanh</b>
+      <span>ESP32-S3</span><i>I²S</i><span>MAX98357A</span><i>dây loa</i><span>Loa trong</span>
+      <em></em>
+      <span>ESP32-S3</span><i>I²S</i><span>PCM5102A</span><i>L · R · AGND</i><span>KCX_BT_EMITTER</span><i>Bluetooth</i><span>Loa Bluetooth</span>
+    </div>
+  </section>
+
+  <section id="tables" class="card">
+    <p class="eyebrow">ĐẤU TỪNG MODULE</p>
+    <h2>Bảng đấu dây</h2>
+    <p class="lead">Đấu lần lượt từng module theo bảng: cột trái là chân in trên module, cột phải là nơi cắm trên ESP32-S3 hoặc nguồn.</p>
+    <div id="wiring-tables" class="mods"></div>
     <div class="power">
       <h3>Nguồn và lưu ý</h3>
       <ul>
-        <li><b>3V3:</b> micro ICS-43434, màn ST7789, APDS-9930, VL53L0X, OLED, TTP223.</li>
-        <li><b>5V:</b> ampli MAX98357A, servo MG90S và mạch L298N (nên cấp nguồn riêng cho servo và động cơ).</li>
-        <li><b>GND chung</b> cho tất cả module. Giữ jumper ENA/ENB trên L298N.</li>
+        <li><b>3V3:</b> micro, màn ST7789, APDS-9930, VL53L0X, OLED, TTP223.</li>
+        <li><b>5V:</b> MAX98357A, PCM5102A, KCX_BT_EMITTER. Servo và động cơ dùng nguồn riêng.</li>
+        <li><b>GND chung</b> cho tất cả module và mọi nguồn.</li>
+        <li>GPIO15, GPIO16, GPIO7 dùng chung cho MAX98357A và PCM5102A: mỗi GPIO nối hai dây.</li>
         <li>GPIO0 vừa là nút BOOT vừa là chân TTP223: giữ chân này ở mức cao khi cấp nguồn.</li>
-        <li>Bo mạch không dùng GPIO46 cho các cảm biến I²C.</li>
       </ul>
     </div>
   </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
