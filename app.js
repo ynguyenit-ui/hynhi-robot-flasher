@@ -68,7 +68,7 @@ function drawMap() {
   s += '<text class="s" x="' + (BX + BW / 2) + '" y="' + (H - 28) + '" text-anchor="middle">USB</text>';
   const draw = (boxes, side) => {
     for (const b of boxes) {
-      s += '<g><rect x="' + b.x + '" y="' + b.y + '" width="' + CARD_W + '" height="' + b.h + '" rx="12" fill="#0d1626" stroke="#2c3d57"/>';
+      s += '<g><rect x="' + b.x + '" y="' + b.y + '" width="' + CARD_W + '" height="' + b.h + '" rx="12" fill="#111722" stroke="#33405a"/>';
       s += '<g transform="translate(' + (b.x + 10) + ' ' + (b.y + 7) + ')">' + ART[b.m.art] + '</g>';
       s += '<text class="t" x="' + (b.x + 76) + '" y="' + (b.y + 22) + '">' + esc(b.m.name) + '</text>';
       s += '<text class="s" x="' + (b.x + 76) + '" y="' + (b.y + 38) + '">' + esc(b.m.note) + '</text>';
@@ -79,8 +79,8 @@ function drawMap() {
         const dir = side === 'L' ? 1 : -1;
         const mid = (px + bx) / 2;
         s += '<path d="M' + px + ' ' + r.y + 'C' + mid + ' ' + r.y + ' ' + mid + ' ' + r.y + ' ' + bx + ' ' + r.y + '" stroke="' + color + '" stroke-width="3" fill="none" stroke-linecap="round"/>';
-        s += '<circle cx="' + px + '" cy="' + r.y + '" r="5" fill="' + color + '" stroke="#0a1220" stroke-width="2"/>';
-        s += '<circle cx="' + bx + '" cy="' + r.y + '" r="5" fill="' + color + '" stroke="#0a1220" stroke-width="2"/>';
+        s += '<circle cx="' + px + '" cy="' + r.y + '" r="5" fill="' + color + '" stroke="#0c111b" stroke-width="2"/>';
+        s += '<circle cx="' + bx + '" cy="' + r.y + '" r="5" fill="' + color + '" stroke="#0c111b" stroke-width="2"/>';
         const lx = side === 'L' ? b.x + CARD_W - 14 : b.x + 14;
         s += '<text class="p" x="' + lx + '" y="' + (r.y + 4) + '" text-anchor="' + (side === 'L' ? 'end' : 'start') + '">' + esc(label) + '</text>';
         const gx = bx + dir * 14;
