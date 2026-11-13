@@ -7,13 +7,13 @@
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
 <header class="top">
   <a class="brand" href="#top"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8</small></span></a>
-  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#wiring">Sơ đồ đấu nối</a><a href="#tables">Bảng đấu dây</a><a href="#camera">Robot Camera</a></nav>
+  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#diag">Chẩn đoán</a><a href="#wiring">Sơ đồ đấu nối</a><a href="#tables">Bảng đấu dây</a><a href="#camera">Robot Camera</a></nav>
 </header>
 
 <main id="top">
@@ -41,6 +41,44 @@
       <li><b>Chọn xóa bộ nhớ</b><span>Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
       <li><b>Chờ robot khởi động lại</b><span>Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
     </ol>
+  </section>
+
+  <section id="diag" class="card">
+    <p class="eyebrow">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p>
+    <h2>Chẩn đoán</h2>
+    <p class="lead">Cắm robot vào máy tính, chọn cổng rồi đọc thông tin chip và địa chỉ trang cấu hình. Đóng các chương trình khác đang mở cổng này (Arduino, idf.py monitor) trước khi kết nối.</p>
+    <div class="dg-actions">
+      <button type="button" class="button" id="dg-connect">Chọn cổng ESP32</button>
+      <button type="button" class="ghost" id="dg-chip" disabled>Đọc thông tin chip</button>
+      <button type="button" class="ghost" id="dg-ip" disabled>Đọc địa chỉ IP</button>
+      <label class="dg-check"><input type="checkbox" id="dg-reset" checked> Khởi động lại robot khi đọc IP</label>
+    </div>
+    <p id="dg-status" class="dg-status" role="status" aria-live="polite">Chưa kết nối.</p>
+    <a id="dg-open" class="button dg-open" href="#" target="_blank" rel="noopener" hidden>Mở trang cấu hình</a>
+    <div class="dg-grid">
+      <dl class="dg-info">
+        <dt>Cổng</dt><dd data-dg="port">—</dd>
+        <dt>Chip</dt><dd data-dg="chip">—</dd>
+        <dt>Tính năng</dt><dd data-dg="features">—</dd>
+        <dt>Flash</dt><dd data-dg="flash">—</dd>
+        <dt>Thạch anh</dt><dd data-dg="crystal">—</dd>
+        <dt>Địa chỉ MAC</dt><dd data-dg="mac">—</dd>
+      </dl>
+      <dl class="dg-info">
+        <dt>Địa chỉ IP</dt><dd data-dg="ip" class="dg-ip">—</dd>
+        <dt>Wi-Fi</dt><dd data-dg="wifi">—</dd>
+        <dt>Firmware</dt><dd data-dg="version">—</dd>
+        <dt>Bo mạch</dt><dd data-dg="board">—</dd>
+        <dt>Camera</dt><dd data-dg="camera">—</dd>
+        <dt>Lần khởi động trước</dt><dd data-dg="reset">—</dd>
+        <dt>RAM nội / PSRAM</dt><dd><span data-dg="ram">—</span> · <span data-dg="psram">—</span></dd>
+      </dl>
+    </div>
+    <details class="dg-logwrap">
+      <summary>Log từ robot</summary>
+      <div class="dg-logbar"><button type="button" class="ghost" id="dg-copy">Chép log</button><button type="button" class="ghost" id="dg-clear">Xoá</button></div>
+      <pre id="dg-log" class="dg-log"></pre>
+    </details>
   </section>
 
   <section id="wiring" class="card">
@@ -113,5 +151,6 @@
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
 <script src="app.js?v=8"></script>
+<script type="module" src="diag.js?v=2"></script>
 </body>
 </html>

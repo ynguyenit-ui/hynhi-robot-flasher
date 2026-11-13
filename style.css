@@ -86,3 +86,24 @@ footer{max-width:1060px;margin:0 auto;padding:6px 20px 28px;text-align:center;co
 .variants button span{font-size:.76rem;color:var(--muted)}
 .variants button[aria-checked="true"]{border-color:var(--accent);background:rgba(255,92,122,.12)}
 .variants button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ghost{font:inherit;font-weight:600;color:var(--text);border:1px solid var(--border2);background:var(--card2);border-radius:10px;padding:11px 16px;min-height:46px;cursor:pointer}
+.ghost:hover:not(:disabled){border-color:var(--accent)}
+.ghost:disabled,.button:disabled{opacity:.45;cursor:not-allowed}
+.ghost:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.dg-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0 10px}
+.dg-check{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem}
+.dg-check input{accent-color:var(--accent);width:18px;height:18px}
+.dg-status{color:var(--muted);margin:4px 0 12px}
+.dg-status[data-tone="ok"]{color:var(--green)}
+.dg-status[data-tone="bad"]{color:#ff8f8f}
+.dg-open{display:inline-block;text-decoration:none;margin-bottom:14px}
+.dg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.dg-info{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card2);padding:14px 16px}
+.dg-info dt{color:var(--muted);font-size:.84rem}
+.dg-info dd{margin:0;font-weight:600;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.dg-info dd.dg-ip{color:var(--green);font-size:1.05rem}
+.dg-logwrap{margin-top:14px}
+.dg-logwrap summary{cursor:pointer;font-weight:600}
+.dg-logbar{display:flex;gap:8px;margin:10px 0}
+.dg-logbar .ghost{min-height:36px;padding:6px 12px;font-size:.85rem}
+.dg-log{margin:0;max-height:340px;overflow:auto;background:#05070b;border:1px solid var(--border);border-radius:10px;padding:12px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#c9d4e3;white-space:pre-wrap;overflow-wrap:anywhere}
