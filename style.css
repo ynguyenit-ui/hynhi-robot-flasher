@@ -121,3 +121,9 @@ footer{max-width:1060px;margin:0 auto;padding:6px 20px 28px;text-align:center;co
 .pa-reserved td span{color:var(--muted)}
 .pa-reserved td{color:var(--muted)}
 .dg-open[hidden]{display:none}
+#cam-map svg{min-width:980px}
+#cam-map .ct{font:700 19px system-ui,"Segoe UI",sans-serif;fill:#e7ecf3}
+#cam-map .cs{font:14px system-ui,"Segoe UI",sans-serif;fill:#8b97aa}
+#cam-map .cp{font:600 16px system-ui,"Segoe UI",sans-serif;fill:#e7ecf3}
+#cam-map .cg{font:700 15px system-ui,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+#cam-map .s{font-size:14px}

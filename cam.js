@@ -1,0 +1,148 @@
+'use strict';
+/* Robot Camera (ESP32-S3 CAM N16R8): one data source for the wiring diagram, the module tables and the pin table.
+   Uses TYPE, ART, pads and esc from app.js. Pin order follows the two headers of the board, top to bottom. */
+const CAM_LEFT_HDR = ['3V3', 'EN', '4', '5', '6', '7', '15', '16', '17', '18', '8', '3', '46', '9', '10', '11', '12', '13', '14', '5V'];
+const CAM_RIGHT_HDR = ['43', '44', '1', '2', '42', '41', '40', '39', '38', '37', '36', '35', '0', '45', '48', '47', '21', '20', '19', 'GND'];
+
+ART.strip = '<rect x="4" y="26" width="104" height="28" rx="3" fill="#15181e" stroke="#3a4558"/>' +
+  [0, 1, 2, 3, 4, 5, 6, 7].map(i => '<rect x="' + (9 + i * 12.4) + '" y="33" width="9" height="9" rx="1.5" fill="#f1f3f6"/><circle cx="' + (13.5 + i * 12.4) + '" cy="37.5" r="2.4" fill="' + ['#ff5c7a', '#ffb547', '#f5e663', '#3ddc97', '#4aa3ff', '#a77bff', '#ff7ad9', '#ffffff'][i] + '"/>').join('') + pads(4, 48, 18, 25);
+
+/* side: L/R header. pins: [label on module, GPIO, wire type]. wires: power and other wires. */
+const CAM_MODULES = [
+  { id: 'tof', side: 'L', short: 'VL53L0X', snote: 'I²C chung bus camera', name: 'Đo khoảng cách VL53L0X', note: 'I²C · dùng chung bus với camera', art: 'tof',
+    pins: [['SDA', 4, 'i2c'], ['SCL', 5, 'i2c']], wires: [['VIN', '3V3', 'v33'], ['GND', 'GND', 'gnd']],
+    tip: 'GPIO4/5 là dây điều khiển camera (SCCB). Chỉ cảm biến I²C mới được nối chung hai chân này.' },
+  { id: 'strip', side: 'L', short: 'LED WS2812', snote: '8 bóng · 5 V', name: 'LED WS2812 · 8 bóng', note: 'Dữ liệu 1 dây · 5 V', art: 'strip',
+    pins: [['DIN', 3, 'gpio']], wires: [['5V', '5V', 'v5'], ['GND', 'GND', 'gnd']], tip: '' },
+  { id: 'servo', side: 'L', short: 'Servo MG90S ×2', snote: 'PWM · 5 V riêng', name: 'Servo MG90S ×2', note: 'PWM · nguồn 5 V riêng', art: 'servo',
+    pins: [['Đầu · dây cam', 46, 'pwm'], ['Cổ · dây cam', 14, 'pwm']], wires: [['Dây đỏ', '5V riêng (≥ 2 A)', 'v5'], ['Dây nâu', 'GND chung', 'gnd']],
+    tip: 'Không lấy 5 V cho servo từ chân 5V của bo: robot dễ tự khởi động lại.' },
+  { id: 'mic', side: 'R', short: 'Micro INMP441', snote: 'I²S · 3,3 V', name: 'Micro INMP441 / ICS-43434', note: 'I²S · 3,3 V', art: 'mic',
+    pins: [['SD', 1, 'i2s'], ['SCK', 2, 'i2s'], ['WS', 42, 'i2s']], wires: [['VDD', '3V3', 'v33'], ['L/R', 'GND', 'gnd'], ['GND', 'GND', 'gnd']],
+    tip: 'Chỉ cấp 3,3 V. Đèn IO2 trên bo sáng mờ khi micro chạy là bình thường.' },
+  { id: 'audio', side: 'R', short: 'Âm thanh I²S', snote: 'MAX98357A · PCM5102A · KCX', name: 'MAX98357A + PCM5102A + KCX', note: 'I²S · ampli và DAC nối song song · 5 V', art: 'amp',
+    pins: [['KCX · LINK', 41, 'gpio'], ['LRC / LCK', 40, 'i2s'], ['BCLK / BCK', 39, 'i2s'], ['DIN', 38, 'i2s']],
+    wires: [['MAX98357A · Vin', '5V', 'v5'], ['PCM5102A · VIN', '5V', 'v5'], ['PCM5102A · SCK', 'GND', 'gnd'], ['PCM LOUT · ROUT · AGND', 'KCX AUDIO_L · AUDIO_R · AGND', 'analog'], ['KCX · +5V', '5V', 'v5'], ['Cọc loa + / −', 'Loa 4–8 Ω', 'analog']],
+    tip: 'LRC, BCLK, DIN nối chung cho MAX98357A và PCM5102A. Sau khi nối dây LINK, chọn GPIO41 ở mục KCX LINK trên trang cấu hình.' },
+  { id: 'touch', side: 'R', short: 'Nút chạm TTP223', snote: '3,3 V', name: 'Nút chạm TTP223', note: 'Chạm · 3,3 V', art: 'touch',
+    pins: [['I/O', 0, 'gpio']], wires: [['VCC', '3V3', 'v33'], ['GND', 'GND', 'gnd']], tip: 'GPIO0 cũng là nút BOOT: đừng chạm khi vừa cấp nguồn.' },
+  { id: 'display', side: 'R', short: 'Màn ST7789', snote: 'SPI · 240×240 · 3,3 V', name: 'Màn ST7789 240×240', note: 'SPI · 3,3 V', art: 'display',
+    pins: [['DC', 45, 'gpio'], ['RES / RST', 48, 'gpio'], ['SCL / SCLK', 47, 'spi'], ['SDA / MOSI', 21, 'spi']],
+    wires: [['VCC', '3V3', 'v33'], ['BLK (đèn nền)', '3V3', 'v33'], ['GND', 'GND', 'gnd']],
+    tip: 'GPIO48 cũng nối đèn RGB trên bo, đèn có thể nháy khi màn khởi động. Màn có chân CS thì nối CS xuống GND.' },
+  { id: 'oled', side: 'R', short: 'OLED SSD1306', snote: 'I²C riêng · tùy chọn', name: 'OLED phụ SSD1306 0,96″', note: 'I²C riêng · 3,3 V · tùy chọn', art: 'oled',
+    pins: [['SDA', 20, 'i2c'], ['SCL', 19, 'i2c']], wires: [['VCC', '3V3', 'v33'], ['GND', 'GND', 'gnd']],
+    tip: 'GPIO19/20 là cổng USB gốc. Bật OLED thì nạp và xem log qua cổng COM của bo; muốn nạp qua cổng USB, giữ BOOT rồi bấm RST.' }
+];
+
+const camPinKind = name => {
+  const n = Number(name);
+  if (name === '3V3') return ['3V3', '#f59e0b'];
+  if (name === '5V') return ['5V', '#ef4444'];
+  if (name === 'GND') return ['GND', '#8b97aa'];
+  if (name === 'EN') return ['RST', '#8b97aa'];
+  if ((n >= 6 && n <= 13) || (n >= 15 && n <= 18)) return ['camera', '#c2410c'];
+  if (n >= 35 && n <= 37) return ['PSRAM', '#b91c1c'];
+  if (n === 43 || n === 44) return ['COM', '#be185d'];
+  return null;
+};
+
+function drawCamMap() {
+  const host = document.getElementById('cam-map');
+  if (!host) return;
+  const W = 1500, P = 52, Y0 = 150, BX = 610, BW = 280, HX = [BX + 26, BX + BW - 26], CHIP = 104, CARD_W = 420, PADY = 23;
+  const rowY = i => Y0 + i * P, H = rowY(19) + 70;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Sơ đồ đấu nối Robot Camera">';
+  /* Board */
+  s += '<rect x="' + BX + '" y="40" width="' + BW + '" height="' + (H - 60) + '" rx="14" fill="#16181d" stroke="#3a4558" stroke-width="2"/>';
+  s += '<rect x="' + (BX + 70) + '" y="58" width="140" height="190" rx="6" fill="#c9ced6" stroke="#8b97aa"/>';
+  s += '<text class="b" x="' + (BX + 140) + '" y="84" text-anchor="middle" style="fill:#1b1f27">ESP32-S3</text>';
+  s += '<circle cx="' + (BX + 140) + '" cy="160" r="40" fill="#0b0d12" stroke="#59647a" stroke-width="4"/><circle cx="' + (BX + 140) + '" cy="160" r="22" fill="#1d2a4a"/><circle cx="' + (BX + 132) + '" cy="152" r="6" fill="#7fa8ff" opacity=".7"/>';
+  s += '<rect x="' + (BX + 128) + '" y="200" width="24" height="90" fill="#d9822b"/>';
+  s += '<rect x="' + (BX + 80) + '" y="290" width="120" height="34" rx="3" fill="#2a2f3a" stroke="#59647a"/>';
+  s += '<text class="s" x="' + (BX + 140) + '" y="352" text-anchor="middle">Camera OV3660 / OV5640</text>';
+  s += '<text class="b" x="' + (BX + 140) + '" y="' + (rowY(12) + 4) + '" text-anchor="middle">ESP32-S3 CAM</text>';
+  s += '<text class="s" x="' + (BX + 140) + '" y="' + (rowY(12) + 22) + '" text-anchor="middle">N16R8</text>';
+  [['RST', BX + 96], ['BOOT', BX + 184]].forEach(([t, x]) => { s += '<rect x="' + (x - 14) + '" y="' + (rowY(15) - 14) + '" width="28" height="28" rx="4" fill="#2a2f3a" stroke="#59647a"/><circle cx="' + x + '" cy="' + rowY(15) + '" r="7" fill="#59647a"/><text class="s" x="' + x + '" y="' + (rowY(15) + 30) + '" text-anchor="middle">' + t + '</text>'; });
+  [['USB', BX + 96, 'GPIO19/20'], ['COM', BX + 184, 'GPIO43/44']].forEach(([t, x, sub]) => { s += '<rect x="' + (x - 24) + '" y="' + (H - 58) + '" width="48" height="26" rx="8" fill="#c9ced6" stroke="#8b97aa"/><text class="b" x="' + x + '" y="' + (H - 66) + '" text-anchor="middle">' + t + '</text><text class="s" x="' + x + '" y="' + (H - 82) + '" text-anchor="middle">' + sub + '</text>'; });
+  /* GPIO -> wire (module, label, type) */
+  const used = {};
+  CAM_MODULES.forEach(m => m.pins.forEach(([label, gpio, type]) => { used[gpio] = { m, label, type }; }));
+  /* Header pins and label chips */
+  [CAM_LEFT_HDR, CAM_RIGHT_HDR].forEach((hdr, side) => hdr.forEach((name, i) => {
+    const y = rowY(i), hx = HX[side], kind = camPinKind(name), u = used[name];
+    const cx = side === 0 ? BX - 10 - CHIP : BX + BW + 10;
+    const color = u ? TYPE[u.type][1] : kind ? kind[1] : '#33405a';
+    s += '<circle cx="' + hx + '" cy="' + y + '" r="7" fill="#0b0d12" stroke="#e6c76a" stroke-width="2.4"/>';
+    s += '<text class="s" x="' + (side === 0 ? hx + 14 : hx - 14) + '" y="' + (y + 4) + '" text-anchor="' + (side === 0 ? 'start' : 'end') + '">' + name + '</text>';
+    s += '<path d="M' + hx + ' ' + y + 'H' + (side === 0 ? BX - 10 : BX + BW + 10) + '" stroke="' + color + '" stroke-width="2.4" opacity="' + (u || kind ? 1 : .35) + '"/>';
+    const fill = u ? '#0c111b' : kind ? kind[1] : '#0c111b';
+    s += '<rect x="' + cx + '" y="' + (y - 15) + '" width="' + CHIP + '" height="30" rx="7" fill="' + fill + '" stroke="' + color + '" stroke-width="1.6"/>';
+    const text = /^\d+$/.test(name) ? 'GPIO' + name : name;
+    s += '<text class="cg" x="' + (cx + CHIP / 2) + '" y="' + (y + 5.5) + '" text-anchor="middle" style="fill:' + (u ? '#3ddc97' : kind ? '#fff' : '#8b97aa') + '">' + text + '</text>';
+    if (kind && /^\d+$/.test(name)) s += '<text class="s" x="' + (side === 0 ? cx - 8 : cx + CHIP + 8) + '" y="' + (y + 4) + '" text-anchor="' + (side === 0 ? 'end' : 'start') + '" style="fill:' + kind[1] + '">' + kind[0] + '</text>';
+  }));
+  /* Module cards: each pin row sits at the height of its header pin, so every wire is a straight line. */
+  CAM_MODULES.forEach(m => {
+    const hdr = m.side === 'L' ? CAM_LEFT_HDR : CAM_RIGHT_HDR;
+    const ys = m.pins.map(p => rowY(hdr.indexOf(String(p[1]))));
+    const top = Math.min(...ys) - PADY, bottom = Math.max(...ys) + PADY, h = bottom - top;
+    const x = m.side === 'L' ? 18 : W - 18 - CARD_W, inner = m.side === 'L' ? x + CARD_W : x;
+    const chipEdge = m.side === 'L' ? BX - 10 - CHIP : BX + BW + 10 + CHIP;
+    s += '<rect x="' + x + '" y="' + top + '" width="' + CARD_W + '" height="' + h + '" rx="10" fill="#111722" stroke="#33405a"/>';
+    const scale = Math.min(.8, (h - 10) / 80), artX = m.side === 'L' ? x + 10 : x + CARD_W - 10 - 112 * scale;
+    s += '<g transform="translate(' + artX + ' ' + (top + (h - 80 * scale) / 2) + ') scale(' + scale.toFixed(3) + ')">' + ART[m.art] + '</g>';
+    const tx = m.side === 'L' ? x + 20 + 112 * scale : x + CARD_W - 20 - 112 * scale, anchor = m.side === 'L' ? 'start' : 'end';
+    const single = m.pins.length === 1;
+    const ty = single ? top + h / 2 - 2 : top + 28;
+    s += '<text class="ct" x="' + tx + '" y="' + ty + '" text-anchor="' + anchor + '">' + esc(m.short) + '</text>';
+    s += '<text class="cs" x="' + tx + '" y="' + (ty + (single ? 17 : 20)) + '" text-anchor="' + anchor + '">' + esc(m.snote) + '</text>';
+    m.pins.forEach(([label, gpio, type], k) => {
+      const y = ys[k], color = TYPE[type][1];
+      s += '<path d="M' + inner + ' ' + y + 'H' + chipEdge + '" stroke="' + color + '" stroke-width="3.4" stroke-linecap="round"/>';
+      s += '<circle cx="' + inner + '" cy="' + y + '" r="6" fill="' + color + '" stroke="#0c111b" stroke-width="2"/>';
+      s += '<circle cx="' + chipEdge + '" cy="' + y + '" r="4" fill="' + color + '"/>';
+      s += '<text class="cp" x="' + (m.side === 'L' ? inner - 16 : inner + 16) + '" y="' + (y + 5.5) + '" text-anchor="' + (m.side === 'L' ? 'end' : 'start') + '">' + esc(label) + '</text>';
+    });
+  });
+  s += '<text class="ct" x="' + (W / 2) + '" y="26" text-anchor="middle">Robot Camera · ESP32-S3 CAM N16R8 · nhìn từ mặt có camera</text>';
+  s += '</svg>';
+  host.innerHTML = s;
+  document.getElementById('cam-legend').innerHTML = WIRE_LEGEND.filter(k => k !== 'analog').map(k => '<span><i style="background:' + TYPE[k][1] + '"></i>' + TYPE[k][0] + '</span>').join('') +
+    '<span><i style="background:#c2410c"></i>Camera</span><span><i style="background:#b91c1c"></i>PSRAM</span><span><i style="background:#be185d"></i>Cổng COM (UART0)</span>';
+}
+
+function drawCamTables() {
+  const list = document.getElementById('cam-tables');
+  if (list) {
+    list.innerHTML = '';
+    for (const m of CAM_MODULES) {
+      const row = (label, target, type, strong) => '<tr style="--w:' + TYPE[type][1] + '"><td>' + esc(label) + '</td><td class="wire" aria-hidden="true"><i></i></td><td' + (strong ? ' class="gp"' : '') + '>' + esc(target) + '</td></tr>';
+      const card = document.createElement('article');
+      card.className = 'mod';
+      card.innerHTML = '<header><div class="pic"><svg viewBox="0 0 112 80" aria-hidden="true">' + ART[m.art] + '</svg></div><div><h4>' + esc(m.name) + '</h4><p>' + esc(m.note) + '</p></div></header>' +
+        '<table><thead><tr><th>Chân trên module</th><th></th><th>Nối tới</th></tr></thead><tbody>' +
+        m.pins.map(([label, gpio, type]) => row(label, 'GPIO' + gpio, type, true)).join('') +
+        m.wires.map(([label, target, type]) => row(label, target, type, false)).join('') + '</tbody></table>' +
+        (m.tip ? '<p class="tip">' + esc(m.tip) + '</p>' : '');
+      list.append(card);
+    }
+  }
+  const body = document.getElementById('cam-pins');
+  if (!body) return;
+  const used = {};
+  CAM_MODULES.forEach(m => m.pins.forEach(([label, gpio]) => { used[gpio] = m.name.split(' ·')[0] + ' · ' + label; }));
+  const rows = [];
+  for (const g of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]) {
+    const kind = camPinKind(String(g));
+    let state, text;
+    if (used[g]) { state = (g === 4 || g === 5) ? 'shared' : 'used'; text = used[g] + (g === 4 || g === 5 ? ' (chung bus camera)' : '') + ([3, 45, 46].includes(g) ? ' · chân strapping' : '') + (g === 0 ? ' · cũng là nút BOOT' : '') + (g === 19 || g === 20 ? ' · cổng USB gốc' : '') + (g === 48 ? ' · đèn RGB trên bo' : ''); }
+    else if (kind) { state = 'reserved'; text = kind[0] === 'camera' ? 'Camera (dữ liệu, VSYNC, HREF, PCLK, XCLK)' : kind[0] === 'PSRAM' ? 'Bộ nhớ PSRAM 8 MB' : 'Cổng COM (UART0): nạp firmware và log'; }
+    else { state = 'free'; text = 'Còn trống'; }
+    rows.push('<tr class="pa-' + state + '"><td>GPIO ' + g + '</td><td><span>' + { free: 'Trống', used: 'Đang dùng', shared: 'Chung I²C', reserved: 'Dành riêng' }[state] + '</span></td><td>' + esc(text) + '</td></tr>');
+  }
+  body.innerHTML = rows.join('');
+}
+
+drawCamMap();
+drawCamTables();
