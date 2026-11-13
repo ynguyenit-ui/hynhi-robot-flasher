@@ -7,13 +7,13 @@
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
 <header class="top">
   <a class="brand" href="#top"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8</small></span></a>
-  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#diag">Chẩn đoán</a><a href="#wiring">Sơ đồ đấu nối</a><a href="#tables">Bảng đấu dây</a><a href="#camera">Robot Camera</a></nav>
+  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#diag">Chẩn đoán</a><a href="#wiring" id="nav-wiring">Sơ đồ đấu nối</a><a href="#tables" data-fw="custom">Bảng đấu dây</a></nav>
 </header>
 
 <main id="top">
@@ -81,7 +81,7 @@
     </details>
   </section>
 
-  <section id="wiring" class="card">
+  <section id="wiring" class="card" data-fw="custom">
     <p class="eyebrow">CHÂN CUSTOM</p>
     <h2>Sơ đồ đấu nối</h2>
     <p class="lead">Mỗi đường màu là một sợi dây tín hiệu từ module về đúng GPIO trên ESP32-S3. Nguồn và GND của từng module xem ở bảng đấu dây bên dưới.</p>
@@ -95,7 +95,7 @@
     </div>
   </section>
 
-  <section id="tables" class="card">
+  <section id="tables" class="card" data-fw="custom">
     <p class="eyebrow">ĐẤU TỪNG MODULE</p>
     <h2>Bảng đấu dây</h2>
     <p class="lead">Đấu lần lượt từng module theo bảng: cột trái là chân in trên module, cột phải là nơi cắm trên ESP32-S3 hoặc nguồn.</p>
@@ -111,7 +111,7 @@
       </ul>
     </div>
   </section>
-  <section id="camera" class="card">
+  <section id="camera" class="card" data-fw="cam" hidden>
     <p class="eyebrow">ESP32-S3 CAM N16R8 · OV3660 / OV5640 tự nhận</p>
     <h2>Sơ đồ đấu nối Robot Camera</h2>
     <p class="lead">Camera cắm sẵn trên bo và chiếm GPIO6–13, 15–18. Các module còn lại dùng hết những chân trống: mỗi dây vẽ thẳng từ chân module tới đúng chân trên hai hàng header của bo. Mọi chân vẫn đổi được trong tab Chân GPIO.</p>
@@ -135,7 +135,7 @@
   </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 <script src="cam.js?v=5"></script>
 <script type="module" src="diag.js?v=2"></script>
 </body>

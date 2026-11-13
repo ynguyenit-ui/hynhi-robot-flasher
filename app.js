@@ -165,13 +165,20 @@ function loadManifest() {
 }
 
 /* Chọn firmware: robot để bàn hoặc Robot Camera (OV3660 / OV5640). */
-document.querySelectorAll('.variants button').forEach(button => button.addEventListener('click', () => {
-  document.querySelectorAll('.variants button').forEach(b => b.setAttribute('aria-checked', String(b === button)));
-  firmwareDir = button.dataset.fw;
+/* Only the wiring diagram and tables of the selected firmware are shown. */
+function selectFirmware(dir) {
+  firmwareDir = dir === 'cam' ? 'cam' : 'custom';
+  document.querySelectorAll('.variants button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.fw === firmwareDir)));
+  document.querySelectorAll('[data-fw]:not(.variants button)').forEach(el => { el.hidden = el.dataset.fw !== firmwareDir; });
+  document.getElementById('nav-wiring').href = firmwareDir === 'cam' ? '#camera' : '#wiring';
   document.getElementById('installer').setAttribute('manifest', 'firmware/' + firmwareDir + '/manifest.json');
+  try { localStorage.setItem('hynhi-fw', firmwareDir); } catch { /* chỉ để nhớ lựa chọn */ }
   loadManifest();
-}));
+}
+document.querySelectorAll('.variants button').forEach(button => button.addEventListener('click', () => selectFirmware(button.dataset.fw)));
 
 drawMap();
 drawTables();
-loadManifest();
+let savedFw = location.hash === '#camera' ? 'cam' : '';
+try { savedFw = savedFw || localStorage.getItem('hynhi-fw') || ''; } catch { /* không có bộ nhớ trình duyệt */ }
+selectFirmware(savedFw);
