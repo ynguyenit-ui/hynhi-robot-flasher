@@ -48,31 +48,46 @@ function loadManifest() {
   }).catch(() => { facts.innerHTML = '<li class="warn">Chưa tìm thấy gói firmware.</li>'; });
 }
 
-/* Firmware choice (desk robot / Robot Camera): drives the installer and the wiring diagram. */
+/* Firmware choice (desk robot / Robot Camera): drives the installer and the wiring diagram below it. */
 function selectFirmware(dir) {
   firmwareDir = dir === 'cam' ? 'cam' : 'custom';
   document.querySelectorAll('[data-fw-pick]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.fwPick === firmwareDir)));
   document.getElementById('installer').setAttribute('manifest', 'firmware/' + firmwareDir + '/manifest.json');
+  document.getElementById('wiring-title').textContent = 'Sơ đồ đấu nối · ' + (firmwareDir === 'cam' ? 'Robot Camera' : 'Robot để bàn');
   try { localStorage.setItem('hynhi-fw', firmwareDir); } catch { /* chỉ để nhớ lựa chọn */ }
   drawWiring(firmwareDir);
   loadManifest();
 }
 document.querySelectorAll('[data-fw-pick]').forEach(b => b.addEventListener('click', () => selectFirmware(b.dataset.fwPick)));
 
-/* Tabs: #firmware, #wiring, #diag. */
-const VIEWS = ['firmware', 'wiring', 'diag'];
+/* Two views: #firmware (installer + wiring diagram) and #diag. #wiring scrolls to the diagram. */
 function showView() {
-  const id = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'firmware';
-  VIEWS.forEach(v => { document.getElementById(v).hidden = v !== id; });
+  const hash = location.hash.slice(1);
+  const id = hash === 'diag' ? 'diag' : 'firmware';
+  ['firmware', 'diag'].forEach(v => { document.getElementById(v).hidden = v !== id; });
   document.querySelectorAll('.tabs a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'page' : 'false'));
-  window.scrollTo(0, 0);
+  if (hash === 'wiring') document.getElementById('wiring').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  else window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', showView);
+
+/* Light / dark theme: follows the system until the viewer picks one. */
+const themeButton = document.getElementById('theme');
+function isDark() { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+function syncThemeIcon() { themeButton.querySelector('use').setAttribute('href', isDark() ? '#i-sun' : '#i-moon'); }
+themeButton.addEventListener('click', () => {
+  const next = isDark() ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('hynhi-theme', next); } catch { /* chỉ để nhớ lựa chọn */ }
+  syncThemeIcon();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncThemeIcon);
 
 /* wiring.js loads after this file, so start once every script has run. */
 window.addEventListener('DOMContentLoaded', () => {
   let savedFw = '';
   try { savedFw = localStorage.getItem('hynhi-fw') || ''; } catch { /* không có bộ nhớ trình duyệt */ }
   selectFirmware(savedFw);
+  syncThemeIcon();
   showView();
 });

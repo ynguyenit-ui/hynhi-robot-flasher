@@ -55,7 +55,7 @@ $('dg-connect').addEventListener('click', async () => {
   await readBootLog(port, !chipRead);
   busy = false;
   $('dg-connect').disabled = false;
-  $('dg-connect').textContent = 'Kết nối lại';
+  $('dg-connect').querySelector('span').textContent = 'Kết nối lại';
 });
 
 /* Step 1: download mode, read the chip, then hard reset so the boot log starts from the top. */

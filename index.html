@@ -3,81 +3,95 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0a0e15">
+<meta name="color-scheme" content="light dark">
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=14">
+<script>try{var t=localStorage.getItem('hynhi-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="style.css?v=20">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+  <symbol id="i-usb" viewBox="0 0 24 24"><path d="M12 2v14M8 6l4-4 4 4M7 10v3l5 3 5-3v-3"/><circle cx="12" cy="19" r="2.5"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2v6M15 2v6M6 8h12v3a6 6 0 0 1-12 0zM12 17v5"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-desk" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="11" rx="3"/><path d="M9 9h.01M15 9h.01M10 12h4M8 20h8M12 15v5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-flash" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.4a5 5 0 0 1 7 0"/><circle cx="12" cy="20" r=".8"/></symbol>
+</svg>
 <header class="top">
   <a class="brand" href="#firmware"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>Firmware · ESP32-S3</small></span></a>
   <nav class="tabs" aria-label="Mục chính">
-    <a href="#firmware">Nạp firmware</a>
-    <a href="#wiring">Sơ đồ đấu nối</a>
-    <a href="#diag">Chẩn đoán</a>
+    <a href="#firmware"><svg class="ic"><use href="#i-flash"/></svg>Nạp firmware</a>
+    <a href="#diag"><svg class="ic"><use href="#i-pulse"/></svg>Chẩn đoán</a>
   </nav>
+  <button type="button" class="iconbtn" id="theme" aria-label="Đổi giao diện sáng/tối"><svg class="ic"><use href="#i-moon"/></svg></button>
 </header>
 
 <main>
-  <section id="firmware" class="card hero">
-    <div class="hero-text">
-      <p class="eyebrow">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
-      <h1>Nạp firmware<br>cho Hynhi Robot</h1>
-      <p class="lead">Chọn loại robot, cắm cáp USB rồi bấm nạp. Dùng Chrome hoặc Edge trên máy tính.</p>
-      <div class="variants" role="radiogroup" aria-label="Chọn firmware">
-        <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
-        <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
+  <div id="firmware" class="view">
+    <section class="card hero">
+      <div class="hero-text">
+        <p class="eyebrow">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
+        <h1>Nạp firmware<br>cho Hynhi Robot</h1>
+        <p class="lead">Chọn loại robot, cắm cáp USB rồi bấm nạp. Dùng Chrome hoặc Edge trên máy tính.</p>
+        <div class="variants" role="radiogroup" aria-label="Chọn firmware">
+          <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><svg class="ic"><use href="#i-desk"/></svg><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
+          <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><svg class="ic"><use href="#i-camera"/></svg><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
+        </div>
+        <div class="actions">
+          <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
+            <button slot="activate" class="button"><svg class="ic"><use href="#i-usb"/></svg>Kết nối và nạp firmware</button>
+            <span slot="unsupported" class="warn">Trình duyệt này không hỗ trợ Web Serial. Hãy mở bằng Chrome hoặc Edge trên máy tính.</span>
+            <span slot="not-allowed" class="warn">Cần mở trang qua HTTPS để dùng cổng USB.</span>
+          </esp-web-install-button>
+          <a class="ghost-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối</a>
+        </div>
+        <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
       </div>
-      <div class="actions">
-        <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
-          <button slot="activate" class="button">Kết nối và nạp firmware</button>
-          <span slot="unsupported" class="warn">Trình duyệt này không hỗ trợ Web Serial. Hãy mở bằng Chrome hoặc Edge trên máy tính.</span>
-          <span slot="not-allowed" class="warn">Cần mở trang qua HTTPS để dùng cổng USB.</span>
-        </esp-web-install-button>
-        <a class="ghost-link" href="#wiring">Xem sơ đồ đấu nối</a>
-      </div>
-      <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
-    </div>
-    <ol class="steps">
-      <li><b>Cắm cáp USB dữ liệu</b><span>Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
-      <li><b>Bấm “Kết nối”</b><span>Chọn cổng USB của robot trong danh sách.</span></li>
-      <li><b>Chọn xóa bộ nhớ</b><span>Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
-      <li><b>Chờ robot khởi động lại</b><span>Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
-    </ol>
-  </section>
+      <ol class="steps">
+        <li><svg class="ic"><use href="#i-plug"/></svg><b>Cắm cáp USB dữ liệu</b><span>Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
+        <li><svg class="ic"><use href="#i-usb"/></svg><b>Bấm “Kết nối”</b><span>Chọn cổng USB của robot trong danh sách.</span></li>
+        <li><svg class="ic"><use href="#i-trash"/></svg><b>Chọn xóa bộ nhớ</b><span>Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
+        <li><svg class="ic"><use href="#i-clock"/></svg><b>Chờ robot khởi động lại</b><span>Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
+      </ol>
+    </section>
 
-  <section id="wiring" class="card" hidden>
-    <div class="view-head">
-      <div>
-        <p class="eyebrow">ĐẤU DÂY THEO BẢN NẠP</p>
-        <h2>Sơ đồ đấu nối</h2>
+    <section id="wiring" class="card">
+      <div class="view-head">
+        <span class="badge"><svg class="ic"><use href="#i-map"/></svg></span>
+        <div><p class="eyebrow">THEO BẢN ĐANG CHỌN</p><h2 id="wiring-title">Sơ đồ đấu nối · Robot để bàn</h2></div>
       </div>
-      <div class="seg" role="radiogroup" aria-label="Chọn robot">
-        <button type="button" role="radio" aria-checked="true" data-fw-pick="custom">Robot để bàn</button>
-        <button type="button" role="radio" aria-checked="false" data-fw-pick="cam">Robot Camera</button>
-      </div>
-    </div>
-    <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
-    <div class="legend" id="legend"></div>
-  </section>
+      <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+  </div>
 
-  <section id="diag" class="card" hidden>
+  <section id="diag" class="card view" hidden>
     <div class="view-head">
-      <div>
-        <p class="eyebrow">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p>
-        <h2>Chẩn đoán</h2>
-      </div>
+      <span class="badge"><svg class="ic"><use href="#i-pulse"/></svg></span>
+      <div><p class="eyebrow">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p><h2>Chẩn đoán</h2></div>
     </div>
     <p class="lead">Cắm robot vào máy tính rồi bấm Kết nối ESP32. Trang đọc thông tin chip, khởi động lại robot và hiện địa chỉ trang cấu hình. Đóng các chương trình khác đang mở cổng này trước khi kết nối.</p>
     <div class="dg-actions">
-      <button type="button" class="button" id="dg-connect">Kết nối ESP32</button>
+      <button type="button" class="button" id="dg-connect"><svg class="ic"><use href="#i-usb"/></svg><span>Kết nối ESP32</span></button>
       <p id="dg-status" class="dg-status" role="status" aria-live="polite">Chưa kết nối.</p>
     </div>
     <div class="dg-url">
+      <span class="badge"><svg class="ic"><use href="#i-wifi"/></svg></span>
       <div><span>Địa chỉ trang cấu hình</span><b id="dg-url">Chưa có</b></div>
-      <a id="dg-open" class="button" href="#" target="_blank" rel="noopener" hidden>Mở trang cấu hình</a>
+      <a id="dg-open" class="button" href="#" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-ext"/></svg>Mở trang cấu hình</a>
     </div>
     <div class="dg-grid">
       <dl class="dg-info">
@@ -100,14 +114,14 @@
     </div>
     <details class="dg-logwrap">
       <summary>Log từ robot</summary>
-      <div class="dg-logbar"><button type="button" class="ghost" id="dg-copy">Chép log</button><button type="button" class="ghost" id="dg-clear">Xoá</button></div>
+      <div class="dg-logbar"><button type="button" class="ghost" id="dg-copy"><svg class="ic"><use href="#i-copy"/></svg>Chép log</button><button type="button" class="ghost" id="dg-clear"><svg class="ic"><use href="#i-trash"/></svg>Xoá</button></div>
       <pre id="dg-log" class="dg-log"></pre>
     </details>
   </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=10"></script>
-<script src="wiring.js?v=2"></script>
-<script type="module" src="diag.js?v=3"></script>
+<script src="app.js?v=11"></script>
+<script src="wiring.js?v=3"></script>
+<script type="module" src="diag.js?v=4"></script>
 </body>
 </html>
