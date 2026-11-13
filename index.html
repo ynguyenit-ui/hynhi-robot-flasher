@@ -7,7 +7,7 @@
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=11">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
@@ -120,7 +120,7 @@
     <div class="mods" id="cam-tables"></div>
     <div class="pin-avail">
       <h3>Toàn bộ chân của bo camera</h3>
-      <p>Bộ chân này dùng hết mọi GPIO còn trống. GPIO4/5 dùng chung với camera, chỉ dành cho thiết bị I²C (VL53L0X, OLED địa chỉ 0x3D). GPIO19/20 là cổng USB để nạp firmware nên luôn được giữ lại: dùng hai chân này cho module khác sẽ làm mất cổng COM trên máy tính. Bo không còn đủ chân cho mạch động cơ L298N khi đã có màn ST7789 và hai servo.</p>
+      <p>Chấm tròn trên sơ đồ là chân dùng được cho module. GPIO4/5 dùng chung với camera, chỉ dành cho thiết bị I²C (VL53L0X, OLED địa chỉ 0x3D). GPIO45/46/3 là chân strapping: dùng được sau khi khởi động, đừng nối thiết bị kéo lên mức cao. GPIO19/20 là cổng USB gốc: dùng được cho tín hiệu nhưng khi đó mất cổng COM USB, nạp lại bằng cách giữ BOOT, bấm RST.</p>
       <div class="pa-scroll"><table><thead><tr><th>Chân</th><th>Trạng thái</th><th>Dùng cho</th></tr></thead><tbody id="cam-pins"></tbody></table></div>
     </div>
     <div class="power">
@@ -136,7 +136,7 @@
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
 <script src="app.js?v=8"></script>
-<script src="cam.js?v=3"></script>
+<script src="cam.js?v=5"></script>
 <script type="module" src="diag.js?v=2"></script>
 </body>
 </html>

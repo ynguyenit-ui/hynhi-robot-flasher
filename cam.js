@@ -45,69 +45,110 @@ const camPinKind = name => {
   return null;
 };
 
+/* GPIO that can carry a module signal on this board (the round dots on the diagram). */
+const CAM_USABLE = [0, 1, 2, 3, 4, 5, 14, 19, 20, 21, 38, 39, 40, 41, 42, 45, 46, 47, 48];
+
 function drawCamMap() {
   const host = document.getElementById('cam-map');
   if (!host) return;
-  const W = 1500, P = 52, Y0 = 150, BX = 610, BW = 280, HX = [BX + 26, BX + BW - 26], CHIP = 104, CARD_W = 420, PADY = 23;
-  const rowY = i => Y0 + i * P, H = rowY(19) + 70;
-  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Sơ đồ đấu nối Robot Camera">';
+  const W = 1500, P = 52, Y0 = 250, BX = 610, BW = 280, HX = [BX + 26, BX + BW - 26], CHIP = 104, CARD_W = 420, PADY = 23;
+  const rowY = i => Y0 + i * P, BOARD_BOTTOM = rowY(19) + 110, PWR = BOARD_BOTTOM + 40, H = PWR + 300;
+  const RED = '#ef4444', AMBER = '#f59e0b';
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Sơ đồ đấu nối Hynhi Robot Camera">';
+  /* Title banner */
+  s += '<rect x="0" y="0" width="' + W + '" height="150" rx="16" fill="#0f1420"/>';
+  s += '<image href="images/logo.png" x="24" y="14" width="122" height="122" preserveAspectRatio="xMidYMid meet"/>';
+  s += '<text class="ch" x="170" y="72">HYNHI ROBOT CAMERA · ESP32-S3 CUSTOM GPIO</text>';
+  s += '<text class="cs2" x="172" y="108">Sơ đồ đấu nối bo ESP32-S3 CAM N16R8 · camera OV3660 / OV5640 tự nhận · mọi chân đổi được trong tab Chân GPIO</text>';
+  s += '<circle cx="182" cy="132" r="7" fill="#3ddc97"/><text class="cs" x="196" y="137">Chấm tròn: chân dùng được cho module</text>';
+  s += '<circle cx="520" cy="132" r="7" fill="none" stroke="#e7ecf3" stroke-width="2.4"/><text class="cs" x="534" y="137">Chấm rỗng: chân dùng được, đang trống</text>';
+  /* 3.3 V and 5 V rails along the top and bottom of the board */
+  s += '<path d="M' + (BX - 10 - CHIP) + ' ' + (Y0 - 50) + 'H' + (BX + BW + 10 + CHIP) + '" stroke="' + AMBER + '" stroke-width="3" stroke-dasharray="10 6"/>';
+  s += '<text class="cs" x="' + (BX + BW / 2) + '" y="' + (Y0 - 58) + '" text-anchor="middle" style="fill:' + AMBER + '">Đường 3,3 V từ chân 3V3 của bo: micro, màn hình, VL53L0X, OLED, TTP223</text>';
   /* Board */
-  s += '<rect x="' + BX + '" y="40" width="' + BW + '" height="' + (H - 60) + '" rx="14" fill="#16181d" stroke="#3a4558" stroke-width="2"/>';
-  s += '<rect x="' + (BX + 70) + '" y="58" width="140" height="190" rx="6" fill="#c9ced6" stroke="#8b97aa"/>';
-  s += '<text class="b" x="' + (BX + 140) + '" y="84" text-anchor="middle" style="fill:#1b1f27">ESP32-S3</text>';
-  s += '<circle cx="' + (BX + 140) + '" cy="160" r="40" fill="#0b0d12" stroke="#59647a" stroke-width="4"/><circle cx="' + (BX + 140) + '" cy="160" r="22" fill="#1d2a4a"/><circle cx="' + (BX + 132) + '" cy="152" r="6" fill="#7fa8ff" opacity=".7"/>';
-  s += '<rect x="' + (BX + 128) + '" y="200" width="24" height="90" fill="#d9822b"/>';
-  s += '<rect x="' + (BX + 80) + '" y="290" width="120" height="34" rx="3" fill="#2a2f3a" stroke="#59647a"/>';
-  s += '<text class="s" x="' + (BX + 140) + '" y="352" text-anchor="middle">Camera OV3660 / OV5640</text>';
+  s += '<rect x="' + BX + '" y="' + (Y0 - 36) + '" width="' + BW + '" height="' + (BOARD_BOTTOM - Y0 + 36) + '" rx="14" fill="#16181d" stroke="#3a4558" stroke-width="2"/>';
+  const top = Y0 - 20;
+  s += '<rect x="' + (BX + 70) + '" y="' + top + '" width="140" height="180" rx="6" fill="#c9ced6" stroke="#8b97aa"/>';
+  s += '<text class="b" x="' + (BX + 140) + '" y="' + (top + 24) + '" text-anchor="middle" style="fill:#1b1f27">ESP32-S3</text>';
+  s += '<circle cx="' + (BX + 140) + '" cy="' + (top + 96) + '" r="40" fill="#0b0d12" stroke="#59647a" stroke-width="4"/><circle cx="' + (BX + 140) + '" cy="' + (top + 96) + '" r="22" fill="#1d2a4a"/><circle cx="' + (BX + 132) + '" cy="' + (top + 88) + '" r="6" fill="#7fa8ff" opacity=".7"/>';
+  s += '<rect x="' + (BX + 128) + '" y="' + (top + 136) + '" width="24" height="90" fill="#d9822b"/>';
+  s += '<rect x="' + (BX + 80) + '" y="' + (top + 226) + '" width="120" height="34" rx="3" fill="#2a2f3a" stroke="#59647a"/>';
+  s += '<text class="s" x="' + (BX + 140) + '" y="' + (top + 286) + '" text-anchor="middle">Camera OV3660 / OV5640</text>';
   s += '<text class="b" x="' + (BX + 140) + '" y="' + (rowY(12) + 4) + '" text-anchor="middle">ESP32-S3 CAM</text>';
   s += '<text class="s" x="' + (BX + 140) + '" y="' + (rowY(12) + 22) + '" text-anchor="middle">N16R8</text>';
   [['RST', BX + 96], ['BOOT', BX + 184]].forEach(([t, x]) => { s += '<rect x="' + (x - 14) + '" y="' + (rowY(15) - 14) + '" width="28" height="28" rx="4" fill="#2a2f3a" stroke="#59647a"/><circle cx="' + x + '" cy="' + rowY(15) + '" r="7" fill="#59647a"/><text class="s" x="' + x + '" y="' + (rowY(15) + 30) + '" text-anchor="middle">' + t + '</text>'; });
-  [['USB', BX + 96, 'GPIO19/20'], ['UART', BX + 184, 'GPIO43/44']].forEach(([t, x, sub]) => { s += '<rect x="' + (x - 24) + '" y="' + (H - 58) + '" width="48" height="26" rx="8" fill="#c9ced6" stroke="#8b97aa"/><text class="b" x="' + x + '" y="' + (H - 66) + '" text-anchor="middle">' + t + '</text><text class="s" x="' + x + '" y="' + (H - 82) + '" text-anchor="middle">' + sub + '</text>'; });
-  /* GPIO -> wire (module, label, type) */
+  [['USB', BX + 96, 'GPIO19/20'], ['UART', BX + 184, 'GPIO43/44']].forEach(([t, x, sub]) => { s += '<rect x="' + (x - 24) + '" y="' + (BOARD_BOTTOM - 32) + '" width="48" height="26" rx="8" fill="#c9ced6" stroke="#8b97aa"/><text class="b" x="' + x + '" y="' + (BOARD_BOTTOM - 40) + '" text-anchor="middle">' + t + '</text><text class="s" x="' + x + '" y="' + (BOARD_BOTTOM - 56) + '" text-anchor="middle">' + sub + '</text>'; });
   const used = {};
   CAM_MODULES.forEach(m => m.pins.forEach(([label, gpio, type]) => { used[gpio] = { m, label, type }; }));
-  /* Header pins and label chips */
   [CAM_LEFT_HDR, CAM_RIGHT_HDR].forEach((hdr, side) => hdr.forEach((name, i) => {
     const y = rowY(i), hx = HX[side], kind = camPinKind(name), u = used[name];
     const cx = side === 0 ? BX - 10 - CHIP : BX + BW + 10;
+    const usable = CAM_USABLE.includes(Number(name)) && /^\d+$/.test(name);
     const color = u ? TYPE[u.type][1] : kind ? kind[1] : '#33405a';
     s += '<circle cx="' + hx + '" cy="' + y + '" r="7" fill="#0b0d12" stroke="#e6c76a" stroke-width="2.4"/>';
     s += '<text class="s" x="' + (side === 0 ? hx + 14 : hx - 14) + '" y="' + (y + 4) + '" text-anchor="' + (side === 0 ? 'start' : 'end') + '">' + name + '</text>';
-    s += '<path d="M' + hx + ' ' + y + 'H' + (side === 0 ? BX - 10 : BX + BW + 10) + '" stroke="' + color + '" stroke-width="2.4" opacity="' + (u || kind ? 1 : .35) + '"/>';
+    s += '<path d="M' + hx + ' ' + y + 'H' + (side === 0 ? BX - 10 : BX + BW + 10) + '" stroke="' + color + '" stroke-width="2.4" opacity="' + (u || kind ? 1 : .5) + '"/>';
     const fill = u ? '#0c111b' : kind ? kind[1] : '#0c111b';
     s += '<rect x="' + cx + '" y="' + (y - 15) + '" width="' + CHIP + '" height="30" rx="7" fill="' + fill + '" stroke="' + color + '" stroke-width="1.6"/>';
     const text = /^\d+$/.test(name) ? 'GPIO' + name : name;
-    s += '<text class="cg" x="' + (cx + CHIP / 2) + '" y="' + (y + 5.5) + '" text-anchor="middle" style="fill:' + (u ? '#3ddc97' : kind ? '#fff' : '#8b97aa') + '">' + text + '</text>';
-    if (kind && /^\d+$/.test(name)) s += '<text class="s" x="' + (side === 0 ? cx - 8 : cx + CHIP + 8) + '" y="' + (y + 4) + '" text-anchor="' + (side === 0 ? 'end' : 'start') + '" style="fill:' + kind[1] + '">' + kind[0] + '</text>';
+    s += '<text class="cg" x="' + (cx + CHIP / 2) + '" y="' + (y + 5.5) + '" text-anchor="middle" style="fill:' + (u ? '#3ddc97' : kind ? '#fff' : '#e7ecf3') + '">' + text + '</text>';
+    if (kind && /^\d+$/.test(name) && !usable) s += '<text class="s" x="' + (side === 0 ? cx - 10 : cx + CHIP + 10) + '" y="' + (y + 4) + '" text-anchor="' + (side === 0 ? 'end' : 'start') + '" style="fill:' + kind[1] + '">' + kind[0] + '</text>';
+    if (usable && !u) {
+      const dx = side === 0 ? cx - 12 : cx + CHIP + 12;
+      s += '<circle cx="' + dx + '" cy="' + y + '" r="7" fill="none" stroke="#e7ecf3" stroke-width="2.4"/>';
+      s += '<text class="s" x="' + (side === 0 ? dx - 14 : dx + 14) + '" y="' + (y + 4) + '" text-anchor="' + (side === 0 ? 'end' : 'start') + '">trống' + (name === '19' || name === '20' ? ' · USB gốc' : '') + '</text>';
+    }
   }));
   /* Module cards: each pin row sits at the height of its header pin, so every wire is a straight line. */
   CAM_MODULES.forEach(m => {
     const hdr = m.side === 'L' ? CAM_LEFT_HDR : CAM_RIGHT_HDR;
     const ys = m.pins.map(p => rowY(hdr.indexOf(String(p[1]))));
-    const top = Math.min(...ys) - PADY, bottom = Math.max(...ys) + PADY, h = bottom - top;
+    const ctop = Math.min(...ys) - PADY, bottom = Math.max(...ys) + PADY, h = bottom - ctop;
     const x = m.side === 'L' ? 18 : W - 18 - CARD_W, inner = m.side === 'L' ? x + CARD_W : x;
     const chipEdge = m.side === 'L' ? BX - 10 - CHIP : BX + BW + 10 + CHIP;
-    s += '<rect x="' + x + '" y="' + top + '" width="' + CARD_W + '" height="' + h + '" rx="10" fill="#111722" stroke="#33405a"/>';
+    s += '<rect x="' + x + '" y="' + ctop + '" width="' + CARD_W + '" height="' + h + '" rx="10" fill="#111722" stroke="#33405a"/>';
     const scale = Math.min(.8, (h - 10) / 80), artX = m.side === 'L' ? x + 10 : x + CARD_W - 10 - 112 * scale;
-    s += '<g transform="translate(' + artX + ' ' + (top + (h - 80 * scale) / 2) + ') scale(' + scale.toFixed(3) + ')">' + ART[m.art] + '</g>';
+    s += '<g transform="translate(' + artX + ' ' + (ctop + (h - 80 * scale) / 2) + ') scale(' + scale.toFixed(3) + ')">' + ART[m.art] + '</g>';
     const tx = m.side === 'L' ? x + 20 + 112 * scale : x + CARD_W - 20 - 112 * scale, anchor = m.side === 'L' ? 'start' : 'end';
-    const single = m.pins.length === 1;
-    const ty = single ? top + h / 2 - 2 : top + 28;
+    const single = m.pins.length === 1, ty = single ? ctop + h / 2 - 2 : ctop + 28;
     s += '<text class="ct" x="' + tx + '" y="' + ty + '" text-anchor="' + anchor + '">' + esc(m.short) + '</text>';
     s += '<text class="cs" x="' + tx + '" y="' + (ty + (single ? 17 : 20)) + '" text-anchor="' + anchor + '">' + esc(m.snote) + '</text>';
     m.pins.forEach(([label, gpio, type], k) => {
       const y = ys[k], color = TYPE[type][1];
       s += '<path d="M' + inner + ' ' + y + 'H' + chipEdge + '" stroke="' + color + '" stroke-width="3.4" stroke-linecap="round"/>';
       s += '<circle cx="' + inner + '" cy="' + y + '" r="6" fill="' + color + '" stroke="#0c111b" stroke-width="2"/>';
-      s += '<circle cx="' + chipEdge + '" cy="' + y + '" r="4" fill="' + color + '"/>';
+      s += '<circle cx="' + chipEdge + '" cy="' + y + '" r="7" fill="' + color + '" stroke="#0c111b" stroke-width="2"/>';
       s += '<text class="cp" x="' + (m.side === 'L' ? inner - 16 : inner + 16) + '" y="' + (y + 5.5) + '" text-anchor="' + (m.side === 'L' ? 'end' : 'start') + '">' + esc(label) + '</text>';
     });
   });
-  s += '<text class="ct" x="' + (W / 2) + '" y="26" text-anchor="middle">Robot Camera · ESP32-S3 CAM N16R8 · nhìn từ mặt có camera</text>';
+  /* Power: battery -> charger/boost -> switch -> capacitor -> 5 V rail (board 5V pin, amp, LED, KCX, servos) */
+  const py = PWR + 70, boxes = [
+    ['Pin Li-ion 3,7 V', '14250 / 18650', '#1e5fb4'], ['Mạch sạc + tăng áp 5 V', 'TP4056 + MT3608 hoặc IP5306', '#12583f'],
+    ['Công tắc nguồn', 'gạt 2 vị trí', '#2a2f3a'], ['Tụ lọc 470–1000 µF', '16–25 V, sát chân 5V', '#3d2a7a']];
+  s += '<rect x="18" y="' + PWR + '" width="' + (W - 36) + '" height="150" rx="12" fill="#111722" stroke="#33405a"/>';
+  s += '<text class="ct" x="40" y="' + (PWR + 32) + '">Nguồn cho Hynhi Robot Camera</text>';
+  const bw = 250, gap = 60, x0 = 40;
+  boxes.forEach(([t, sub, col], i) => {
+    const x = x0 + i * (bw + gap);
+    s += '<rect x="' + x + '" y="' + (py - 26) + '" width="' + bw + '" height="64" rx="10" fill="' + col + '" stroke="#0c111b"/>';
+    s += '<text class="cp" x="' + (x + bw / 2) + '" y="' + (py) + '" text-anchor="middle">' + t + '</text>';
+    s += '<text class="cs" x="' + (x + bw / 2) + '" y="' + (py + 22) + '" text-anchor="middle" style="fill:#d6dce6">' + sub + '</text>';
+    if (i) s += '<path d="M' + (x - gap + 6) + ' ' + (py + 6) + 'H' + (x - 8) + '" stroke="' + RED + '" stroke-width="4" marker-end="url(#arr)"/>';
+  });
+  const railX = x0 + 4 * (bw + gap) - gap + 6;
+  s += '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="' + RED + '"/></marker></defs>';
+  s += '<path d="M' + railX + ' ' + (py + 6) + 'H' + (W - 40) + '" stroke="' + RED + '" stroke-width="4"/>';
+  s += '<text class="cp" x="' + (railX + 16) + '" y="' + (py - 6) + '" style="fill:' + RED + '">Đường 5 V</text>';
+  s += '<text class="cs" x="' + (railX + 16) + '" y="' + (py + 30) + '">bo · ampli · DAC · KCX · LED</text>';
+  s += '<text class="cs" x="40" y="' + (PWR + 136) + '">Servo cần nguồn 5 V riêng ≥ 2 A. Mọi module nối GND chung với bo.</text>';
+  /* Footer: how to configure */
+  s += '<text class="cf" x="18" y="' + (PWR + 196) + '">• Mạch mới: nạp firmware xong, kết nối Wi-Fi “Hynhi Robot - …” của robot rồi mở 192.168.4.1:8080 để chọn chân GPIO.</text>';
+  s += '<text class="cf" x="18" y="' + (PWR + 236) + '">• Robot đã vào Wi-Fi nhà: mở địa chỉ IP:8080 của robot (xem trên màn hình robot hoặc mục Chẩn đoán của trang này).</text>';
+  s += '<text class="cs" x="18" y="' + (PWR + 270) + '">Chân 19/20 (USB gốc) dùng được cho tín hiệu, nhưng khi đó cổng COM USB mất: nạp lại bằng cách giữ BOOT, bấm RST, thả BOOT.</text>';
   s += '</svg>';
   host.innerHTML = s;
   document.getElementById('cam-legend').innerHTML = WIRE_LEGEND.filter(k => k !== 'analog').map(k => '<span><i style="background:' + TYPE[k][1] + '"></i>' + TYPE[k][0] + '</span>').join('') +
-    '<span><i style="background:#c2410c"></i>Camera</span><span><i style="background:#b91c1c"></i>PSRAM</span><span><i style="background:#be185d"></i>Cổng COM (UART0)</span>';
+    '<span><i style="background:#c2410c"></i>Camera</span><span><i style="background:#b91c1c"></i>PSRAM</span><span><i style="background:#7c3aed"></i>USB gốc</span><span><i style="background:#be185d"></i>UART0 (log)</span>';
 }
 
 function drawCamTables() {
@@ -135,6 +176,7 @@ function drawCamTables() {
     const kind = camPinKind(String(g));
     let state, text;
     if (used[g]) { state = (g === 4 || g === 5) ? 'shared' : 'used'; text = used[g] + (g === 4 || g === 5 ? ' (chung bus camera)' : '') + ([3, 45, 46].includes(g) ? ' · chân strapping' : '') + (g === 0 ? ' · cũng là nút BOOT' : '') + (g === 19 || g === 20 ? ' · cổng USB gốc' : '') + (g === 48 ? ' · đèn RGB trên bo' : ''); }
+    else if (g === 19 || g === 20) { state = 'free'; text = 'Còn trống · USB gốc: dùng thì mất cổng COM USB, nạp lại bằng BOOT + RST'; }
     else if (kind) { state = 'reserved'; text = kind[0] === 'camera' ? 'Camera (dữ liệu, VSYNC, HREF, PCLK, XCLK)' : kind[0] === 'PSRAM' ? 'Bộ nhớ PSRAM 8 MB' : kind[0] === 'USB' ? 'Cổng USB gốc: nạp firmware và log (COM trên máy tính)' : 'UART0: log khởi động'; }
     else { state = 'free'; text = 'Còn trống'; }
     rows.push('<tr class="pa-' + state + '"><td>GPIO ' + g + '</td><td><span>' + { free: 'Trống', used: 'Đang dùng', shared: 'Chung I²C', reserved: 'Dành riêng' }[state] + '</span></td><td>' + esc(text) + '</td></tr>');

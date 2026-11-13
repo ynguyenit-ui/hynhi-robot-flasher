@@ -127,3 +127,6 @@ footer{max-width:1060px;margin:0 auto;padding:6px 20px 28px;text-align:center;co
 #cam-map .cp{font:600 16px system-ui,"Segoe UI",sans-serif;fill:#e7ecf3}
 #cam-map .cg{font:700 15px system-ui,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
 #cam-map .s{font-size:14px}
+#cam-map .ch{font:800 40px system-ui,"Segoe UI",sans-serif;fill:#ff5c7a;letter-spacing:.01em}
+#cam-map .cs2{font:17px system-ui,"Segoe UI",sans-serif;fill:#c9d4e3}
+#cam-map .cf{font:600 19px system-ui,"Segoe UI",sans-serif;fill:#ff8fa3}
