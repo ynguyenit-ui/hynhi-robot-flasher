@@ -7,7 +7,7 @@
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
@@ -137,6 +137,34 @@
         <tr style="--w:#d6a34d"><td>VL53L0X · SCL</td><td class="wire"><i></i></td><td class="gp">GPIO5</td></tr>
         <tr style="--w:#ae71cb"><td>LED trạng thái</td><td class="wire"><i></i></td><td class="gp">GPIO45</td></tr>
         <tr style="--w:#ff8197"><td>TTP223 · I/O</td><td class="wire"><i></i></td><td class="gp">GPIO0</td></tr></tbody></table></article>
+    </div>
+    <div class="pin-avail">
+      <h3>Toàn bộ chân của bo camera</h3>
+      <p>Với bộ chân mặc định ở trên, chỉ còn <b>GPIO48</b> trống. Muốn thêm module (OLED, motor…) thì bỏ bớt một module khác, hoặc cho cảm biến I²C dùng chung GPIO4/5 với camera. Trong tab Chân GPIO, các chân dành riêng và chân đã dùng được ẩn khỏi danh sách chọn.</p>
+      <div class="pa-scroll"><table><thead><tr><th>Chân</th><th>Trạng thái</th><th>Dùng cho</th></tr></thead><tbody>
+        <tr class="pa-reserved"><td>GPIO 0</td><td><span>Dành riêng</span></td><td>Nút BOOT · dùng chung cho nút chạm TTP223</td></tr>
+        <tr class="pa-used"><td>GPIO 1</td><td><span>Đang dùng</span></td><td>Servo cổ</td></tr>
+        <tr class="pa-used"><td>GPIO 2</td><td><span>Đang dùng</span></td><td>Micro SD</td></tr>
+        <tr class="pa-used"><td>GPIO 3</td><td><span>Đang dùng</span></td><td>Màn RST · chân strapping</td></tr>
+        <tr class="pa-shared"><td>GPIO 4</td><td><span>Chỉ I²C</span></td><td>Camera SCCB SIOD · chỉ dùng chung làm SDA cho cảm biến I²C (VL53L0X)</td></tr>
+        <tr class="pa-shared"><td>GPIO 5</td><td><span>Chỉ I²C</span></td><td>Camera SCCB SIOC · chỉ dùng chung làm SCL cho cảm biến I²C</td></tr>
+        <tr class="pa-reserved"><td>GPIO 6–13</td><td><span>Dành riêng</span></td><td>Camera (dữ liệu D0–D4, VSYNC, HREF, PCLK)</td></tr>
+        <tr class="pa-used"><td>GPIO 14</td><td><span>Đang dùng</span></td><td>Màn DC</td></tr>
+        <tr class="pa-reserved"><td>GPIO 15–18</td><td><span>Dành riêng</span></td><td>Camera (XCLK, D5–D7)</td></tr>
+        <tr class="pa-reserved"><td>GPIO 19, 20</td><td><span>Dành riêng</span></td><td>Cổng USB gốc: nạp firmware và xem log</td></tr>
+        <tr class="pa-used"><td>GPIO 21</td><td><span>Đang dùng</span></td><td>Màn MOSI / SDA</td></tr>
+        <tr class="pa-reserved"><td>GPIO 35–37</td><td><span>Dành riêng</span></td><td>Bộ nhớ PSRAM 8 MB</td></tr>
+        <tr class="pa-used"><td>GPIO 38</td><td><span>Đang dùng</span></td><td>Loa DIN</td></tr>
+        <tr class="pa-used"><td>GPIO 39</td><td><span>Đang dùng</span></td><td>Loa BCLK</td></tr>
+        <tr class="pa-used"><td>GPIO 40</td><td><span>Đang dùng</span></td><td>Loa LRC</td></tr>
+        <tr class="pa-used"><td>GPIO 41</td><td><span>Đang dùng</span></td><td>Micro WS</td></tr>
+        <tr class="pa-used"><td>GPIO 42</td><td><span>Đang dùng</span></td><td>Micro SCK</td></tr>
+        <tr class="pa-reserved"><td>GPIO 43, 44</td><td><span>Dành riêng</span></td><td>UART0: log khởi động (TX/RX)</td></tr>
+        <tr class="pa-used"><td>GPIO 45</td><td><span>Đang dùng</span></td><td>LED RGB WS2812 · chân strapping</td></tr>
+        <tr class="pa-used"><td>GPIO 46</td><td><span>Đang dùng</span></td><td>Servo đầu · chân strapping</td></tr>
+        <tr class="pa-used"><td>GPIO 47</td><td><span>Đang dùng</span></td><td>Màn SCLK / SCL</td></tr>
+        <tr class="pa-free"><td>GPIO 48</td><td><span>Trống</span></td><td>Còn trống</td></tr>
+      </tbody></table></div>
     </div>
     <div class="power">
       <h3>Lưu ý cho bo camera</h3>

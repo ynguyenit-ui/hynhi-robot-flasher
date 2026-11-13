@@ -107,3 +107,17 @@ footer{max-width:1060px;margin:0 auto;padding:6px 20px 28px;text-align:center;co
 .dg-logbar{display:flex;gap:8px;margin:10px 0}
 .dg-logbar .ghost{min-height:36px;padding:6px 12px;font-size:.85rem}
 .dg-log{margin:0;max-height:340px;overflow:auto;background:#05070b;border:1px solid var(--border);border-radius:10px;padding:12px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#c9d4e3;white-space:pre-wrap;overflow-wrap:anywhere}
+.pin-avail{border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px}
+.pin-avail p{color:var(--muted);font-size:.92rem;margin:6px 0 12px}
+.pa-scroll{overflow-x:auto}
+.pin-avail table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:420px}
+.pin-avail th{text-align:left;color:var(--muted);font-weight:600;font-size:.8rem;padding:6px 10px;border-bottom:1px solid var(--border)}
+.pin-avail td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.pin-avail td:first-child{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pin-avail td span{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;font-weight:700;white-space:nowrap;border:1px solid var(--border2)}
+.pa-free td span{color:var(--green);border-color:var(--green)}
+.pa-used td span{color:var(--text)}
+.pa-shared td span{color:#f5c469;border-color:#f5c469}
+.pa-reserved td span{color:var(--muted)}
+.pa-reserved td{color:var(--muted)}
+.dg-open[hidden]{display:none}
