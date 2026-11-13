@@ -5,26 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0a0e15">
 <title>Hynhi Robot | Nạp firmware</title>
-<meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3 N16R8) qua USB ngay trên trình duyệt và xem sơ đồ đấu nối GPIO.">
+<meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=14">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="#top"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>ESP32-S3 N16R8</small></span></a>
-  <nav aria-label="Danh mục"><a href="#firmware">Nạp firmware</a><a href="#diag">Chẩn đoán</a><a href="#wiring" id="nav-wiring">Sơ đồ đấu nối</a><a href="#tables" data-fw="custom">Bảng đấu dây</a></nav>
+  <a class="brand" href="#firmware"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>Firmware · ESP32-S3</small></span></a>
+  <nav class="tabs" aria-label="Mục chính">
+    <a href="#firmware">Nạp firmware</a>
+    <a href="#wiring">Sơ đồ đấu nối</a>
+    <a href="#diag">Chẩn đoán</a>
+  </nav>
 </header>
 
-<main id="top">
+<main>
   <section id="firmware" class="card hero">
     <div class="hero-text">
       <p class="eyebrow">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
       <h1>Nạp firmware<br>cho Hynhi Robot</h1>
-      <p class="lead">Cắm cáp USB vào robot, bấm nút bên dưới và chọn cổng COM. Dùng Chrome hoặc Edge trên máy tính.</p>
+      <p class="lead">Chọn loại robot, cắm cáp USB rồi bấm nạp. Dùng Chrome hoặc Edge trên máy tính.</p>
       <div class="variants" role="radiogroup" aria-label="Chọn firmware">
-        <button type="button" role="radio" aria-checked="true" data-fw="custom"><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
-        <button type="button" role="radio" aria-checked="false" data-fw="cam"><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640 tự nhận</span></button>
+        <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
+        <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
       </div>
       <div class="actions">
         <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
@@ -32,29 +36,49 @@
           <span slot="unsupported" class="warn">Trình duyệt này không hỗ trợ Web Serial. Hãy mở bằng Chrome hoặc Edge trên máy tính.</span>
           <span slot="not-allowed" class="warn">Cần mở trang qua HTTPS để dùng cổng USB.</span>
         </esp-web-install-button>
+        <a class="ghost-link" href="#wiring">Xem sơ đồ đấu nối</a>
       </div>
       <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
     </div>
     <ol class="steps">
       <li><b>Cắm cáp USB dữ liệu</b><span>Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
-      <li><b>Bấm “Kết nối”</b><span>Chọn cổng USB Serial / JTAG của robot.</span></li>
+      <li><b>Bấm “Kết nối”</b><span>Chọn cổng USB của robot trong danh sách.</span></li>
       <li><b>Chọn xóa bộ nhớ</b><span>Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
       <li><b>Chờ robot khởi động lại</b><span>Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
     </ol>
   </section>
 
-  <section id="diag" class="card">
-    <p class="eyebrow">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p>
-    <h2>Chẩn đoán</h2>
-    <p class="lead">Cắm robot vào máy tính, chọn cổng rồi đọc thông tin chip và địa chỉ trang cấu hình. Đóng các chương trình khác đang mở cổng này (Arduino, idf.py monitor) trước khi kết nối.</p>
-    <div class="dg-actions">
-      <button type="button" class="button" id="dg-connect">Chọn cổng ESP32</button>
-      <button type="button" class="ghost" id="dg-chip" disabled>Đọc thông tin chip</button>
-      <button type="button" class="ghost" id="dg-ip" disabled>Đọc địa chỉ IP</button>
-      <label class="dg-check"><input type="checkbox" id="dg-reset" checked> Khởi động lại robot khi đọc IP</label>
+  <section id="wiring" class="card" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">ĐẤU DÂY THEO BẢN NẠP</p>
+        <h2>Sơ đồ đấu nối</h2>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Chọn robot">
+        <button type="button" role="radio" aria-checked="true" data-fw-pick="custom">Robot để bàn</button>
+        <button type="button" role="radio" aria-checked="false" data-fw-pick="cam">Robot Camera</button>
+      </div>
     </div>
-    <p id="dg-status" class="dg-status" role="status" aria-live="polite">Chưa kết nối.</p>
-    <a id="dg-open" class="button dg-open" href="#" target="_blank" rel="noopener" hidden>Mở trang cấu hình</a>
+    <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section id="diag" class="card" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p>
+        <h2>Chẩn đoán</h2>
+      </div>
+    </div>
+    <p class="lead">Cắm robot vào máy tính rồi bấm Kết nối ESP32. Trang đọc thông tin chip, khởi động lại robot và hiện địa chỉ trang cấu hình. Đóng các chương trình khác đang mở cổng này trước khi kết nối.</p>
+    <div class="dg-actions">
+      <button type="button" class="button" id="dg-connect">Kết nối ESP32</button>
+      <p id="dg-status" class="dg-status" role="status" aria-live="polite">Chưa kết nối.</p>
+    </div>
+    <div class="dg-url">
+      <div><span>Địa chỉ trang cấu hình</span><b id="dg-url">Chưa có</b></div>
+      <a id="dg-open" class="button" href="#" target="_blank" rel="noopener" hidden>Mở trang cấu hình</a>
+    </div>
     <div class="dg-grid">
       <dl class="dg-info">
         <dt>Cổng</dt><dd data-dg="port">—</dd>
@@ -80,63 +104,10 @@
       <pre id="dg-log" class="dg-log"></pre>
     </details>
   </section>
-
-  <section id="wiring" class="card" data-fw="custom">
-    <p class="eyebrow">CHÂN CUSTOM</p>
-    <h2>Sơ đồ đấu nối</h2>
-    <p class="lead">Mỗi đường màu là một sợi dây tín hiệu từ module về đúng GPIO trên ESP32-S3. Nguồn và GND của từng module xem ở bảng đấu dây bên dưới.</p>
-    <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
-    <div class="legend" id="legend"></div>
-    <div class="chain" aria-label="Đường âm thanh">
-      <b>Đường âm thanh</b>
-      <span>ESP32-S3</span><i>I²S</i><span>MAX98357A</span><i>dây loa</i><span>Loa trong</span>
-      <em></em>
-      <span>ESP32-S3</span><i>I²S</i><span>PCM5102A</span><i>L · R · AGND</i><span>KCX_BT_EMITTER</span><i>Bluetooth</i><span>Loa Bluetooth</span>
-    </div>
-  </section>
-
-  <section id="tables" class="card" data-fw="custom">
-    <p class="eyebrow">ĐẤU TỪNG MODULE</p>
-    <h2>Bảng đấu dây</h2>
-    <p class="lead">Đấu lần lượt từng module theo bảng: cột trái là chân in trên module, cột phải là nơi cắm trên ESP32-S3 hoặc nguồn.</p>
-    <div id="wiring-tables" class="mods"></div>
-    <div class="power">
-      <h3>Nguồn và lưu ý</h3>
-      <ul>
-        <li><b>3V3:</b> micro, màn ST7789, APDS-9930, VL53L0X, OLED, TTP223.</li>
-        <li><b>5V:</b> MAX98357A, PCM5102A, KCX_BT_EMITTER. Servo và động cơ dùng nguồn riêng.</li>
-        <li><b>GND chung</b> cho tất cả module và mọi nguồn.</li>
-        <li>GPIO15, GPIO16, GPIO7 dùng chung cho MAX98357A và PCM5102A: mỗi GPIO nối hai dây.</li>
-        <li>GPIO0 vừa là nút BOOT vừa là chân TTP223: giữ chân này ở mức cao khi cấp nguồn.</li>
-      </ul>
-    </div>
-  </section>
-  <section id="camera" class="card" data-fw="cam" hidden>
-    <p class="eyebrow">ESP32-S3 CAM N16R8 · OV3660 / OV5640 tự nhận</p>
-    <h2>Sơ đồ đấu nối Robot Camera</h2>
-    <p class="lead">Camera cắm sẵn trên bo và chiếm GPIO6–13, 15–18. Các module còn lại dùng hết những chân trống: mỗi dây vẽ thẳng từ chân module tới đúng chân trên hai hàng header của bo. Mọi chân vẫn đổi được trong tab Chân GPIO.</p>
-    <div id="cam-map" class="map" aria-label="Sơ đồ đấu nối Robot Camera"></div>
-    <div class="legend" id="cam-legend"></div>
-    <div class="mods" id="cam-tables"></div>
-    <div class="pin-avail">
-      <h3>Toàn bộ chân của bo camera</h3>
-      <p>Chấm tròn trên sơ đồ là chân dùng được cho module. GPIO4/5 dùng chung với camera, chỉ dành cho thiết bị I²C (VL53L0X, OLED địa chỉ 0x3D). GPIO45/46/3 là chân strapping: dùng được sau khi khởi động, đừng nối thiết bị kéo lên mức cao. GPIO19/20 là cổng USB gốc: dùng được cho tín hiệu nhưng khi đó mất cổng COM USB, nạp lại bằng cách giữ BOOT, bấm RST.</p>
-      <div class="pa-scroll"><table><thead><tr><th>Chân</th><th>Trạng thái</th><th>Dùng cho</th></tr></thead><tbody id="cam-pins"></tbody></table></div>
-    </div>
-    <div class="power">
-      <h3>Nguồn và lưu ý cho bo camera</h3>
-      <ul>
-        <li><b>3,3 V:</b> micro, màn ST7789, VL53L0X, OLED, TTP223. <b>5 V:</b> MAX98357A, PCM5102A, KCX, LED WS2812. Servo dùng nguồn 5 V riêng, nối GND chung.</li>
-        <li>Một firmware dùng cho cả OV3660 và OV5640: robot tự nhận loại camera khi khởi động.</li>
-        <li>Robot từng chạy firmware khác: nạp xong, firmware tự chuyển sang bộ chân trên nếu cấu hình cũ dùng nhầm chân camera; các cài đặt khác được giữ.</li>
-        <li>Nhập khóa Gemini ở tab Thiết bị để robot phân tích ảnh khi được hỏi “bạn nhìn thấy gì?”.</li>
-      </ul>
-    </div>
-  </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=9"></script>
-<script src="cam.js?v=5"></script>
-<script type="module" src="diag.js?v=2"></script>
+<script src="app.js?v=10"></script>
+<script src="wiring.js?v=2"></script>
+<script type="module" src="diag.js?v=3"></script>
 </body>
 </html>
