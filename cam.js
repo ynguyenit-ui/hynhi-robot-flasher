@@ -9,9 +9,9 @@ ART.strip = '<rect x="4" y="26" width="104" height="28" rx="3" fill="#15181e" st
 
 /* side: L/R header. pins: [label on module, GPIO, wire type]. wires: power and other wires. */
 const CAM_MODULES = [
-  { id: 'tof', side: 'L', short: 'VL53L0X', snote: 'I²C chung bus camera', name: 'Đo khoảng cách VL53L0X', note: 'I²C · dùng chung bus với camera', art: 'tof',
-    pins: [['SDA', 4, 'i2c'], ['SCL', 5, 'i2c']], wires: [['VIN', '3V3', 'v33'], ['GND', 'GND', 'gnd']],
-    tip: 'GPIO4/5 là dây điều khiển camera (SCCB). Chỉ cảm biến I²C mới được nối chung hai chân này.' },
+  { id: 'tof', side: 'L', short: 'I²C: VL53L0X + OLED', snote: 'chung bus camera · OLED 0x3D', name: 'VL53L0X + OLED SSD1306 (I²C)', note: 'I²C · dùng chung bus với camera · 3,3 V', art: 'tof',
+    pins: [['SDA', 4, 'i2c'], ['SCL', 5, 'i2c']], wires: [['VL53L0X · VIN', '3V3', 'v33'], ['VL53L0X · GND', 'GND', 'gnd'], ['OLED · VCC', '3V3', 'v33'], ['OLED · GND', 'GND', 'gnd']],
+    tip: 'GPIO4/5 là dây điều khiển camera (SCCB), chỉ thiết bị I²C mới được nối chung. Camera chiếm địa chỉ 0x3C nên OLED phải chỉnh sang 0x3D (hàn lại điện trở địa chỉ) và chọn Địa chỉ OLED = 0x3D trên trang cấu hình.' },
   { id: 'strip', side: 'L', short: 'LED WS2812', snote: '8 bóng · 5 V', name: 'LED WS2812 · 8 bóng', note: 'Dữ liệu 1 dây · 5 V', art: 'strip',
     pins: [['DIN', 3, 'gpio']], wires: [['5V', '5V', 'v5'], ['GND', 'GND', 'gnd']], tip: '' },
   { id: 'servo', side: 'L', short: 'Servo MG90S ×2', snote: 'PWM · 5 V riêng', name: 'Servo MG90S ×2', note: 'PWM · nguồn 5 V riêng', art: 'servo',
@@ -29,10 +29,7 @@ const CAM_MODULES = [
   { id: 'display', side: 'R', short: 'Màn ST7789', snote: 'SPI · 240×240 · 3,3 V', name: 'Màn ST7789 240×240', note: 'SPI · 3,3 V', art: 'display',
     pins: [['DC', 45, 'gpio'], ['RES / RST', 48, 'gpio'], ['SCL / SCLK', 47, 'spi'], ['SDA / MOSI', 21, 'spi']],
     wires: [['VCC', '3V3', 'v33'], ['BLK (đèn nền)', '3V3', 'v33'], ['GND', 'GND', 'gnd']],
-    tip: 'GPIO48 cũng nối đèn RGB trên bo, đèn có thể nháy khi màn khởi động. Màn có chân CS thì nối CS xuống GND.' },
-  { id: 'oled', side: 'R', short: 'OLED SSD1306', snote: 'I²C riêng · tùy chọn', name: 'OLED phụ SSD1306 0,96″', note: 'I²C riêng · 3,3 V · tùy chọn', art: 'oled',
-    pins: [['SDA', 20, 'i2c'], ['SCL', 19, 'i2c']], wires: [['VCC', '3V3', 'v33'], ['GND', 'GND', 'gnd']],
-    tip: 'GPIO19/20 là cổng USB gốc. Bật OLED thì nạp và xem log qua cổng COM của bo; muốn nạp qua cổng USB, giữ BOOT rồi bấm RST.' }
+    tip: 'GPIO48 cũng nối đèn RGB trên bo, đèn có thể nháy khi màn khởi động. Màn có chân CS thì nối CS xuống GND.' }
 ];
 
 const camPinKind = name => {
@@ -43,7 +40,8 @@ const camPinKind = name => {
   if (name === 'EN') return ['RST', '#8b97aa'];
   if ((n >= 6 && n <= 13) || (n >= 15 && n <= 18)) return ['camera', '#c2410c'];
   if (n >= 35 && n <= 37) return ['PSRAM', '#b91c1c'];
-  if (n === 43 || n === 44) return ['COM', '#be185d'];
+  if (n === 19 || n === 20) return ['USB', '#7c3aed'];
+  if (n === 43 || n === 44) return ['UART', '#be185d'];
   return null;
 };
 
@@ -64,7 +62,7 @@ function drawCamMap() {
   s += '<text class="b" x="' + (BX + 140) + '" y="' + (rowY(12) + 4) + '" text-anchor="middle">ESP32-S3 CAM</text>';
   s += '<text class="s" x="' + (BX + 140) + '" y="' + (rowY(12) + 22) + '" text-anchor="middle">N16R8</text>';
   [['RST', BX + 96], ['BOOT', BX + 184]].forEach(([t, x]) => { s += '<rect x="' + (x - 14) + '" y="' + (rowY(15) - 14) + '" width="28" height="28" rx="4" fill="#2a2f3a" stroke="#59647a"/><circle cx="' + x + '" cy="' + rowY(15) + '" r="7" fill="#59647a"/><text class="s" x="' + x + '" y="' + (rowY(15) + 30) + '" text-anchor="middle">' + t + '</text>'; });
-  [['USB', BX + 96, 'GPIO19/20'], ['COM', BX + 184, 'GPIO43/44']].forEach(([t, x, sub]) => { s += '<rect x="' + (x - 24) + '" y="' + (H - 58) + '" width="48" height="26" rx="8" fill="#c9ced6" stroke="#8b97aa"/><text class="b" x="' + x + '" y="' + (H - 66) + '" text-anchor="middle">' + t + '</text><text class="s" x="' + x + '" y="' + (H - 82) + '" text-anchor="middle">' + sub + '</text>'; });
+  [['USB', BX + 96, 'GPIO19/20'], ['UART', BX + 184, 'GPIO43/44']].forEach(([t, x, sub]) => { s += '<rect x="' + (x - 24) + '" y="' + (H - 58) + '" width="48" height="26" rx="8" fill="#c9ced6" stroke="#8b97aa"/><text class="b" x="' + x + '" y="' + (H - 66) + '" text-anchor="middle">' + t + '</text><text class="s" x="' + x + '" y="' + (H - 82) + '" text-anchor="middle">' + sub + '</text>'; });
   /* GPIO -> wire (module, label, type) */
   const used = {};
   CAM_MODULES.forEach(m => m.pins.forEach(([label, gpio, type]) => { used[gpio] = { m, label, type }; }));
@@ -137,7 +135,7 @@ function drawCamTables() {
     const kind = camPinKind(String(g));
     let state, text;
     if (used[g]) { state = (g === 4 || g === 5) ? 'shared' : 'used'; text = used[g] + (g === 4 || g === 5 ? ' (chung bus camera)' : '') + ([3, 45, 46].includes(g) ? ' · chân strapping' : '') + (g === 0 ? ' · cũng là nút BOOT' : '') + (g === 19 || g === 20 ? ' · cổng USB gốc' : '') + (g === 48 ? ' · đèn RGB trên bo' : ''); }
-    else if (kind) { state = 'reserved'; text = kind[0] === 'camera' ? 'Camera (dữ liệu, VSYNC, HREF, PCLK, XCLK)' : kind[0] === 'PSRAM' ? 'Bộ nhớ PSRAM 8 MB' : 'Cổng COM (UART0): nạp firmware và log'; }
+    else if (kind) { state = 'reserved'; text = kind[0] === 'camera' ? 'Camera (dữ liệu, VSYNC, HREF, PCLK, XCLK)' : kind[0] === 'PSRAM' ? 'Bộ nhớ PSRAM 8 MB' : kind[0] === 'USB' ? 'Cổng USB gốc: nạp firmware và log (COM trên máy tính)' : 'UART0: log khởi động'; }
     else { state = 'free'; text = 'Còn trống'; }
     rows.push('<tr class="pa-' + state + '"><td>GPIO ' + g + '</td><td><span>' + { free: 'Trống', used: 'Đang dùng', shared: 'Chung I²C', reserved: 'Dành riêng' }[state] + '</span></td><td>' + esc(text) + '</td></tr>');
   }

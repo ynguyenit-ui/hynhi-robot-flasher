@@ -120,7 +120,7 @@
     <div class="mods" id="cam-tables"></div>
     <div class="pin-avail">
       <h3>Toàn bộ chân của bo camera</h3>
-      <p>Bộ chân này dùng hết mọi GPIO còn trống. GPIO4/5 dùng chung với camera, chỉ dành cho cảm biến I²C. GPIO19/20 là cổng USB gốc: khi bật OLED phụ trên hai chân này, nạp và xem log qua cổng COM. Bo không còn đủ chân cho mạch động cơ L298N khi đã có màn ST7789 và hai servo.</p>
+      <p>Bộ chân này dùng hết mọi GPIO còn trống. GPIO4/5 dùng chung với camera, chỉ dành cho thiết bị I²C (VL53L0X, OLED địa chỉ 0x3D). GPIO19/20 là cổng USB để nạp firmware nên luôn được giữ lại: dùng hai chân này cho module khác sẽ làm mất cổng COM trên máy tính. Bo không còn đủ chân cho mạch động cơ L298N khi đã có màn ST7789 và hai servo.</p>
       <div class="pa-scroll"><table><thead><tr><th>Chân</th><th>Trạng thái</th><th>Dùng cho</th></tr></thead><tbody id="cam-pins"></tbody></table></div>
     </div>
     <div class="power">
@@ -136,7 +136,7 @@
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
 <script src="app.js?v=8"></script>
-<script src="cam.js?v=2"></script>
+<script src="cam.js?v=3"></script>
 <script type="module" src="diag.js?v=2"></script>
 </body>
 </html>
