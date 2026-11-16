@@ -8,7 +8,7 @@
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
 <script>try{var t=localStorage.getItem('hynhi-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="style.css?v=20">
+<link rel="stylesheet" href="style.css?v=21">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
@@ -24,6 +24,7 @@
   <symbol id="i-desk" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="11" rx="3"/><path d="M9 9h.01M15 9h.01M10 12h4M8 20h8M12 15v5"/></symbol>
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
   <symbol id="i-flash" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="4"/><circle cx="12" cy="14" r="3"/><path d="M11 7h2"/></symbol>
   <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></symbol>
   <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
   <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
@@ -34,6 +35,7 @@
   <a class="brand" href="#firmware"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>Firmware · ESP32-S3</small></span></a>
   <nav class="tabs" aria-label="Mục chính">
     <a href="#firmware"><svg class="ic"><use href="#i-flash"/></svg>Nạp firmware</a>
+    <a href="#phicom"><svg class="ic"><use href="#i-speaker"/></svg>Loa Phicom</a>
     <a href="#diag"><svg class="ic"><use href="#i-pulse"/></svg>Chẩn đoán</a>
   </nav>
   <button type="button" class="iconbtn" id="theme" aria-label="Đổi giao diện sáng/tối"><svg class="ic"><use href="#i-moon"/></svg></button>
@@ -75,6 +77,44 @@
       </div>
       <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
       <div class="legend" id="legend"></div>
+    </section>
+  </div>
+
+  <div id="phicom" class="view" hidden>
+    <section class="card hero phicom-hero">
+      <div>
+        <h1>Hynhi Phicom</h1>
+        <p class="lead">Bản cài Windows cho loa Phicomm R1. Cài ứng dụng vào loa, mở trang điều khiển trong mạng nhà và cập nhật qua Wi‑Fi.</p>
+        <div class="actions">
+          <a class="button" href="phicom/Hynhi-Phicom-Windows.zip" download>Tải bộ cài Windows</a>
+          <a class="ghost-link" href="phicom/Huong-dan.html">Hướng dẫn chi tiết <span aria-hidden="true">›</span></a>
+        </div>
+        <p class="phicom-version">Phiên bản 1.5.38-hynhi.11 · ZIP</p>
+      </div>
+      <figure class="phicom-photo">
+        <img src="images/phicomm-r1.jpg" alt="Loa Phicomm R1 thân lưới đen đặt cạnh hộp R1" width="1024" height="1024" loading="lazy">
+        <figcaption><a href="https://www.didonghay.com/product/loa-bluetooth-hang-phicomm-r1-infinity-by-harman-.html" rel="noopener">Ảnh sản phẩm · Di Động Hay</a></figcaption>
+      </figure>
+    </section>
+    <section class="card phicom-details" aria-labelledby="phicom-features">
+      <h2 id="phicom-features">Tính năng trên loa</h2>
+      <ul class="phicom-features">
+        <li><strong>Nhạc, YouTube, radio và podcast</strong><span>Loa tìm và phát qua Internet của Wi‑Fi đang kết nối. Có danh sách phát và điều khiển phát trên trang loa.</span></li>
+        <li><strong>Smart Life</strong><span>Nhập User Code, tạo QR và chấp nhận trong ứng dụng Smart Life. Có tùy chọn ghép qua Home Assistant.</span></li>
+        <li><strong>Âm thanh và đèn</strong><span>Equalizer có chế độ sẵn. Đèn RGB có bảng hiệu ứng và hình động xem trước.</span></li>
+        <li><strong>Điều khiển và kết nối</strong><span>Có giao diện sáng, tối và tối sâu, cùng thông tin Wi‑Fi, Bluetooth, báo thức và nhóm loa.</span></li>
+        <li><strong>Trợ lý Hynhi</strong><span>Từ đánh thức OK HyNhi và Hi Nhi. Lệnh phát bằng giọng nói phụ thuộc vào trợ lý đã kết nối.</span></li>
+        <li><strong>Cập nhật qua Wi‑Fi</strong><span>Dùng tập tin Cap-nhat-OTA.ps1 trong bộ cài cùng địa chỉ IP hiện tại của loa.</span></li>
+      </ul>
+    </section>
+    <section class="card phicom-details" aria-labelledby="phicom-install">
+      <h2 id="phicom-install">Cài đặt</h2>
+      <ol class="phicom-install">
+        <li>Giải nén toàn bộ ZIP trên máy Windows 64 bit.</li>
+        <li>Kết nối máy tính và loa vào cùng Wi‑Fi rồi chạy <code>Cai-dat-Hynhi-Phicom.bat</code>.</li>
+        <li>Chọn loa hoặc nhập IP khi được hỏi. Bộ cài sẽ mở trang điều khiển của loa.</li>
+      </ol>
+      <p><a href="phicom/Huong-dan.html">Hướng dẫn cho loa chưa nối Wi‑Fi và cách cập nhật</a></p>
     </section>
   </div>
 
@@ -120,7 +160,7 @@
   </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 <script src="wiring.js?v=3"></script>
 <script type="module" src="diag.js?v=4"></script>
 </body>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cài đặt Hynhi Phicom</title>
+<link rel="icon" href="Hynhi-Logo.jpg" type="image/jpeg">
+<link rel="stylesheet" href="huong-dan.css">
+</head>
+<body>
+<main>
+<img class="hynhi-logo" src="Hynhi-Logo.jpg" alt="Logo Hynhi Robot" width="112" height="115">
+<h1>Cài đặt Hynhi Phicom</h1>
+<p>Chuẩn bị loa Phicomm R1 đã cắm điện và máy tính Windows có Internet.</p>
+<ol>
+<li>Giải nén toàn bộ ZIP, bấm đúp <strong>Cai-dat-Hynhi-Phicom.bat</strong> trên Windows 64 bit.</li>
+<li>Nếu loa đã vào Wi-Fi nhà, kết nối máy tính vào cùng mạng rồi bấm <strong>Enter</strong> để tìm loa hoặc nhập IP của loa.</li>
+<li>Bộ cài đưa ứng dụng lên loa và mở trang điều khiển. Sau khi cài, loa dùng Internet của Wi-Fi đang kết nối để tìm và phát nhạc.</li>
+</ol>
+<details>
+<summary>Loa mới, chưa vào Wi-Fi nhà</summary>
+<p>Chạy bộ cài khi máy tính còn Internet. Đến câu hỏi địa chỉ loa, gõ <strong>M</strong>. Sau khi loa đã khởi động, giữ nút trên đỉnh khoảng 5 giây để hiện Wi-Fi <strong>Phicomm R1</strong>. Nối máy tính vào mạng đó, quay lại bộ cài bấm <strong>Enter</strong> rồi làm theo hướng dẫn chuyển loa vào Wi-Fi nhà. Nếu phải nhập lại Wi-Fi, trang điều khiển ở chế độ này là <strong>http://192.168.43.1:8088</strong>.</p>
+</details>
+<h2>Đánh thức Hynhi</h2>
+<p>Nói <strong>OK HyNhi</strong> hoặc <strong>Hi Nhi</strong> khi loa đang chờ, rồi nói yêu cầu sau tiếng báo. Nếu loa đang trả lời, chờ trả lời xong hoặc dùng nút trên đỉnh loa.</p>
+<h2>Nhạc, radio và YouTube</h2>
+<p>Trong mục <strong>Radio</strong>, chọn đài để nghe trực tiếp.</p>
+<p>Vào <strong>Nhạc / YouTube</strong>, nhập tên bài hát, tên video hoặc dán đường dẫn YouTube. Sau khi kết nối trợ lý Xiaozhi, bạn cũng có thể nói <strong>“OK HyNhi”</strong>, chờ tiếng báo rồi nói <strong>“Phát nhạc Nối vòng tay lớn”</strong>.</p>
+<p>Bấm <strong>Wi-Fi</strong> trên thanh điều hướng để xem tên mạng, địa chỉ IP và cường độ sóng, hoặc để đổi mạng cho loa. Trong <strong>Kết nối</strong>, chọn <strong>Xiaozhi</strong> nếu cần kích hoạt trợ lý.</p>
+<h2>Âm thanh và đèn</h2><p>Trong mục <strong>Âm thanh</strong>, chọn hiệu ứng đèn để xem demo và chọn chế độ Equalizer. Nút giao diện ở góc trên chuyển giữa <strong>Sáng</strong>, <strong>Tối</strong> và <strong>Tối sâu</strong>.</p><h2>Trợ lý Hynhi</h2><p>Chọn <strong>Podcast</strong> trên thanh điều hướng. Mục <strong>Kết nối</strong> có báo thức, Bluetooth, nhóm loa, thời tiết và cấu hình trợ lý. Nút <strong>Nhật ký</strong> ở đầu trang.</p>
+<p>Hynhi gửi lời giới thiệu mặc định đến máy chủ. Nếu máy chủ yêu cầu cấu hình trợ lý trong tài khoản, hãy đặt tên Hynhi và dùng mẫu dưới đây. Có thể chỉnh lời giới thiệu trong <strong>Kết nối → Trợ lý</strong> khi máy chủ hỗ trợ.</p>
+<blockquote>Bạn là Hynhi, trợ lý tiếng Việt của loa Hynhi Phicom. Khi được hỏi tên, hãy giới thiệu mình là Hynhi. Hãy xưng mình, nói tự nhiên và trả lời ngắn gọn. Dùng công cụ phù hợp để phát nhạc, radio, YouTube hoặc điều khiển nhà thông minh. Nếu có nhiều thiết bị trùng tên, hãy hỏi lại tên phòng. Chỉ báo đã thực hiện khi thao tác thành công.</blockquote>
+<p>Chọn thành phố trong mục <strong>Vị trí và thời tiết</strong> để loa dùng đúng giờ và dự báo địa phương.</p>
+<h2>Smart Life</h2>
+<p>Mở <strong>Smart Life</strong> ngay trên trang điều khiển, nhập <strong>User Code</strong> rồi bấm <strong>Tạo mã QR</strong>. Quét mã và chấp nhận trong ứng dụng Smart Life. Tuỳ chọn ghép qua Home Assistant dùng địa chỉ và token quản trị. Sau khi kết nối, bạn điều khiển thiết bị tại cùng tab này.</p>
+<p><a href="Smart-Life.html">Các bước nhập User Code và xác nhận trên điện thoại</a></p>
+<h2>Cập nhật qua Wi-Fi</h2>
+<p>Giải nén phiên bản mới. Mở PowerShell trong thư mục đó và chạy lệnh dưới đây. Thay IP ví dụ bằng IP hiện trong mục Wi-Fi của loa. Máy tính và loa cần cùng mạng, loa cần bật ADB qua Wi-Fi.</p>
+<pre>powershell -ExecutionPolicy Bypass -File .\Cap-nhat-OTA.ps1 -Ip 192.168.1.18</pre><p>Thêm <code>-Reboot</code> nếu muốn khởi động lại loa ngay sau khi cập nhật.</p>
+</main>
+</body>
+</html>

@@ -34,6 +34,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tabs{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .tabs a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:9px;color:var(--muted);font-weight:600;font-size:.92rem;text-decoration:none}
 .tabs a:hover{color:var(--text);background:var(--raised)}
+.tabs a{white-space:nowrap}
 .tabs a[aria-current="page"]{background:var(--accent);color:#fff}
 .tabs .ic{width:18px;height:18px}
 .iconbtn{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}
@@ -75,6 +76,22 @@ h2{font-size:1.3rem;letter-spacing:-.01em}
 .steps .ic{grid-row:span 2;width:22px;height:22px;padding:9px;box-sizing:content-box;border-radius:11px;background:var(--accent-soft);color:var(--accent)}
 .steps b{font-size:.96rem}
 .steps span{color:var(--muted);font-size:.84rem}
+.phicom-hero{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:28px}
+.phicom-version{color:var(--muted);font-size:.83rem}
+.phicom-photo{margin:0;padding:14px;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--sunken);text-align:center}
+.phicom-photo img{display:block;width:100%;height:clamp(220px,34vw,350px);object-fit:contain;border-radius:10px}
+.phicom-photo figcaption{margin-top:8px;font-size:.76rem;color:var(--muted)}
+.phicom-photo figcaption a{color:inherit}
+.phicom-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;list-style:none;padding:0;margin:14px 0 0}
+.phicom-features li{display:grid;gap:5px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--sunken)}
+.phicom-features span{color:var(--muted);font-size:.9rem}
+.phicom-install{padding-inline-start:1.4rem;margin:12px 0;display:grid;gap:8px}
+.phicom-install code{overflow-wrap:anywhere}
+@media(max-width:700px){
+  .phicom-hero{grid-template-columns:minmax(0,1fr)}
+  .tabs a{gap:5px;padding-inline:8px}
+  .tabs .ic{width:15px;height:15px}
+}
 
 /* Wiring diagram: the drawing keeps a dark board panel in both themes */
 .map{border:1px solid var(--line);border-radius:14px;background:var(--map);padding:10px;overflow-x:auto}

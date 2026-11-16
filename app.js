@@ -60,11 +60,12 @@ function selectFirmware(dir) {
 }
 document.querySelectorAll('[data-fw-pick]').forEach(b => b.addEventListener('click', () => selectFirmware(b.dataset.fwPick)));
 
-/* Two views: #firmware (installer + wiring diagram) and #diag. #wiring scrolls to the diagram. */
+/* #wiring opens the firmware view and scrolls to its diagram. */
 function showView() {
   const hash = location.hash.slice(1);
-  const id = hash === 'diag' ? 'diag' : 'firmware';
-  ['firmware', 'diag'].forEach(v => { document.getElementById(v).hidden = v !== id; });
+  const views = ['firmware', 'phicom', 'diag'];
+  const id = views.includes(hash) ? hash : 'firmware';
+  views.forEach(v => { document.getElementById(v).hidden = v !== id; });
   document.querySelectorAll('.tabs a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'page' : 'false'));
   if (hash === 'wiring') document.getElementById('wiring').scrollIntoView({ behavior: 'smooth', block: 'start' });
   else window.scrollTo(0, 0);

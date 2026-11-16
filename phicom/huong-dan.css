@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    background: #f6f7f2;
+    color: #182d26;
+    font: 17px/1.65 system-ui, sans-serif;
+}
+main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+}
+h1, h2 { line-height: 1.2; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
+h2 { margin-top: 2rem; }
+li + li { margin-top: 0.5rem; }
+a { color: #155f48; }
+a:focus-visible, summary:focus-visible { outline: 3px solid #218768; outline-offset: 4px; }
+summary { cursor: pointer; font-weight: 650; }
+blockquote {
+    margin-inline: 0;
+    border-left: 4px solid #83ac95;
+    padding-left: 16px;
+}
+.button {
+    display: inline-block;
+    padding: 9px 14px;
+    border-radius: 6px;
+    color: white;
+    background: #155f48;
+    font-weight: 650;
+}
+
+.hynhi-logo { display: block; width: 112px; height: auto; margin-top: 12px; border-radius: 18px; }
