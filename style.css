@@ -76,17 +76,16 @@ h2{font-size:1.3rem;letter-spacing:-.01em}
 .steps .ic{grid-row:span 2;width:22px;height:22px;padding:9px;box-sizing:content-box;border-radius:11px;background:var(--accent-soft);color:var(--accent)}
 .steps b{font-size:.96rem}
 .steps span{color:var(--muted);font-size:.84rem}
-.phicom-hero{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:28px}
-.phicom-version{color:var(--muted);font-size:.83rem}
-.phicom-photo{margin:0;padding:14px;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--sunken);text-align:center}
-.phicom-photo img{display:block;width:100%;height:clamp(220px,34vw,350px);object-fit:contain;border-radius:10px}
-.phicom-photo figcaption{margin-top:8px;font-size:.76rem;color:var(--muted)}
-.phicom-photo figcaption a{color:inherit}
-.phicom-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;list-style:none;padding:0;margin:14px 0 0}
-.phicom-features li{display:grid;gap:5px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--sunken)}
+.phicom-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
+.phicom-shot,.phicom-gallery figure{margin:0;padding:8px;border:1px solid var(--line);border-radius:16px;background:var(--sunken)}
+.phicom-shot img,.phicom-gallery img{display:block;width:100%;height:auto;border-radius:10px}
+.phicom-shot figcaption,.phicom-gallery figcaption{margin:8px 4px 2px;font-size:.82rem;color:var(--muted)}
+.phicom-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;list-style:none;padding:0;margin:14px 0 0}
+.phicom-features li{display:grid;align-content:start;gap:6px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--sunken)}
 .phicom-features span{color:var(--muted);font-size:.9rem}
-.phicom-install{padding-inline-start:1.4rem;margin:12px 0;display:grid;gap:8px}
-.phicom-install code{overflow-wrap:anywhere}
+.phicom-steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));margin:14px 0}
+.phicom-steps code{overflow-wrap:anywhere}
+.phicom-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px;margin-top:14px}
 @media(max-width:700px){
   .phicom-hero{grid-template-columns:minmax(0,1fr)}
   .tabs a{gap:5px;padding-inline:8px}

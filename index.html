@@ -8,7 +8,7 @@
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
 <script>try{var t=localStorage.getItem('hynhi-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="style.css?v=21">
+<link rel="stylesheet" href="style.css?v=22">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
@@ -83,38 +83,56 @@
   <div id="phicom" class="view" hidden>
     <section class="card hero phicom-hero">
       <div>
+        <p class="eyebrow">LOA PHICOMM R1 · TRỢ LÝ AI TIẾNG VIỆT</p>
         <h1>Hynhi Phicom</h1>
-        <p class="lead">Bản cài Windows cho loa Phicomm R1. Cài ứng dụng vào loa, mở trang điều khiển trong mạng nhà và cập nhật qua Wi‑Fi.</p>
+        <p class="lead">Biến loa Phicomm R1 thành trợ lý AI nói tiếng Việt: gọi “Hy Nhi ơi” để hỏi đáp, nghe nhạc, nghe radio, điều khiển nhà thông minh và máy tính. Cài từ Windows qua Wi‑Fi, không cần tháo loa.</p>
         <div class="actions">
-          <a class="button" href="phicom/Hynhi-Phicom-Windows.zip" download>Tải bộ cài Windows</a>
-          <a class="ghost-link" href="phicom/Huong-dan.html">Hướng dẫn chi tiết <span aria-hidden="true">›</span></a>
+          <a class="button" href="phicom/HynhiPhicom-Setup.zip" download><svg class="ic"><use href="#i-usb"/></svg>Tải bộ cài Windows</a>
+          <a class="ghost-link" href="phicom/Huong-dan.html">Hướng dẫn bằng hình ảnh <span aria-hidden="true">›</span></a>
         </div>
-        <p class="phicom-version">Phiên bản 1.5.38-hynhi.20 · ZIP</p>
+        <ul class="facts"><li>Phiên bản 1.9.1</li><li>ZIP · 13 MB</li><li>Windows 10/11</li><li>Android 5.1 trên R1</li></ul>
       </div>
-      <figure class="phicom-photo">
-        <img src="images/phicomm-r1.jpg" alt="Loa Phicomm R1 thân lưới đen đặt cạnh hộp R1" width="1024" height="1024" loading="lazy">
-        <figcaption><a href="https://www.didonghay.com/product/loa-bluetooth-hang-phicomm-r1-infinity-by-harman-.html" rel="noopener">Ảnh sản phẩm · Di Động Hay</a></figcaption>
+      <figure class="phicom-shot">
+        <img src="phicom/img/01-trang-chu.jpg" alt="Trang điều khiển Hynhi Phicom: trạng thái loa, nút Gọi Hy Nhi, âm lượng và phổ nhạc" width="800" height="600" loading="lazy">
+        <figcaption>Trang điều khiển mở bằng trình duyệt trong mạng nhà</figcaption>
       </figure>
     </section>
+
     <section class="card phicom-details" aria-labelledby="phicom-features">
-      <h2 id="phicom-features">Tính năng trên loa</h2>
+      <h2 id="phicom-features">Tính năng nổi bật</h2>
       <ul class="phicom-features">
-        <li><strong>Nhạc, YouTube, radio và podcast</strong><span>Loa tìm và phát qua Internet của Wi‑Fi đang kết nối. Có danh sách phát và điều khiển phát trên trang loa.</span></li>
-        <li><strong>Smart Life</strong><span>Nhập User Code, tạo QR và chấp nhận trong ứng dụng Smart Life. Có tùy chọn ghép qua Home Assistant.</span></li>
-        <li><strong>Âm thanh và đèn</strong><span>Equalizer có chế độ sẵn. Đèn RGB có bảng hiệu ứng và hình động xem trước.</span></li>
-        <li><strong>Điều khiển và kết nối</strong><span>Có giao diện sáng, tối và tối sâu, cùng thông tin Wi‑Fi, Bluetooth, báo thức và nhóm loa.</span></li>
-        <li><strong>Trợ lý Hynhi</strong><span>Từ đánh thức OK HyNhi và Hi Nhi. Lệnh phát bằng giọng nói phụ thuộc vào trợ lý đã kết nối.</span></li>
-        <li><strong>Cập nhật qua Wi‑Fi</strong><span>Dùng tập tin Cap-nhat-OTA.ps1 trong bộ cài cùng địa chỉ IP hiện tại của loa.</span></li>
+        <li><b>🎙️ Gọi “Hy Nhi ơi”</b><span>Từ khoá tiếng Việt nhận ngay trên loa, không cần Internet. Vẫn gọi được khi đang phát nhạc. Sau mỗi câu trả lời, loa nghe tiếp 30 giây để bạn nói tiếp không cần gọi lại.</span></li>
+        <li><b>🧠 Trợ lý AI luôn nói tiếng Việt</b><span>Kết nối xiaozhi.me hoặc máy chủ AI riêng. Tự chặn câu trả lời tiếng Trung và yêu cầu trả lời lại bằng tiếng Việt. Lệnh quen thuộc xử lý ngay trên loa cho nhanh.</span></li>
+        <li><b>🎵 YouTube và ZingMP3</b><span>Nói “mở bài…” để loa tìm và phát. Tìm YouTube trên trang điều khiển và xem video ngay tại chỗ phổ nhạc.</span></li>
+        <li><b>📻 Radio VOV và podcast</b><span>VOV1, VOV2, VOV3, VOV Giao thông và các chương trình podcast tiếng Việt, chọn bằng giọng nói hoặc một chạm.</span></li>
+        <li><b>🎚️ Equalizer và phổ nhạc</b><span>Chế độ âm thanh có sẵn, chỉnh từng dải và tăng bass. Phổ nhạc màu trắng–đỏ–xanh–xanh dương chạy theo bài hát.</span></li>
+        <li><b>💡 Smart Life và Hunonic</b><span>Liên kết Smart Life bằng User Code và mã QR. Đăng nhập Hunonic để bật tắt công tắc, chỉnh máy lạnh và TV hồng ngoại. Đổi tên và biểu tượng từng thiết bị.</span></li>
+        <li><b>🖥️ Điều khiển máy tính</b><span>Cài Desktop Bridge kèm bộ cài, máy tính tự ghép với loa. Nói “mở YouTube trên máy tính”, “tăng âm lượng máy tính”, “mở Zalo”.</span></li>
+        <li><b>⏰ Báo thức, thời tiết, tiện ích</b><span>Đặt báo thức bằng giọng nói, hỏi thời tiết, đèn LED đổi màu theo trạng thái. Loa đọc địa chỉ trang điều khiển khi khởi động hoặc khi bạn hỏi.</span></li>
       </ul>
     </section>
+
     <section class="card phicom-details" aria-labelledby="phicom-install">
-      <h2 id="phicom-install">Cài đặt</h2>
-      <ol class="phicom-install">
-        <li>Giải nén toàn bộ ZIP trên máy Windows 64 bit.</li>
-        <li>Kết nối máy tính và loa vào cùng Wi‑Fi rồi chạy <code>Cai-dat-Hynhi-Phicom.bat</code>.</li>
-        <li>Chọn loa hoặc nhập IP khi được hỏi. Bộ cài sẽ mở trang điều khiển của loa.</li>
+      <h2 id="phicom-install">Cài đặt trong 4 bước</h2>
+      <ol class="steps phicom-steps">
+        <li><svg class="ic"><use href="#i-plug"/></svg><b>Tải và giải nén</b><span>Giải nén toàn bộ <code>HynhiPhicom-Setup.zip</code> trên máy Windows.</span></li>
+        <li><svg class="ic"><use href="#i-wifi"/></svg><b>Nối máy tính với loa</b><span>Loa mới: nối Wi‑Fi <b>Phicomm_R1_xxxx</b> do loa phát. Loa đã vào mạng nhà: dùng chung Wi‑Fi với loa.</span></li>
+        <li><svg class="ic"><use href="#i-flash"/></svg><b>Chạy CaiDat-HynhiPhicom.bat</b><span>Chọn cách kết nối, nhập Wi‑Fi nhà, bấm <b>CÀI ĐẶT</b>. Có thể tích chọn cài điều khiển máy tính.</span></li>
+        <li><svg class="ic"><use href="#i-speaker"/></svg><b>Mở trang điều khiển</b><span>Loa đọc địa chỉ dạng <code>http://192.168.x.x:8088</code>. Mở trên điện thoại hoặc máy tính cùng mạng.</span></li>
       </ol>
-      <p><a href="phicom/Huong-dan.html">Hướng dẫn cho loa chưa nối Wi‑Fi và cách cập nhật</a></p>
+      <p><a class="ghost-link" href="phicom/Huong-dan.html">Xem hướng dẫn từng bước có ảnh minh hoạ <span aria-hidden="true">›</span></a></p>
+    </section>
+
+    <section class="card phicom-details" aria-labelledby="phicom-gallery">
+      <h2 id="phicom-gallery">Giao diện trên loa</h2>
+      <div class="phicom-gallery">
+        <figure><img src="phicom/img/02-am-nhac-spectrum.jpg" alt="Tab Âm nhạc với tìm kiếm YouTube, ZingMP3 và phổ nhạc" loading="lazy" width="800" height="600"><figcaption>Âm nhạc · YouTube · ZingMP3</figcaption></figure>
+        <figure><img src="phicom/img/03-radio-podcast.jpg" alt="Danh sách đài VOV và podcast" loading="lazy" width="800" height="600"><figcaption>Radio VOV và podcast</figcaption></figure>
+        <figure><img src="phicom/img/04-nha-thong-minh.jpg" alt="Tab Nhà thông minh với thiết bị Smart Life và Hunonic" loading="lazy" width="800" height="600"><figcaption>Nhà thông minh</figcaption></figure>
+        <figure><img src="phicom/img/05-may-lanh.jpg" alt="Bảng điều khiển máy lạnh hồng ngoại" loading="lazy" width="800" height="600"><figcaption>Máy lạnh và TV hồng ngoại</figcaption></figure>
+        <figure><img src="phicom/img/06-may-tinh.jpg" alt="Tab Máy tính với các nút điều khiển nhanh" loading="lazy" width="800" height="600"><figcaption>Điều khiển máy tính</figcaption></figure>
+        <figure><img src="phicom/img/07-danh-thuc.jpg" alt="Tab Đánh thức với từ khoá và độ nhạy" loading="lazy" width="800" height="600"><figcaption>Từ khoá đánh thức</figcaption></figure>
+      </div>
     </section>
   </div>
 
