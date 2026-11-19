@@ -1,0 +1,322 @@
+{
+ "groups": {
+  "tra_cuu": "Tin tức & tra cứu",
+  "tai_chinh": "Tài chính",
+  "lich": "Lịch & tâm linh",
+  "hoc_tap": "Học tập & gia sư",
+  "tu_van": "Tư vấn chuyên gia",
+  "giai_tri": "Giải trí & cho bé",
+  "tien_ich": "Tiện ích"
+ },
+ "tools": [
+  {
+   "name": "lunar_calendar",
+   "group": "lich",
+   "description": "Lịch vạn niên: đổi dương lịch sang âm lịch (và ngược lại), can chi ngày/tháng/năm, tiết khí, ngày hoàng đạo/hắc đạo, giờ hoàng đạo, ngày lễ. Dùng khi hỏi \"hôm nay âm lịch ngày mấy\", \"rằm tháng 7 là ngày nào\".",
+   "params": [
+    "date",
+    "lunar_date",
+    "leap_month"
+   ]
+  },
+  {
+   "name": "days_until_event",
+   "group": "lich",
+   "description": "Đếm ngược tới Tết Nguyên Đán, Trung thu, Giáng sinh, sinh nhật hoặc một ngày bất kỳ.",
+   "params": [
+    "event"
+   ]
+  },
+  {
+   "name": "age_compatibility",
+   "group": "lich",
+   "description": "Xem tuổi: con giáp, mệnh ngũ hành nạp âm của một năm sinh; hoặc xem hai tuổi hợp hay khắc (kết hôn, làm ăn, sinh con) theo tam hợp, lục hợp, tứ hành xung, ngũ hành, thiên can. Mang tính tham khảo văn hoá.",
+   "params": [
+    "year1",
+    "year2"
+   ]
+  },
+  {
+   "name": "feng_shui_advice",
+   "group": "lich",
+   "description": "Phong thuỷ Bát trạch theo năm sinh và giới tính: cung mệnh, hướng tốt (Sinh khí, Thiên y, Diên niên, Phục vị) và hướng xấu cho nhà, cửa, bàn làm việc, giường ngủ; màu sắc, con số hợp mệnh.",
+   "params": [
+    "birth_year",
+    "gender"
+   ]
+  },
+  {
+   "name": "find_good_days",
+   "group": "lich",
+   "description": "Xem ngày tốt: liệt kê các ngày hoàng đạo sắp tới để cưới hỏi, khai trương, động thổ, xuất hành, mua xe..., loại trừ Tam nương, Nguyệt kỵ và ngày xung tuổi (nếu cho năm sinh).",
+   "params": [
+    "purpose",
+    "days_ahead",
+    "birth_year",
+    "from_date"
+   ]
+  },
+  {
+   "name": "numerology_reading",
+   "group": "lich",
+   "description": "Thần số học Pythagoras: số chủ đạo (đường đời), số sứ mệnh, linh hồn, nhân cách, ngày sinh và năm cá nhân từ họ tên và ngày sinh.",
+   "params": [
+    "birth_date",
+    "full_name"
+   ]
+  },
+  {
+   "name": "daily_horoscope",
+   "group": "lich",
+   "description": "Tử vi/cung hoàng đạo hằng ngày: tính cung từ ngày sinh hoặc tên cung, đánh giá tình cảm, công việc, tài chính, sức khoẻ, con số và màu may mắn hôm nay. Mang tính giải trí.",
+   "params": [
+    "birth_date",
+    "sign"
+   ]
+  },
+  {
+   "name": "tarot_reading",
+   "group": "lich",
+   "description": "Rút bài Tarot (1 lá hoặc 3 lá quá khứ - hiện tại - tương lai) cho một câu hỏi. Mang tính giải trí.",
+   "params": [
+    "question",
+    "cards"
+   ]
+  },
+  {
+   "name": "weather_forecast",
+   "group": "tra_cuu",
+   "description": "Thời tiết hiện tại, chất lượng không khí (AQI) và dự báo nhiều ngày cho bất kỳ tỉnh/thành/địa điểm nào ở Việt Nam hoặc thế giới. Dùng khi người dùng hỏi thời tiết, nhiệt độ, mưa, nắng, có nên mang ô.",
+   "params": [
+    "city",
+    "days"
+   ]
+  },
+  {
+   "name": "news_headlines",
+   "group": "tra_cuu",
+   "description": "Đọc tin tức mới nhất từ VnExpress/Tuổi Trẻ theo chuyên mục. Sau đó có thể dùng news_read_article để đọc chi tiết một bài.",
+   "params": [
+    "category",
+    "keyword",
+    "count",
+    "source"
+   ]
+  },
+  {
+   "name": "news_read_article",
+   "group": "tra_cuu",
+   "description": "Đọc nội dung chi tiết một bài báo: theo số thứ tự trong danh sách tin vừa đọc, hoặc theo đường link.",
+   "params": [
+    "index",
+    "url"
+   ]
+  },
+  {
+   "name": "lottery_results",
+   "group": "tra_cuu",
+   "description": "Kết quả xổ số kiến thiết Việt Nam (miền Bắc, Trung, Nam) theo ngày, có lọc theo tỉnh. Dữ liệu 7 ngày gần nhất.",
+   "params": [
+    "region",
+    "date",
+    "province"
+   ]
+  },
+  {
+   "name": "lottery_check_ticket",
+   "group": "tra_cuu",
+   "description": "Dò vé số: so số vé với kết quả kỳ mới nhất (hoặc ngày chỉ định) của một miền, báo trúng giải nào, trùng 2 số cuối.",
+   "params": [
+    "number",
+    "region",
+    "date"
+   ]
+  },
+  {
+   "name": "wikipedia_lookup",
+   "group": "tra_cuu",
+   "description": "Tra cứu bách khoa Wikipedia (tiếng Việt, tự chuyển tiếng Anh nếu thiếu): nhân vật, địa danh, sự kiện, khái niệm.",
+   "params": [
+    "query",
+    "lang"
+   ]
+  },
+  {
+   "name": "web_search",
+   "group": "tra_cuu",
+   "description": "Tìm kiếm Internet (như Google) để lấy thông tin mới, sự kiện gần đây, giá cả, lịch chiếu, địa chỉ... Trả về tiêu đề, đoạn trích và link.",
+   "params": [
+    "query",
+    "count"
+   ]
+  },
+  {
+   "name": "read_web_page",
+   "group": "tra_cuu",
+   "description": "Đọc nội dung văn bản của một trang web theo link (ví dụ link lấy từ web_search).",
+   "params": [
+    "url"
+   ]
+  },
+  {
+   "name": "gold_price",
+   "group": "tai_chinh",
+   "description": "Giá vàng SJC trong nước (mua/bán theo khu vực) và giá vàng thế giới (USD/ounce).",
+   "params": [
+    "branch"
+   ]
+  },
+  {
+   "name": "exchange_rate",
+   "group": "tai_chinh",
+   "description": "Tỷ giá ngoại tệ Vietcombank (mua/chuyển khoản/bán) và quy đổi tiền giữa các loại tiền tệ (USD, EUR, JPY, CNY, KRW, VND...).",
+   "params": [
+    "currency",
+    "amount",
+    "to"
+   ]
+  },
+  {
+   "name": "crypto_price",
+   "group": "tai_chinh",
+   "description": "Giá tiền số (Bitcoin, Ethereum, BNB, Solana, XRP, Dogecoin...) theo USD và VND, biến động 24 giờ.",
+   "params": [
+    "coins"
+   ]
+  },
+  {
+   "name": "stock_price",
+   "group": "tai_chinh",
+   "description": "Giá cổ phiếu Việt Nam (HOSE/HNX/UPCoM: FPT, VNM, VCB, HPG...), chỉ số VN-Index, và cổ phiếu/chỉ số quốc tế (AAPL, sp500, nasdaq).",
+   "params": [
+    "symbols"
+   ]
+  },
+  {
+   "name": "business_tax_lookup",
+   "group": "tai_chinh",
+   "description": "Tra cứu mã số thuế doanh nghiệp/hộ kinh doanh: tên công ty, tên quốc tế, địa chỉ, tình trạng hoạt động.",
+   "params": [
+    "tax_code"
+   ]
+  },
+  {
+   "name": "translate_text",
+   "group": "hoc_tap",
+   "description": "Dịch văn bản giữa tiếng Việt và hơn 20 ngôn ngữ (Anh, Pháp, Đức, Nhật, Hàn, Trung, Thái...).",
+   "params": [
+    "text",
+    "target",
+    "source"
+   ]
+  },
+  {
+   "name": "traffic_fine_lookup",
+   "group": "tra_cuu",
+   "description": "Tra cứu phạt nguội ô tô, xe máy theo biển số xe.",
+   "params": [
+    "plate",
+    "vehicle"
+   ]
+  },
+  {
+   "name": "tutor",
+   "group": "hoc_tap",
+   "description": "Gia sư AI cho học sinh: Toán, Lý, Hoá, Sinh, Văn, Sử, Địa, Tin và 15 ngoại ngữ (Anh, Pháp, Đức, Ý, Tây Ban Nha, Nga, Nhật, Hàn, Trung, Thái, Hindi, Indonesia, Mã Lai, Bồ Đào Nha, tiếng Việt cho người nước ngoài). Gọi khi người dùng muốn học, hỏi bài, luyện tập, kiểm tra bài làm. Trả về phương pháp dạy và tư liệu để bạn giảng tiếp.",
+   "params": [
+    "subject",
+    "question",
+    "grade",
+    "mode"
+   ]
+  },
+  {
+   "name": "expert_advice",
+   "group": "tu_van",
+   "description": "Tư vấn chuyên gia: nghề nghiệp, du lịch trong nước & quốc tế, luật doanh nghiệp/đất đai/dân sự/giao thông, sức khoẻ, dinh dưỡng, bài thuốc dân gian, tuyển sinh 2026, tâm lý, nuôi dạy con, nông nghiệp, công nghệ, kinh doanh. Trả về khung tư vấn và thông tin mới nhất tìm được trên Internet.",
+   "params": [
+    "domain",
+    "question"
+   ]
+  },
+  {
+   "name": "cooking_recipe",
+   "group": "giai_tri",
+   "description": "Dạy nấu ăn: tìm công thức món ăn trên Internet (nguyên liệu, các bước, mẹo), món Việt và quốc tế; hoặc gợi ý món theo nguyên liệu có sẵn.",
+   "params": [
+    "dish",
+    "servings"
+   ]
+  },
+  {
+   "name": "kids_story",
+   "group": "giai_tri",
+   "description": "Kể chuyện cho bé: truyện cổ tích Việt Nam và thế giới, ngụ ngôn (Tấm Cám, Thánh Gióng, Sơn Tinh Thủy Tinh, Cây khế, Lọ Lem, Bạch Tuyết...). Lấy nội dung từ Wikipedia để bạn kể lại bằng giọng truyền cảm.",
+   "params": [
+    "title",
+    "age"
+   ]
+  },
+  {
+   "name": "greek_mythology",
+   "group": "giai_tri",
+   "description": "Thần thoại Hy Lạp, La Mã, Bắc Âu, Ai Cập: các vị thần (Zeus, Athena, Poseidon, Hades...), anh hùng (Heracles, Achilles, Perseus), sự tích (hộp Pandora, ngựa thành Troy). Nội dung từ Wikipedia.",
+   "params": [
+    "topic"
+   ]
+  },
+  {
+   "name": "vietnamese_joke",
+   "group": "giai_tri",
+   "description": "Kể truyện cười, tiếu lâm Việt Nam (Tiếu lâm An Nam, Trạng Quỳnh, Góp cười truyện thế...) lấy từ thư viện Wikisource; có thể lọc theo từ khoá.",
+   "params": [
+    "topic"
+   ]
+  },
+  {
+   "name": "riddle_game",
+   "group": "giai_tri",
+   "description": "Câu đố vui, đố mẹo, câu đố dân gian cho bé và gia đình (có đáp án) lấy từ Internet. Đố người dùng rồi mới nói đáp án.",
+   "params": [
+    "topic"
+   ]
+  },
+  {
+   "name": "driving_theory_quiz",
+   "group": "hoc_tap",
+   "description": "Ôn thi lý thuyết bằng lái xe theo bộ 600 câu hỏi hiện hành (ô tô) và các câu dùng cho xe máy, có câu điểm liệt và giải thích. Hỏi từng câu, người dùng trả lời số đáp án, sau đó gọi lại với answer để chấm.",
+   "params": [
+    "vehicle",
+    "question_number",
+    "critical_only",
+    "answer"
+   ]
+  },
+  {
+   "name": "calculator",
+   "group": "tien_ich",
+   "description": "Máy tính chính xác: cộng trừ nhân chia, luỹ thừa, căn, phần trăm, lượng giác, giai thừa. Dùng thay vì tự nhẩm.",
+   "params": [
+    "expression"
+   ]
+  },
+  {
+   "name": "unit_convert",
+   "group": "tien_ich",
+   "description": "Đổi đơn vị: độ dài, khối lượng (cả chỉ, lượng vàng, tạ, yến), thể tích, diện tích (sào, mẫu, công, ha), tốc độ, năng lượng, dung lượng, nhiệt độ (C/F/K).",
+   "params": [
+    "value",
+    "from_unit",
+    "to_unit"
+   ]
+  },
+  {
+   "name": "current_datetime",
+   "group": "tien_ich",
+   "description": "Ngày giờ hiện tại ở Việt Nam hoặc múi giờ/thành phố khác trên thế giới.",
+   "params": [
+    "city"
+   ]
+  }
+ ]
+}

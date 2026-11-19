@@ -1,0 +1,22 @@
+# Render Blueprint: Dashboard → New → Blueprint → chọn repo này. Gói Free đủ chạy.
+services:
+  - type: web
+    name: hynhi-mcp
+    runtime: docker
+    rootDir: mcp-server
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: singapore
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: ADMIN_KEY
+        generateValue: true
+      - key: DEFAULT_CITY
+        value: Hà Nội
+      - key: MCP_ENDPOINTS
+        sync: false
+      - key: RENDER_API_KEY
+        sync: false
+      - key: BRAVE_API_KEY
+        sync: false

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hynhi MCP</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--fg:#1d2433;--mute:#667085;--line:#e4e7ef;--acc:#e8590c;--ok:#12b76a;--bad:#d92d20}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1218;--card:#171b24;--fg:#e8eaf0;--mute:#98a2b3;--line:#2a3140;--acc:#ff7a2f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px;display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+h1{margin:0 0 4px;font-size:26px}h2{margin:0 0 10px;font-size:18px}p{margin:0 0 8px;color:var(--mute)}
+input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit;margin:4px 0 10px}
+button{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer}
+.stats{display:flex;gap:12px;flex-wrap:wrap}.stat{flex:1;min-width:120px;background:var(--bg);border-radius:10px;padding:10px}
+.stat b{display:block;font-size:22px}.msg{margin-top:8px;font-weight:600}.ok{color:var(--ok)}.bad{color:var(--bad)}
+ul{margin:0;padding-left:18px}li{margin:2px 0}code{font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <section class="card">
+    <h1>Hynhi MCP</h1>
+    <p>Máy chủ MCP trực tuyến cho robot Xiaozhi: thời tiết, tin tức, xổ số, lịch vạn niên, giá vàng, chứng khoán, gia sư, tư vấn... Robot dùng ngay, không cần nạp lại firmware.</p>
+    <div class="stats" id="stats"></div>
+  </section>
+  <section class="card">
+    <h2>Kết nối robot</h2>
+    <p>Lấy địa chỉ ở <b>xiaozhi.me → Agent → Cấu hình → MCP endpoint</b> (dạng <code>wss://api.xiaozhi.me/mcp/?token=…</code>).</p>
+    <form id="reg"><input name="name" placeholder="Tên robot (tuỳ ý)" maxlength="40"><input name="url" placeholder="wss://api.xiaozhi.me/mcp/?token=..." required><button>Kết nối MCP</button></form>
+    <div class="msg" id="regmsg"></div>
+  </section>
+  <section class="card">
+    <h2>Xoá robot</h2>
+    <form id="del"><input name="url" placeholder="Dán đúng MCP endpoint đã đăng ký" required><button>Xoá</button></form>
+    <div class="msg" id="delmsg"></div>
+  </section>
+  <section class="card"><h2>Công cụ</h2><ul id="tools"></ul></section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+async function api(p, b) { const r = await fetch(p, b ? {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(b)} : {}); return r.json(); }
+async function load() {
+  const s = await api('/api/status');
+  $('#stats').innerHTML = [['Robot', s.devices], ['Đang online', s.online], ['Công cụ', s.tools], ['Lượt gọi', s.calls]]
+    .map(([k, v]) => `<div class="stat"><b>${v}</b>${k}</div>`).join('');
+}
+async function tools() {
+  const t = await api('/api/tools');
+  $('#tools').innerHTML = t.tools.map(x => `<li><b>${t.groups[x.group]}</b>: ${x.description.split('.')[0]}</li>`).join('');
+}
+for (const [f, path, out] of [['#reg', '/api/register', '#regmsg'], ['#del', '/api/unregister', '#delmsg']]) {
+  $(f).addEventListener('submit', async e => {
+    e.preventDefault(); $(out).textContent = 'Đang xử lý…'; $(out).className = 'msg';
+    const r = await api(path, Object.fromEntries(new FormData(e.target)));
+    $(out).textContent = r.message; $(out).className = 'msg ' + (r.ok ? 'ok' : 'bad'); load();
+  });
+}
+load(); tools(); setInterval(load, 15000);
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "announcement": { "text": "", "tone": "info" },
+  "tabs": [
+    { "id": "firmware", "label": "Nạp firmware", "visible": true },
+    { "id": "phicom", "label": "Loa Phicom", "visible": true },
+    { "id": "mcp", "label": "MCP", "visible": true },
+    { "id": "diag", "label": "Chẩn đoán", "visible": true }
+  ],
+  "variants": { "custom": { "visible": true }, "cam": { "visible": true }, "btbridge": { "visible": true } },
+  "texts": {},
+  "theme": { "accent": "" },
+  "firmware": { "password_sha256": "", "protect": ["custom", "cam", "btbridge"], "hint": "" },
+  "mcp": { "server": "https://hynhi-mcp.onrender.com", "password_sha256": "" }
+}

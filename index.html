@@ -8,7 +8,7 @@
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
 <script>try{var t=localStorage.getItem('hynhi-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="style.css?v=22">
+<link rel="stylesheet" href="style.css?v=23">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 </head>
 <body>
@@ -30,12 +30,14 @@
   <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></symbol>
   <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.6a10 10 0 0 1 14 0M8.5 16.4a5 5 0 0 1 7 0"/><circle cx="12" cy="20" r=".8"/></symbol>
+  <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M10 3h4v3a2 2 0 1 0 4 0V3h3v7h-3a2 2 0 1 0 0 4h3v7h-7v-3a2 2 0 1 0-4 0v3H3v-7h3a2 2 0 1 0 0-4H3V3z"/></symbol>
 </svg>
 <header class="top">
   <a class="brand" href="#firmware"><img src="images/logo.png" alt=""><span>Hynhi Robot<small>Firmware · ESP32-S3</small></span></a>
   <nav class="tabs" aria-label="Mục chính">
     <a href="#firmware"><svg class="ic"><use href="#i-flash"/></svg>Nạp firmware</a>
     <a href="#phicom"><svg class="ic"><use href="#i-speaker"/></svg>Loa Phicom</a>
+    <a href="#mcp"><svg class="ic"><use href="#i-puzzle"/></svg>MCP</a>
     <a href="#diag"><svg class="ic"><use href="#i-pulse"/></svg>Chẩn đoán</a>
   </nav>
   <button type="button" class="iconbtn" id="theme" aria-label="Đổi giao diện sáng/tối"><svg class="ic"><use href="#i-moon"/></svg></button>
@@ -45,13 +47,13 @@
   <div id="firmware" class="view">
     <section class="card hero">
       <div class="hero-text">
-        <p class="eyebrow">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
-        <h1>Nạp firmware<br>cho Hynhi Robot</h1>
-        <p class="lead">Chọn loại robot, cắm cáp USB rồi bấm nạp. Dùng Chrome hoặc Edge trên máy tính.</p>
+        <p class="eyebrow" data-edit="firmware.eyebrow1">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
+        <h1 data-edit="firmware.title1">Nạp firmware<br>cho Hynhi Robot</h1>
+        <p class="lead" data-edit="firmware.lead1">Chọn loại robot, cắm cáp USB rồi bấm nạp. Dùng Chrome hoặc Edge trên máy tính.</p>
         <div class="variants" role="radiogroup" aria-label="Chọn firmware">
-          <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><svg class="ic"><use href="#i-desk"/></svg><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
-          <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><svg class="ic"><use href="#i-camera"/></svg><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
-          <button type="button" role="radio" aria-checked="false" data-fw-pick="btbridge"><svg class="ic"><use href="#i-speaker"/></svg><b>Loa Bluetooth</b><span>ESP32 classic · phát nhạc robot ra loa BT</span></button>
+          <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><svg class="ic"><use href="#i-desk"/></svg><b data-edit="fw.custom.title">Robot để bàn</b><span data-edit="fw.custom.desc">ESP32-S3 N16R8 · không camera</span></button>
+          <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><svg class="ic"><use href="#i-camera"/></svg><b data-edit="fw.cam.title">Robot Camera</b><span data-edit="fw.cam.desc">ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
+          <button type="button" role="radio" aria-checked="false" data-fw-pick="btbridge"><svg class="ic"><use href="#i-speaker"/></svg><b data-edit="fw.btbridge.title">Loa Bluetooth</b><span data-edit="fw.btbridge.desc">ESP32 classic · phát nhạc robot ra loa BT</span></button>
         </div>
         <div class="actions">
           <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
@@ -69,17 +71,17 @@
         <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
       </div>
       <ol class="steps">
-        <li><svg class="ic"><use href="#i-plug"/></svg><b>Cắm cáp USB dữ liệu</b><span>Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
-        <li><svg class="ic"><use href="#i-usb"/></svg><b>Bấm “Kết nối”</b><span>Chọn cổng USB của robot trong danh sách.</span></li>
-        <li><svg class="ic"><use href="#i-trash"/></svg><b>Chọn xóa bộ nhớ</b><span>Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
-        <li><svg class="ic"><use href="#i-clock"/></svg><b>Chờ robot khởi động lại</b><span>Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
+        <li><svg class="ic"><use href="#i-plug"/></svg><b data-edit="firmware.step-title1">Cắm cáp USB dữ liệu</b><span data-edit="firmware.step-text1">Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
+        <li><svg class="ic"><use href="#i-usb"/></svg><b data-edit="firmware.step-title2">Bấm “Kết nối”</b><span data-edit="firmware.step-text2">Chọn cổng USB của robot trong danh sách.</span></li>
+        <li><svg class="ic"><use href="#i-trash"/></svg><b data-edit="firmware.step-title3">Chọn xóa bộ nhớ</b><span data-edit="firmware.step-text3">Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
+        <li><svg class="ic"><use href="#i-clock"/></svg><b data-edit="firmware.step-title4">Chờ robot khởi động lại</b><span data-edit="firmware.step-text4">Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
       </ol>
     </section>
 
     <section id="wiring" class="card">
       <div class="view-head">
         <span class="badge"><svg class="ic"><use href="#i-map"/></svg></span>
-        <div><p class="eyebrow">THEO BẢN ĐANG CHỌN</p><h2 id="wiring-title">Sơ đồ đấu nối · Robot để bàn</h2></div>
+        <div><p class="eyebrow" data-edit="firmware.eyebrow2">THEO BẢN ĐANG CHỌN</p><h2 id="wiring-title">Sơ đồ đấu nối · Robot để bàn</h2></div>
       </div>
       <div id="wiring-map" class="map" aria-label="Sơ đồ đấu nối GPIO"></div>
       <div class="legend" id="legend"></div>
@@ -89,9 +91,9 @@
   <div id="phicom" class="view" hidden>
     <section class="card hero phicom-hero">
       <div>
-        <p class="eyebrow">LOA PHICOMM R1 · TRỢ LÝ AI TIẾNG VIỆT</p>
-        <h1>Hynhi Phicom</h1>
-        <p class="lead">Biến loa Phicomm R1 thành trợ lý AI nói tiếng Việt: gọi “Hy Nhi ơi” để hỏi đáp, nghe nhạc, nghe radio, điều khiển nhà thông minh và máy tính. Cài từ Windows qua Wi‑Fi, không cần tháo loa.</p>
+        <p class="eyebrow" data-edit="phicom.eyebrow1">LOA PHICOMM R1 · TRỢ LÝ AI TIẾNG VIỆT</p>
+        <h1 data-edit="phicom.title1">Hynhi Phicom</h1>
+        <p class="lead" data-edit="phicom.lead1">Biến loa Phicomm R1 thành trợ lý AI nói tiếng Việt: gọi “Hy Nhi ơi” để hỏi đáp, nghe nhạc, nghe radio, điều khiển nhà thông minh và máy tính. Cài từ Windows qua Wi‑Fi, không cần tháo loa.</p>
         <div class="actions">
           <a class="button" href="phicom/HynhiPhicom-Setup.zip" download><svg class="ic"><use href="#i-usb"/></svg>Tải bộ cài Windows</a>
           <a class="ghost-link" href="phicom/Huong-dan.html">Hướng dẫn bằng hình ảnh <span aria-hidden="true">›</span></a>
@@ -105,32 +107,32 @@
     </section>
 
     <section class="card phicom-details" aria-labelledby="phicom-features">
-      <h2 id="phicom-features">Tính năng nổi bật</h2>
+      <h2 id="phicom-features" data-edit="phicom.heading1">Tính năng nổi bật</h2>
       <ul class="phicom-features">
-        <li><b>🎙️ Gọi “Hy Nhi ơi”</b><span>Từ khoá tiếng Việt nhận ngay trên loa, không cần Internet. Vẫn gọi được khi đang phát nhạc. Sau mỗi câu trả lời, loa nghe tiếp 30 giây để bạn nói tiếp không cần gọi lại.</span></li>
-        <li><b>🧠 Trợ lý AI luôn nói tiếng Việt</b><span>Kết nối xiaozhi.me hoặc máy chủ AI riêng. Tự chặn câu trả lời tiếng Trung và yêu cầu trả lời lại bằng tiếng Việt. Lệnh quen thuộc xử lý ngay trên loa cho nhanh.</span></li>
-        <li><b>🎵 YouTube và ZingMP3</b><span>Nói “mở bài…” để loa tìm và phát. Xem video YouTube trên điện thoại hay máy tính, tiếng phát ra loa và khớp hình, dừng hay tua đều đồng bộ.</span></li>
-        <li><b>📻 Radio VOV và podcast</b><span>VOV1, VOV2, VOV3, VOV Giao thông và các chương trình podcast tiếng Việt, chọn bằng giọng nói hoặc một chạm.</span></li>
-        <li><b>🎚️ Equalizer và phổ nhạc</b><span>Chế độ âm thanh có sẵn, chỉnh từng dải và tăng bass. Phổ nhạc màu trắng–đỏ–xanh–xanh dương chạy theo bài hát.</span></li>
-        <li><b>💡 Smart Life và Hunonic</b><span>Liên kết Smart Life bằng User Code và mã QR. Đăng nhập Hunonic để bật tắt công tắc, chỉnh máy lạnh và TV hồng ngoại. Đổi tên và biểu tượng từng thiết bị.</span></li>
-        <li><b>🖥️ Điều khiển máy tính</b><span>Cài Desktop Bridge kèm bộ cài, máy tính tự ghép với loa. Nói “mở YouTube trên máy tính”, “tăng âm lượng máy tính”, “mở Zalo”.</span></li>
-        <li><b>⏰ Báo thức, thời tiết, tiện ích</b><span>Đặt báo thức bằng giọng nói, hỏi thời tiết, đèn LED đổi màu theo trạng thái. Loa đọc địa chỉ trang điều khiển khi khởi động hoặc khi bạn hỏi.</span></li>
+        <li><b data-edit="phicom.feature-title1">🎙️ Gọi “Hy Nhi ơi”</b><span data-edit="phicom.feature-text1">Từ khoá tiếng Việt nhận ngay trên loa, không cần Internet. Vẫn gọi được khi đang phát nhạc. Sau mỗi câu trả lời, loa nghe tiếp 30 giây để bạn nói tiếp không cần gọi lại.</span></li>
+        <li><b data-edit="phicom.feature-title2">🧠 Trợ lý AI luôn nói tiếng Việt</b><span data-edit="phicom.feature-text2">Kết nối xiaozhi.me hoặc máy chủ AI riêng. Tự chặn câu trả lời tiếng Trung và yêu cầu trả lời lại bằng tiếng Việt. Lệnh quen thuộc xử lý ngay trên loa cho nhanh.</span></li>
+        <li><b data-edit="phicom.feature-title3">🎵 YouTube và ZingMP3</b><span data-edit="phicom.feature-text3">Nói “mở bài…” để loa tìm và phát. Xem video YouTube trên điện thoại hay máy tính, tiếng phát ra loa và khớp hình, dừng hay tua đều đồng bộ.</span></li>
+        <li><b data-edit="phicom.feature-title4">📻 Radio VOV và podcast</b><span data-edit="phicom.feature-text4">VOV1, VOV2, VOV3, VOV Giao thông và các chương trình podcast tiếng Việt, chọn bằng giọng nói hoặc một chạm.</span></li>
+        <li><b data-edit="phicom.feature-title5">🎚️ Equalizer và phổ nhạc</b><span data-edit="phicom.feature-text5">Chế độ âm thanh có sẵn, chỉnh từng dải và tăng bass. Phổ nhạc màu trắng–đỏ–xanh–xanh dương chạy theo bài hát.</span></li>
+        <li><b data-edit="phicom.feature-title6">💡 Smart Life và Hunonic</b><span data-edit="phicom.feature-text6">Liên kết Smart Life bằng User Code và mã QR. Đăng nhập Hunonic để bật tắt công tắc, chỉnh máy lạnh và TV hồng ngoại. Đổi tên và biểu tượng từng thiết bị.</span></li>
+        <li><b data-edit="phicom.feature-title7">🖥️ Điều khiển máy tính</b><span data-edit="phicom.feature-text7">Cài Desktop Bridge kèm bộ cài, máy tính tự ghép với loa. Nói “mở YouTube trên máy tính”, “tăng âm lượng máy tính”, “mở Zalo”.</span></li>
+        <li><b data-edit="phicom.feature-title8">⏰ Báo thức, thời tiết, tiện ích</b><span data-edit="phicom.feature-text8">Đặt báo thức bằng giọng nói, hỏi thời tiết, đèn LED đổi màu theo trạng thái. Loa đọc địa chỉ trang điều khiển khi khởi động hoặc khi bạn hỏi.</span></li>
       </ul>
     </section>
 
     <section class="card phicom-details" aria-labelledby="phicom-install">
-      <h2 id="phicom-install">Cài đặt trong 4 bước</h2>
+      <h2 id="phicom-install" data-edit="phicom.heading2">Cài đặt trong 4 bước</h2>
       <ol class="steps phicom-steps">
-        <li><svg class="ic"><use href="#i-plug"/></svg><b>Tải và giải nén</b><span>Giải nén toàn bộ <code>HynhiPhicom-Setup.zip</code> trên máy Windows.</span></li>
-        <li><svg class="ic"><use href="#i-wifi"/></svg><b>Nối máy tính với loa</b><span>Loa mới: nối Wi‑Fi <b>Phicomm_R1_xxxx</b> do loa phát. Loa đã vào mạng nhà: dùng chung Wi‑Fi với loa.</span></li>
-        <li><svg class="ic"><use href="#i-flash"/></svg><b>Chạy CaiDat-HynhiPhicom.bat</b><span>Chọn cách kết nối, nhập Wi‑Fi nhà, bấm <b>CÀI ĐẶT</b>. Có thể tích chọn cài điều khiển máy tính.</span></li>
-        <li><svg class="ic"><use href="#i-speaker"/></svg><b>Mở trang điều khiển</b><span>Loa đọc địa chỉ dạng <code>http://192.168.x.x:8088</code>. Mở trên điện thoại hoặc máy tính cùng mạng.</span></li>
+        <li><svg class="ic"><use href="#i-plug"/></svg><b data-edit="phicom.step-title1">Tải và giải nén</b><span data-edit="phicom.step-text1">Giải nén toàn bộ <code>HynhiPhicom-Setup.zip</code> trên máy Windows.</span></li>
+        <li><svg class="ic"><use href="#i-wifi"/></svg><b data-edit="phicom.step-title2">Nối máy tính với loa</b><span data-edit="phicom.step-text2">Loa mới: nối Wi‑Fi <b>Phicomm_R1_xxxx</b> do loa phát. Loa đã vào mạng nhà: dùng chung Wi‑Fi với loa.</span></li>
+        <li><svg class="ic"><use href="#i-flash"/></svg><b data-edit="phicom.step-title3">Chạy CaiDat-HynhiPhicom.bat</b><span data-edit="phicom.step-text3">Chọn cách kết nối, nhập Wi‑Fi nhà, bấm <b>CÀI ĐẶT</b>. Có thể tích chọn cài điều khiển máy tính.</span></li>
+        <li><svg class="ic"><use href="#i-speaker"/></svg><b data-edit="phicom.step-title4">Mở trang điều khiển</b><span data-edit="phicom.step-text4">Loa đọc địa chỉ dạng <code>http://192.168.x.x:8088</code>. Mở trên điện thoại hoặc máy tính cùng mạng.</span></li>
       </ol>
       <p><a class="ghost-link" href="phicom/Huong-dan.html">Xem hướng dẫn từng bước có ảnh minh hoạ <span aria-hidden="true">›</span></a></p>
     </section>
 
     <section class="card phicom-details" aria-labelledby="phicom-gallery">
-      <h2 id="phicom-gallery">Giao diện trên loa</h2>
+      <h2 id="phicom-gallery" data-edit="phicom.heading3">Giao diện trên loa</h2>
       <div class="phicom-gallery">
         <figure><img src="phicom/img/02-am-nhac-spectrum.jpg" alt="Tab Âm nhạc với tìm kiếm YouTube, ZingMP3 và phổ nhạc" loading="lazy" width="800" height="600"><figcaption>Âm nhạc · YouTube · ZingMP3</figcaption></figure>
         <figure><img src="phicom/img/03-radio-podcast.jpg" alt="Danh sách đài VOV và podcast" loading="lazy" width="800" height="600"><figcaption>Radio VOV và podcast</figcaption></figure>
@@ -142,12 +144,71 @@
     </section>
   </div>
 
+  <div id="mcp" class="view" hidden>
+    <section class="card hero mcp-hero">
+      <div class="hero-text">
+        <p class="eyebrow" data-edit="mcp.eyebrow1">MCP ENDPOINT · CHẠY TRÊN INTERNET · MIỄN PHÍ</p>
+        <h1 data-edit="mcp.title1">Hynhi MCP</h1>
+        <p class="lead" data-edit="mcp.lead1">Thêm 34 công cụ trực tuyến cho mọi robot Xiaozhi: thời tiết, tin tức, xổ số, lịch vạn niên, giá vàng, chứng khoán, gia sư 23 môn, tư vấn luật và sức khoẻ, kể chuyện cho bé, ôn thi bằng lái. Không cần nạp lại firmware, không cần bật máy tính.</p>
+        <ul class="facts" id="mcp-stats" aria-live="polite"><li>Đang kiểm tra máy chủ…</li></ul>
+      </div>
+      <ol class="steps">
+        <li><svg class="ic"><use href="#i-link"/></svg><b data-edit="mcp.step-title1">Mở xiaozhi.me</b><span data-edit="mcp.step-text1">Đăng nhập, chọn <b>Agent</b> của robot → <b>Cấu hình</b>.</span></li>
+        <li><svg class="ic"><use href="#i-copy"/></svg><b data-edit="mcp.step-title2">Lấy điểm cuối MCP</b><span data-edit="mcp.step-text2">Bấm <b>Lấy điểm cuối MCP</b> và sao chép địa chỉ <code>wss://api.xiaozhi.me/mcp/?token=…</code></span></li>
+        <li><svg class="ic"><use href="#i-puzzle"/></svg><b data-edit="mcp.step-title3">Dán vào ô bên dưới</b><span data-edit="mcp.step-text3">Bấm <b>Kết nối MCP</b>. Robot dùng được ngay ở câu hỏi tiếp theo.</span></li>
+      </ol>
+    </section>
+
+    <section class="card" aria-labelledby="mcp-connect-title">
+      <div class="view-head"><span class="badge"><svg class="ic"><use href="#i-plug"/></svg></span>
+        <div><p class="eyebrow" data-edit="mcp.eyebrow2">ĐĂNG KÝ ROBOT</p><h2 id="mcp-connect-title" data-edit="mcp.heading1">Kết nối MCP</h2></div></div>
+      <form id="mcp-reg" class="mcp-form">
+        <label>Tên robot<input name="name" maxlength="40" placeholder="Ví dụ: Culi phòng khách" autocomplete="off"></label>
+        <label>Điểm cuối MCP (WebSocket)<input name="url" required placeholder="wss://api.xiaozhi.me/mcp/?token=..." autocomplete="off" spellcheck="false"></label>
+        <label id="mcp-pass-row" hidden>Mật khẩu kết nối<input name="password" type="password" autocomplete="off"></label>
+        <details class="mcp-groups"><summary>Chọn nhóm công cụ (mặc định bật tất cả)</summary><div id="mcp-group-list"></div></details>
+        <div class="actions"><button class="button" type="submit"><svg class="ic"><use href="#i-plug"/></svg>Kết nối MCP</button>
+          <button class="ghost-link linklike" type="button" id="mcp-check">Kiểm tra trạng thái</button>
+          <button class="ghost-link linklike danger" type="button" id="mcp-del"><svg class="ic"><use href="#i-trash"/></svg>Xoá robot này</button></div>
+        <p class="mcp-msg" id="mcp-msg" role="status"></p>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="mcp-tools-title">
+      <div class="view-head"><span class="badge"><svg class="ic"><use href="#i-chip"/></svg></span>
+        <div><p class="eyebrow" data-edit="mcp.eyebrow3">CÔNG CỤ CHO AI</p><h2 id="mcp-tools-title" data-edit="mcp.heading2">Robot làm được gì</h2></div></div>
+      <div id="mcp-tools" class="mcp-tools"></div>
+    </section>
+
+    <section class="card" aria-labelledby="mcp-try-title">
+      <div class="view-head"><span class="badge"><svg class="ic"><use href="#i-pulse"/></svg></span>
+        <div><p class="eyebrow" data-edit="mcp.eyebrow4">THỬ NGAY TRÊN TRÌNH DUYỆT</p><h2 id="mcp-try-title" data-edit="mcp.heading3">Chạy thử công cụ</h2></div></div>
+      <form id="mcp-try" class="mcp-form mcp-try">
+        <label>Công cụ<select name="tool" id="mcp-try-tool"></select></label>
+        <label>Tham số (JSON)<input name="args" id="mcp-try-args" value="{}" spellcheck="false"></label>
+        <div class="actions"><button class="button" type="submit">Chạy</button></div>
+      </form>
+      <pre class="mcp-out" id="mcp-try-out" hidden></pre>
+    </section>
+
+    <section class="card" aria-labelledby="mcp-server-title">
+      <div class="view-head"><span class="badge"><svg class="ic"><use href="#i-wifi"/></svg></span>
+        <div><p class="eyebrow" data-edit="mcp.eyebrow5">NÂNG CAO</p><h2 id="mcp-server-title" data-edit="mcp.heading4">Máy chủ MCP</h2></div></div>
+      <p class="lead" data-edit="mcp.lead2">Máy chủ mặc định do Hynhi vận hành. Bạn có thể tự chạy máy chủ riêng miễn phí trên Render (mã nguồn trong repo này, thư mục <code>mcp-server</code>), rồi dán địa chỉ vào đây.</p>
+      <form id="mcp-server" class="mcp-form mcp-inline">
+        <input name="server" id="mcp-server-url" spellcheck="false" aria-label="Địa chỉ máy chủ MCP">
+        <button class="button" type="submit">Dùng máy chủ này</button>
+      </form>
+      <p><a class="ghost-link" href="https://render.com/deploy?repo=https://github.com/ynguyenit-ui/hynhi-robot-flasher" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ext"/></svg>Tự triển khai máy chủ lên Render (1 lần bấm)</a></p>
+    </section>
+  </div>
+
   <section id="diag" class="card view" hidden>
     <div class="view-head">
       <span class="badge"><svg class="ic"><use href="#i-pulse"/></svg></span>
-      <div><p class="eyebrow">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p><h2>Chẩn đoán</h2></div>
+      <div><p class="eyebrow" data-edit="diag.eyebrow1">KẾT NỐI USB · ĐỌC TRỰC TIẾP TỪ ROBOT</p><h2 data-edit="diag.heading1">Chẩn đoán</h2></div>
     </div>
-    <p class="lead">Cắm robot vào máy tính rồi bấm Kết nối ESP32. Trang đọc thông tin chip, khởi động lại robot và hiện địa chỉ trang cấu hình. Đóng các chương trình khác đang mở cổng này trước khi kết nối.</p>
+    <p class="lead" data-edit="diag.lead1">Cắm robot vào máy tính rồi bấm Kết nối ESP32. Trang đọc thông tin chip, khởi động lại robot và hiện địa chỉ trang cấu hình. Đóng các chương trình khác đang mở cổng này trước khi kết nối.</p>
     <div class="dg-actions">
       <button type="button" class="button" id="dg-connect"><svg class="ic"><use href="#i-usb"/></svg><span>Kết nối ESP32</span></button>
       <p id="dg-status" class="dg-status" role="status" aria-live="polite">Chưa kết nối.</p>
@@ -184,7 +245,9 @@
   </section>
 </main>
 <footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
-<script src="app.js?v=12"></script>
+<script src="site.js?v=1"></script>
+<script src="app.js?v=13"></script>
+<script src="mcp.js?v=1"></script>
 <script src="wiring.js?v=3"></script>
 <script type="module" src="diag.js?v=4"></script>
 </body>

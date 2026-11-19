@@ -69,7 +69,7 @@ document.querySelectorAll('[data-fw-pick]').forEach(b => b.addEventListener('cli
 /* #wiring opens the firmware view and scrolls to its diagram. */
 function showView() {
   const hash = location.hash.slice(1);
-  const views = ['firmware', 'phicom', 'diag'];
+  const views = ['firmware', 'phicom', 'mcp', 'diag'];
   const id = views.includes(hash) ? hash : 'firmware';
   views.forEach(v => { document.getElementById(v).hidden = v !== id; });
   document.querySelectorAll('.tabs a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'page' : 'false'));
