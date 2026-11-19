@@ -61,6 +61,8 @@ h2{font-size:1.3rem;letter-spacing:-.01em}
 .variants button:hover{border-color:var(--line2)}
 .variants button[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft)}
 .variants button[aria-checked="true"] .ic{background:var(--accent);color:#fff}
+.bridge-note{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--sunken);border:1px solid var(--line);font-size:.88rem;display:grid;gap:6px}
+.bridge-note p{margin:0}
 .actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin:22px 0 14px;min-height:48px}
 .button,button.button{display:inline-flex;align-items:center;justify-content:center;gap:9px;font:inherit;font-weight:700;color:#fff;border:0;background:var(--accent);border-radius:12px;padding:12px 22px;min-height:48px;cursor:pointer;text-decoration:none;transition:background .15s,transform .05s}
 .button:hover{background:var(--accent-strong)}

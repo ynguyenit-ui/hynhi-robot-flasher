@@ -40,7 +40,8 @@ function loadManifest() {
     const build = manifest.builds[0];
     const items = [manifest.version, build.chipFamily, build.parts.length + ' phần nạp'];
     try {
-      const head = await fetch('firmware/' + dir + '/' + build.parts.find(p => p.path === 'xiaozhi.bin').path, { method: 'HEAD' });
+      const app = build.parts.find(p => p.path === 'xiaozhi.bin' || p.path === 'hynhi_bt_bridge.bin');
+      const head = await fetch('firmware/' + dir + '/' + app.path, { method: 'HEAD' });
       const size = Number(head.headers.get('content-length'));
       if (size) items.push('Ứng dụng ' + (size / 1048576).toFixed(1) + ' MB');
     } catch { /* kích thước chỉ để tham khảo */ }
@@ -50,12 +51,17 @@ function loadManifest() {
 
 /* Firmware choice (desk robot / Robot Camera): drives the installer and the wiring diagram below it. */
 function selectFirmware(dir) {
-  firmwareDir = dir === 'cam' ? 'cam' : 'custom';
+  firmwareDir = ['cam', 'btbridge'].includes(dir) ? dir : 'custom';
+  const bridge = firmwareDir === 'btbridge';
   document.querySelectorAll('[data-fw-pick]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.fwPick === firmwareDir)));
   document.getElementById('installer').setAttribute('manifest', 'firmware/' + firmwareDir + '/manifest.json');
-  document.getElementById('wiring-title').textContent = 'Sơ đồ đấu nối · ' + (firmwareDir === 'cam' ? 'Robot Camera' : 'Robot để bàn');
+  /* The Bluetooth bridge needs no wiring: show its setup note instead of the robot diagram. */
+  document.getElementById('bridge-note').hidden = !bridge;
+  document.getElementById('wiring').hidden = bridge;
+  document.getElementById('wiring-link').hidden = bridge;
+  if (!bridge) document.getElementById('wiring-title').textContent = 'Sơ đồ đấu nối · ' + (firmwareDir === 'cam' ? 'Robot Camera' : 'Robot để bàn');
   try { localStorage.setItem('hynhi-fw', firmwareDir); } catch { /* chỉ để nhớ lựa chọn */ }
-  drawWiring(firmwareDir);
+  if (!bridge) drawWiring(firmwareDir);
   loadManifest();
 }
 document.querySelectorAll('[data-fw-pick]').forEach(b => b.addEventListener('click', () => selectFirmware(b.dataset.fwPick)));

@@ -51,6 +51,7 @@
         <div class="variants" role="radiogroup" aria-label="Chọn firmware">
           <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><svg class="ic"><use href="#i-desk"/></svg><b>Robot để bàn</b><span>ESP32-S3 N16R8 · không camera</span></button>
           <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><svg class="ic"><use href="#i-camera"/></svg><b>Robot Camera</b><span>ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
+          <button type="button" role="radio" aria-checked="false" data-fw-pick="btbridge"><svg class="ic"><use href="#i-speaker"/></svg><b>Loa Bluetooth</b><span>ESP32 classic · phát nhạc robot ra loa BT</span></button>
         </div>
         <div class="actions">
           <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
@@ -58,7 +59,12 @@
             <span slot="unsupported" class="warn">Trình duyệt này không hỗ trợ Web Serial. Hãy mở bằng Chrome hoặc Edge trên máy tính.</span>
             <span slot="not-allowed" class="warn">Cần mở trang qua HTTPS để dùng cổng USB.</span>
           </esp-web-install-button>
-          <a class="ghost-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối</a>
+          <a class="ghost-link" id="wiring-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối</a>
+        </div>
+        <div class="bridge-note" id="bridge-note" hidden>
+          <p><b>Bo ESP32 không tự vào chế độ nạp?</b> Giữ nút <b>BOOT</b>, bấm rồi thả <b>EN</b>, giữ BOOT tới khi trang báo đang nạp.</p>
+          <p><b>Sau khi nạp:</b> điện thoại vào Wi-Fi <b>Hynhi-BT-xxxx</b>, mở <b>192.168.4.1</b>, chọn cùng Wi-Fi với robot. Bật loa ở chế độ ghép đôi (đèn nháy): bridge tự tìm và kết nối. Robot tự thấy bridge ở tab Bluetooth.</p>
+          <p>Chỉ dùng ESP32 classic (WROOM-32, 32D/E, 32S, 32U). ESP32-S2/S3/C3 không có Bluetooth Classic.</p>
         </div>
         <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
       </div>
