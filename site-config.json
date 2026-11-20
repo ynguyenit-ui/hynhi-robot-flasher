@@ -52,6 +52,6 @@
   },
   "mcp": {
     "server": "https://hynhi-mcp.onrender.com",
-    "password_sha256": ""
+    "password_sha256": "69a4c406439bb66896e4bf9f2356e3ffc7dba3c35a7519b57336787001a53348"
   }
 }
