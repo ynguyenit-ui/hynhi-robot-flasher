@@ -1,0 +1,1 @@
+{"n":477,"c":"Báo hiệu đường bộ","q":"Vạch kẻ đường nào dưới đây là vạch phân chia các làn xe cùng chiều?","o":["Vạch 1.","Vạch 2.","Vạch 3.","Vạch 1 và vạch 2."],"a":3,"e":"Quy chuẩn màu vạch kẻ đường: VẠCH MÀU TRẮNG dùng để phân chia các làn xe chạy CÙNG CHIỀU nhau. Do đó Vạch 1 và Vạch 2 (đều màu trắng) là vạch phân chia các làn xe cùng chiều.","k":false,"img":"gplx/477.jpg"}

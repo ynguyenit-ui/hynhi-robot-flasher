@@ -1,0 +1,1 @@
+{"n":482,"c":"Báo hiệu đường bộ","q":"Khi gặp vạch kẻ đường nào các xe được phép đè vạch?","o":["Vạch 1.","Vạch 2.","Vạch 3.","Vạch 1 và vạch 3."],"a":3,"e":"Quy tắc nét vẽ vạch đường: VẠCH NÉT ĐỨT thì ĐƯỢC PHÉP ĐÈ VẠCH (chuyển làn); vạch nét liền cấm đè vạch. Trong hình, Vạch 1 và Vạch 3 là vạch nét đứt nên các xe được phép đè vạch.","k":false,"img":"gplx/482.jpg"}
