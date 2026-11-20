@@ -268,9 +268,13 @@ def gold_price(branch='Hồ Chí Minh'):
         table = []
         for x in rows[:8]:
             out.append(f'- {x["TypeName"]}: mua {x["Buy"].replace(",", ".")}, bán {x["Sell"].replace(",", ".")}')
-            table.append([x['TypeName'].replace('Vàng ', '')[:22], vn(float(x['BuyValue']) / 1e6, 1), vn(float(x['SellValue']) / 1e6, 1)])
-        hint = SHOW_TABLE.format(title='Giá vàng SJC', subtitle='Triệu đồng/lượng · ' + r.get('latestDate', ''), icon='gold',
-                                 columns='Mua|Bán', rows=json.dumps(table[:6], ensure_ascii=False))
+            name = x['TypeName']
+            short = ('Vàng miếng SJC' if '1L' in name else 'Nhẫn SJC 99,99%' if 'nhẫn' in name.lower() and '1 chỉ' in name
+                     else name if name.startswith('Nữ trang') and ('99,99' in name or '99%' in name) else '')
+            if short and short not in [t[0] for t in table]:
+                table.append([short, vn(x['BuyValue']) + ' đ', vn(x['SellValue']) + ' đ'])
+        hint = SHOW_TABLE.format(title='Giá vàng SJC', subtitle='VNĐ/lượng · ' + r.get('latestDate', ''), icon='gold',
+                                 columns='Mua vào|Bán ra', rows=json.dumps(table[:4], ensure_ascii=False))
     except Exception as e:
         hint = ''
         out.append(f'Không lấy được giá SJC: {e}')
@@ -321,6 +325,10 @@ def exchange_rate(currency='USD', amount=None, to='VND'):
             f = lambda v: vn(v, 2 if v and v < 1000 else 0) if v else '-'
             lines.append(f'Tỷ giá Vietcombank {src} ({r["name"]}) lúc {when}: mua tiền mặt {f(r["buy"])} đ, '
                          f'chuyển khoản {f(r["transfer"])} đ, bán {f(r["sell"])} đ.')
+            table = [[c, f(rates[c]['transfer'] or rates[c]['buy']) + ' đ', f(rates[c]['sell']) + ' đ']
+                     for c in dict.fromkeys([src, 'USD', 'EUR', 'JPY', 'CNY']) if c in rates][:4]
+            lines.append(SHOW_TABLE.format(title='Tỷ giá Vietcombank', subtitle='VNĐ cho 1 đơn vị ngoại tệ', icon='money',
+                                           columns='Mua vào|Bán ra', rows=json.dumps(table, ensure_ascii=False)))
     except Exception:
         pass
     if amount is not None or not lines:
@@ -354,8 +362,8 @@ def crypto_price(coins='btc,eth'):
     for k, v in r.items():
         ch = v.get('usd_24h_change') or 0
         out.append(f'{k}: {vn(v["usd"], 2 if v["usd"] < 10 else 0)} USD ≈ {vn(v["vnd"])} đ, 24h {"tăng" if ch >= 0 else "giảm"} {vn(abs(ch), 2)}%')
-        table.append([k.capitalize(), vn(v['usd'], 2 if v['usd'] < 10 else 0), '', ('+' if ch >= 0 else '-') + vn(abs(ch), 1) + '%'])
-    out.append(SHOW_TABLE.format(title='Tiền số', subtitle='USD · biến động 24 giờ', icon='chart', columns='USD',
+        table.append([k.capitalize(), vn(v['vnd']) + ' đ', '', ('+' if ch >= 0 else '-') + vn(abs(ch), 1) + '%'])
+    out.append(SHOW_TABLE.format(title='Tiền số', subtitle='Giá VNĐ · biến động 24 giờ', icon='chart', columns='Giá',
                                  rows=json.dumps(table[:6], ensure_ascii=False)))
     return '\n'.join(out)
 
@@ -505,9 +513,9 @@ def fuel_price(zone='1'):
         ch = r[2].replace(' ', '')
         price, ch = r[col].replace(',', '.'), ch.replace(',', '.')
         out.append(f'- {r[0]}: {price} đồng' + (f' (kỳ trước {ch})' if ch and ch not in ('0', '-') else ''))
-        table.append([r[0][:22], price, '', ch if ch not in ('0', '-') else ''])
+        table.append([r[0][:22], price + ' đ', '', (ch + ' đ') if ch not in ('0', '-', '') else ''])
     out.append('Giá điều chỉnh vào các ngày 1, 11, 21 hằng tháng.')
-    out.append(SHOW_TABLE.format(title='Giá xăng dầu', subtitle=f'Đồng/lít · Petrolimex vùng {zone}' + (f' · {when}' if when else ''),
+    out.append(SHOW_TABLE.format(title='Giá xăng dầu', subtitle=f'VNĐ/lít · Petrolimex vùng {zone}' + (f' · {when}' if when else ''),
                                  icon='fuel', columns='Giá', rows=json.dumps(table[:6], ensure_ascii=False)))
     return '\n'.join(out)
 

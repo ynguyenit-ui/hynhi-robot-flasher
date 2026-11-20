@@ -1,6 +1,6 @@
 {
   "name": "Hynhi Robot Camera",
-  "version": "2.5.2-hynhi3.10.37 · ESP32-S3 CAM (OV3660/OV5640 tự nhận)",
+  "version": "2.5.2-hynhi3.10.37 · 20/11/2026 · ESP32-S3 CAM (OV3660/OV5640 tự nhận)",
   "new_install_prompt_erase": true,
   "builds": [
     {
