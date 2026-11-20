@@ -220,6 +220,14 @@
    ]
   },
   {
+   "name": "fuel_price",
+   "group": "tai_chinh",
+   "description": "Giá xăng dầu bán lẻ Petrolimex hôm nay (vùng 1, vùng 2, mức tăng giảm) và PVOIL. Sau đó gọi self.screen.show_table để hiện bảng.",
+   "params": [
+    "zone"
+   ]
+  },
+  {
    "name": "tutor",
    "group": "hoc_tap",
    "description": "Gia sư AI cho học sinh: Toán, Lý, Hoá, Sinh, Văn, Sử, Địa, Tin và 15 ngoại ngữ (Anh, Pháp, Đức, Ý, Tây Ban Nha, Nga, Nhật, Hàn, Trung, Thái, Hindi, Indonesia, Mã Lai, Bồ Đào Nha, tiếng Việt cho người nước ngoài). Gọi khi người dùng muốn học, hỏi bài, luyện tập, kiểm tra bài làm. Trả về phương pháp dạy và tư liệu để bạn giảng tiếp.",
@@ -284,11 +292,12 @@
   {
    "name": "driving_theory_quiz",
    "group": "hoc_tap",
-   "description": "Ôn thi lý thuyết bằng lái xe theo bộ 600 câu hỏi hiện hành (ô tô) và các câu dùng cho xe máy, có câu điểm liệt và giải thích. Hỏi từng câu, người dùng trả lời số đáp án, sau đó gọi lại với answer để chấm.",
+   "description": "Ôn thi lý thuyết bằng lái xe theo bộ 600 câu hỏi hiện hành (ô tô) và các câu dùng cho xe máy, có câu điểm liệt, câu biển báo/sa hình (robot hiện hình biển báo lên màn hình) và giải thích. Hỏi từng câu, người dùng trả lời số đáp án, sau đó gọi lại với answer để chấm.",
    "params": [
     "vehicle",
     "question_number",
     "critical_only",
+    "signs_only",
     "answer"
    ]
   },

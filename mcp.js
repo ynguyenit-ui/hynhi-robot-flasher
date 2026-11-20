@@ -6,7 +6,7 @@
   let groups = {};
   const VI = { weather_forecast: 'Thời tiết & không khí', news_headlines: 'Tin tức', news_read_article: 'Đọc bài báo', lottery_results: 'Kết quả xổ số',
     lottery_check_ticket: 'Dò vé số', wikipedia_lookup: 'Bách khoa Wikipedia', web_search: 'Tìm kiếm Internet', read_web_page: 'Đọc trang web',
-    traffic_fine_lookup: 'Tra phạt nguội', gold_price: 'Giá vàng', exchange_rate: 'Tỷ giá & quy đổi', crypto_price: 'Tiền số Bitcoin',
+    traffic_fine_lookup: 'Tra phạt nguội', gold_price: 'Giá vàng', fuel_price: 'Giá xăng dầu', exchange_rate: 'Tỷ giá & quy đổi', crypto_price: 'Tiền số Bitcoin',
     stock_price: 'Chứng khoán', business_tax_lookup: 'Mã số thuế doanh nghiệp', lunar_calendar: 'Lịch vạn niên', days_until_event: 'Đếm ngược sự kiện',
     age_compatibility: 'Xem tuổi hợp khắc', feng_shui_advice: 'Phong thuỷ', find_good_days: 'Xem ngày tốt', numerology_reading: 'Thần số học',
     daily_horoscope: 'Cung hoàng đạo hôm nay', tarot_reading: 'Bói Tarot', translate_text: 'Dịch thuật', tutor: 'Gia sư 23 môn',

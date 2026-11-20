@@ -388,6 +388,30 @@ async def api_admin_remove(request):
     return j({'ok': bool(d)})
 
 
+_gplx_cache: dict = {}
+
+
+async def gplx_image(request):
+    """JPEG picture of a driving-theory question, for self.screen.show_image on the robot."""
+    try:
+        qid = int(request.match_info['qid'])
+    except ValueError:
+        raise web.HTTPNotFound()
+    data = _gplx_cache.get(qid)
+    if data is None:
+        try:
+            data = await asyncio.to_thread(t_tri_thuc.gplx_image_jpeg, qid)
+        except Exception as e:
+            log.warning('gplx %s: %s', qid, e)
+            raise web.HTTPBadGateway()
+        if not data:
+            raise web.HTTPNotFound()
+        if len(_gplx_cache) > 400:
+            _gplx_cache.clear()
+        _gplx_cache[qid] = data
+    return web.Response(body=data, content_type='image/jpeg', headers={'Cache-Control': 'public, max-age=86400'})
+
+
 async def healthz(request):
     return web.Response(text='ok')
 
@@ -400,6 +424,7 @@ def make_app():
     app = web.Application(middlewares=[cors], client_max_size=64 * 1024)
     app.router.add_get('/', index)
     app.router.add_get('/healthz', healthz)
+    app.router.add_get('/gplx/{qid}.jpg', gplx_image)
     app.router.add_get('/api/status', api_status)
     app.router.add_get('/api/tools', api_tools)
     app.router.add_post('/api/register', api_register)

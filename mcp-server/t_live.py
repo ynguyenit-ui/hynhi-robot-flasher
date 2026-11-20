@@ -265,15 +265,22 @@ def gold_price(branch='Hồ Chí Minh'):
                        {'method': 'GetCurrentGoldPricesByBranch', 'BranchId': 1}, ttl=600)
         rows = [x for x in r.get('data', []) if fold(branch) in fold(x.get('BranchName', ''))] or r.get('data', [])
         out.append(f'Giá vàng SJC ({rows[0]["BranchName"] if rows else branch}), cập nhật {r.get("latestDate", "")}, đơn vị đồng/lượng:')
+        table = []
         for x in rows[:8]:
             out.append(f'- {x["TypeName"]}: mua {x["Buy"].replace(",", ".")}, bán {x["Sell"].replace(",", ".")}')
+            table.append([x['TypeName'].replace('Vàng ', '')[:22], vn(float(x['BuyValue']) / 1e6, 1), vn(float(x['SellValue']) / 1e6, 1)])
+        hint = SHOW_TABLE.format(title='Giá vàng SJC', subtitle='Triệu đồng/lượng · ' + r.get('latestDate', ''), icon='gold',
+                                 columns='Mua|Bán', rows=json.dumps(table[:6], ensure_ascii=False))
     except Exception as e:
+        hint = ''
         out.append(f'Không lấy được giá SJC: {e}')
     try:
         m = fetch_json('https://query1.finance.yahoo.com/v8/finance/chart/GC=F?range=1d&interval=1d', ttl=600)['chart']['result'][0]['meta']
         out.append(f'Vàng thế giới: {vn(m["regularMarketPrice"], 1)} USD/ounce.')
     except Exception:
         pass
+    if hint:
+        out.append(hint)
     return '\n'.join(out)
 
 
@@ -343,10 +350,13 @@ def crypto_price(coins='btc,eth'):
     r = fetch_json(f'https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd,vnd&include_24hr_change=true&ids={",".join(ids)}', ttl=120)
     if not r:
         return 'Không tìm thấy coin. Dùng mã như btc, eth, sol.'
-    out = []
+    out, table = [], []
     for k, v in r.items():
         ch = v.get('usd_24h_change') or 0
         out.append(f'{k}: {vn(v["usd"], 2 if v["usd"] < 10 else 0)} USD ≈ {vn(v["vnd"])} đ, 24h {"tăng" if ch >= 0 else "giảm"} {vn(abs(ch), 2)}%')
+        table.append([k.capitalize(), vn(v['usd'], 2 if v['usd'] < 10 else 0), '', ('+' if ch >= 0 else '-') + vn(abs(ch), 1) + '%'])
+    out.append(SHOW_TABLE.format(title='Tiền số', subtitle='USD · biến động 24 giờ', icon='chart', columns='USD',
+                                 rows=json.dumps(table[:6], ensure_ascii=False)))
     return '\n'.join(out)
 
 
@@ -460,3 +470,47 @@ def traffic_fine_lookup(plate, vehicle='oto'):
     return (f'Hệ thống tra cứu phạt nguội tự động đang yêu cầu mã xác nhận nên mình chưa tra trực tiếp được biển {p}. '
             'Bạn tra chính thức tại csgt.vn (mục Tra cứu phương tiện vi phạm), nhập biển số và mã xác nhận; '
             'hoặc dùng ứng dụng VNeTraffic của Cục CSGT để được báo phạt nguội tự động.')
+
+
+# ---------------- Fuel ----------------
+def _html_table(page, cls):
+    i = page.find('<table class="' + cls)
+    if i < 0:
+        return []
+    body = page[i:page.find('</table>', i)]
+    rows = []
+    for k, tr in enumerate(re.findall(r'(?s)<tr[^>]*>(.*?)</tr>', body)):
+        cells = [strip_tags(c).replace('\xa0', ' ').strip() for c in re.findall(r'(?s)<t[hd][^>]*>(.*?)</t[hd]>', tr)]
+        if k and cells and cells[0]:
+            rows.append(cells)
+    return rows
+
+
+@tool('fuel_price', 'tai_chinh',
+      'Giá xăng dầu bán lẻ Petrolimex hôm nay (vùng 1, vùng 2, mức tăng giảm) và PVOIL. Sau đó gọi self.screen.show_table để hiện bảng.',
+      {'zone': S('Vùng giá', ['1', '2'], '1')})
+def fuel_price(zone='1'):
+    page = fetch('https://giaxanghomnay.com/', ttl=1800)
+    rows = _html_table(page, 'table-petro')
+    if not rows:
+        return 'Chưa đọc được bảng giá xăng dầu, thử lại sau.'
+    m = re.search(r'Petrolimex\s+cập nhật\s+(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})', strip_tags(page))
+    when = f'{m.group(4)}:{m.group(5)} {m.group(3)}/{m.group(2)}' if m else ''
+    col = 3 if zone == '1' else 4
+    out = [f'Giá bán lẻ xăng dầu Petrolimex vùng {zone}{" cập nhật " + when if when else ""}, đồng/lít:']
+    table = []
+    for r in rows[:7]:
+        if len(r) < 5:
+            continue
+        ch = r[2].replace(' ', '')
+        price, ch = r[col].replace(',', '.'), ch.replace(',', '.')
+        out.append(f'- {r[0]}: {price} đồng' + (f' (kỳ trước {ch})' if ch and ch not in ('0', '-') else ''))
+        table.append([r[0][:22], price, '', ch if ch not in ('0', '-') else ''])
+    out.append('Giá điều chỉnh vào các ngày 1, 11, 21 hằng tháng.')
+    out.append(SHOW_TABLE.format(title='Giá xăng dầu', subtitle=f'Đồng/lít · Petrolimex vùng {zone}' + (f' · {when}' if when else ''),
+                                 icon='fuel', columns='Giá', rows=json.dumps(table[:6], ensure_ascii=False)))
+    return '\n'.join(out)
+
+
+SHOW_TABLE = ('[Robot có màn hình: gọi self.screen.show_table với title="{title}", subtitle="{subtitle}", icon="{icon}", '
+              'columns="{columns}", rows=\'{rows}\' rồi đọc tóm tắt ngắn.]')

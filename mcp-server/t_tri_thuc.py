@@ -277,14 +277,24 @@ def _gplx():
     return json.loads(fetch(GPLX_URL, ttl=86400, timeout=20))
 
 
+GPLX_IMG = 'https://raw.githubusercontent.com/nqthaivl/on-gplx-tiktok/main/public/quiz-images/{name}'
+
+
+def public_url():
+    import os
+    return (os.environ.get('PUBLIC_URL') or os.environ.get('RENDER_EXTERNAL_URL') or '').rstrip('/')
+
+
 @tool('driving_theory_quiz', 'hoc_tap',
-      'Ôn thi lý thuyết bằng lái xe theo bộ 600 câu hỏi hiện hành (ô tô) và các câu dùng cho xe máy, có câu điểm liệt và giải thích. '
-      'Hỏi từng câu, người dùng trả lời số đáp án, sau đó gọi lại với answer để chấm.',
+      'Ôn thi lý thuyết bằng lái xe theo bộ 600 câu hỏi hiện hành (ô tô) và các câu dùng cho xe máy, có câu điểm liệt, câu biển báo/sa hình '
+      '(robot hiện hình biển báo lên màn hình) và giải thích. Hỏi từng câu, người dùng trả lời số đáp án, sau đó gọi lại với answer để chấm.',
       {'vehicle': S('Loại bằng', ['oto', 'xemay'], 'oto'), 'question_number': I('Số câu cụ thể (1-600), bỏ trống = ngẫu nhiên', 1, 600),
        'critical_only': {'type': 'boolean', 'description': 'Chỉ câu điểm liệt'},
+       'signs_only': {'type': 'boolean', 'description': 'Chỉ câu có hình biển báo/sa hình'},
        'answer': I('Đáp án người dùng chọn cho câu vừa hỏi (1-4)', 1, 4)})
-def driving_theory_quiz(vehicle='oto', question_number=None, critical_only=False, answer=None):
-    data = [x for x in _gplx() if not x.get('image')]
+def driving_theory_quiz(vehicle='oto', question_number=None, critical_only=False, signs_only=False, answer=None):
+    base = public_url()
+    data = [x for x in _gplx() if base or not x.get('image')]  # picture questions need our JPEG endpoint
     if answer and _quiz_state.get('last'):
         x = _quiz_state['last']
         ok = answer == x['correct_option']
@@ -298,18 +308,50 @@ def driving_theory_quiz(vehicle='oto', question_number=None, critical_only=False
         pool = [x for x in pool if x['chapter'] in (1, 2, 5, 6) and not re.search(r'(?i)ô tô|xe tải|sơ mi rơ moóc|kinh doanh vận tải', x['question'])] or data
     if critical_only:
         pool = [x for x in pool if x.get('is_critical')] or pool
+    if signs_only:
+        pool = [x for x in pool if x.get('image')] or pool
     if question_number:
         x = next((y for y in _gplx() if y['id'] == question_number), None)
         if not x:
             return 'Không có câu này.'
-        if x.get('image'):
-            return f'Câu {question_number} có hình biển báo/sa hình nên không đọc bằng giọng được; chọn câu khác.'
+        if x.get('image') and not base:
+            return f'Câu {question_number} có hình biển báo nhưng máy chủ chưa có địa chỉ công khai để gửi hình; chọn câu khác.'
     else:
         x = _rnd.choice(pool)
     _quiz_state['last'] = x
     opts = '\n'.join(f'{i}. {o}' for i, o in enumerate(x['options'], 1))
-    return (f'Câu {x["id"]} ({x["chapter_name"]}){" - CÂU ĐIỂM LIỆT" if x.get("is_critical") else ""}:\n{x["question"]}\n{opts}\n'
-            'Đọc câu hỏi và các đáp án, chờ người dùng chọn số rồi gọi lại công cụ với answer. Không nói đáp án trước.')
+    head = f'Câu {x["id"]} ({x["chapter_name"]}){" - CÂU ĐIỂM LIỆT" if x.get("is_critical") else ""}:\n{x["question"]}\n{opts}\n'
+    if x.get('image'):
+        url = f'{base}/gplx/{x["id"]}.jpg'
+        return (head + f'Câu này có HÌNH (biển báo/sa hình): {url}\n'
+                f'BẮT BUỘC: gọi self.screen.show_image với url="{url}" và caption="Câu {x["id"]}" để người dùng nhìn hình, '
+                'rồi đọc câu hỏi và các đáp án (Biển 1, Biển 2... là thứ tự trong hình, từ trái sang phải). '
+                'Chờ người dùng chọn số rồi gọi lại công cụ với answer. Không nói đáp án trước.')
+    return head + 'Đọc câu hỏi và các đáp án, chờ người dùng chọn số rồi gọi lại công cụ với answer. Không nói đáp án trước.'
+
+
+def gplx_image_jpeg(qid):
+    """Picture of question qid as a baseline JPEG that the robot can decode (source images are WebP)."""
+    from io import BytesIO
+    import urllib.request
+    from PIL import Image
+    from netutil import UA
+    x = next((y for y in _gplx() if y['id'] == qid and y.get('image')), None)
+    if not x:
+        return None
+    name = x['image'].split('/')[-1]
+    raw = urllib.request.urlopen(urllib.request.Request(GPLX_IMG.format(name=name), headers={'User-Agent': UA}), timeout=15).read()
+    im = Image.open(BytesIO(raw))
+    if im.mode in ('RGBA', 'LA', 'P'):
+        im = im.convert('RGBA')
+        bg = Image.new('RGB', im.size, (255, 255, 255))
+        bg.paste(im, mask=im.split()[-1])
+        im = bg
+    im = im.convert('RGB')
+    im.thumbnail((480, 360))
+    out = BytesIO()
+    im.save(out, 'JPEG', quality=88, progressive=False)
+    return out.getvalue()
 
 
 # ---------------- Tiện ích ----------------
