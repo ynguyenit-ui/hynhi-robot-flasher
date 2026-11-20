@@ -262,7 +262,11 @@
       setMsg($('save-msg'), 'Đã lưu. Trang nạp cập nhật sau khoảng 1 phút.', true);
       renderGeneral(); renderHistory();
     } catch (e) {
-      setMsg($('save-msg'), e.status === 409 ? 'Cấu hình vừa bị sửa ở nơi khác. Bấm Huỷ thay đổi để tải bản mới rồi sửa lại.' : 'Lưu lỗi: ' + e.message, false);
+      const noWrite = e.status === 403 || /not accessible|permission/i.test(e.message);
+      setMsg($('save-msg'), e.status === 409 ? 'Cấu hình vừa bị sửa ở nơi khác. Bấm Huỷ thay đổi để tải bản mới rồi sửa lại.'
+        : noWrite ? 'Token chưa có quyền GHI. Vào github.com → Settings → Developer settings → Fine-grained tokens → sửa token: Repository access chọn hynhi-robot-flasher, '
+          + 'Permissions → Contents: Read and write → Update. (Hoặc dùng token Classic có quyền "repo".) Rồi đăng xuất và đăng nhập lại.'
+        : 'Lưu lỗi: ' + e.message, false);
     } finally { btn.disabled = false; }
   });
   $('revert').addEventListener('click', () => load());

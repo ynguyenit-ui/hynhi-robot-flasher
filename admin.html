@@ -57,7 +57,8 @@ td,th{text-align:left;padding:8px;border-bottom:1px solid var(--line)}
     <p class="eyebrow">ĐĂNG NHẬP QUẢN TRỊ</p>
     <h1>Quản trị trang nạp</h1>
     <p class="lead">Thay đổi được lưu thẳng vào repo GitHub của trang nạp. Đăng nhập bằng <b>Personal access token</b> có quyền ghi repo
-      (<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">tạo token</a>: Fine-grained → chọn repo <code>hynhi-robot-flasher</code> → Contents: Read and write).</p>
+      (<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">tạo token Fine-grained</a>: Repository access → <b>Only select repositories</b> → <code>hynhi-robot-flasher</code>;
+      Permissions → Repository permissions → <b>Contents: Read and write</b>. Hoặc <a href="https://github.com/settings/tokens/new?scopes=repo&description=Hynhi%20admin" target="_blank" rel="noopener">token Classic</a> tích quyền <b>repo</b>).</p>
     <form id="login-form" class="adm-panel" style="max-width:560px;margin-top:16px">
       <label class="field">GitHub token<input type="password" name="token" required autocomplete="off" placeholder="github_pat_..."></label>
       <label class="field">Repo<input type="text" name="repo" value="ynguyenit-ui/hynhi-robot-flasher"></label>
@@ -141,6 +142,6 @@ td,th{text-align:left;padding:8px;border-bottom:1px solid var(--line)}
     </div>
   </div>
 </main>
-<script src="admin.js?v=1"></script>
+<script src="admin.js?v=2"></script>
 </body>
 </html>
