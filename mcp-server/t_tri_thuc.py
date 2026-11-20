@@ -286,6 +286,7 @@ def public_url():
 
 
 @tool('driving_theory_quiz', 'hoc_tap',
+      'CHỈ dùng khi robot KHÔNG có công cụ self.quiz.start (robot Hynhi có self.quiz.start: hiện hình biển báo, câu hỏi và đáp án lên màn hình, hãy dùng nó). '
       'Ôn thi lý thuyết bằng lái xe theo bộ 600 câu hỏi hiện hành (ô tô) và các câu dùng cho xe máy, có câu điểm liệt, câu biển báo/sa hình '
       '(robot hiện hình biển báo lên màn hình) và giải thích. Hỏi từng câu, người dùng trả lời số đáp án, sau đó gọi lại với answer để chấm.',
       {'vehicle': S('Loại bằng', ['oto', 'xemay'], 'oto'), 'question_number': I('Số câu cụ thể (1-600), bỏ trống = ngẫu nhiên', 1, 600),
