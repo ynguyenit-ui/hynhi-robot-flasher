@@ -51,7 +51,38 @@ def _aqi_text(v):
       {'city': S('Tên địa điểm, ví dụ "Hà Nội", "Đà Lạt", "Tokyo". Bỏ trống = thành phố mặc định'),
        'days': I('Số ngày dự báo (1-7)', 1, 7, 3)})
 def weather_forecast(city=None, days=3):
-    g = _geocode(city or CONFIG.get('city') or 'Hà Nội')
+    city = city or CONFIG.get('city') or 'Hà Nội'
+    try:
+        return _open_meteo(city, days)
+    except Exception as e:  # Open-Meteo rate-limits shared cloud IPs (HTTP 429): use wttr.in instead
+        try:
+            return _wttr(city, days)
+        except Exception:
+            raise e
+
+
+def _wttr(city, days):
+    name = CITY_ALIAS.get(fold(city), city)
+    w = fetch_json(f'https://wttr.in/{q(name)}?format=j1&lang=vi', ttl=900)
+    c = w['current_condition'][0]
+    desc = ((c.get('lang_vi') or c.get('weatherDesc') or [{}])[0].get('value') or '').lower()
+    area = (w.get('nearest_area') or [{}])[0]
+    place = ', '.join(x[0]['value'] for x in (area.get('areaName'), area.get('region'), area.get('country')) if x and x[0].get('value')) or city
+    lines = [f'Thời tiết {place}: {desc}, {c["temp_C"]}°C (cảm giác {c["FeelsLikeC"]}°C), độ ẩm {c["humidity"]}%, '
+             f'gió {c["windspeedKmph"]} km/h, UV {c.get("uvIndex", "?")}.']
+    for i, d in enumerate(w.get('weather', [])[:max(1, min(int(days or 3), 3))]):
+        dd = dt.date.fromisoformat(d['date'])
+        label = 'Hôm nay' if i == 0 else 'Ngày mai' if i == 1 else f'{THU[dd.weekday()]} {dd.day}/{dd.month}'
+        rain = max((int(h.get('chanceofrain', 0)) for h in d.get('hourly', [])), default=0)
+        hd = ((d.get('hourly') or [{}])[len(d.get('hourly') or [1]) // 2].get('lang_vi') or [{}])[0].get('value', '')
+        astro = (d.get('astronomy') or [{}])[0]
+        lines.append(f'{label}: {hd.lower()}, {d["mintempC"]}–{d["maxtempC"]}°C, khả năng mưa {rain}%'
+                     + (f', mặt trời mọc {astro.get("sunrise", "")} lặn {astro.get("sunset", "")}' if i == 0 else '') + '.')
+    return '\n'.join(lines)
+
+
+def _open_meteo(city, days):
+    g = _geocode(city)
     lat, lon = g['latitude'], g['longitude']
     w = fetch_json('https://api.open-meteo.com/v1/forecast?timezone=auto'
                    f'&latitude={lat}&longitude={lon}&forecast_days={days}'
