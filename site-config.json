@@ -42,7 +42,7 @@
     "accent": ""
   },
   "firmware": {
-    "password_sha256": "f7c41fba926bf7120f36df7a018dc291b6e23c5ce51036936cba5013ef6f052c",
+    "password_sha256": "",
     "protect": [
       "custom",
       "cam",
