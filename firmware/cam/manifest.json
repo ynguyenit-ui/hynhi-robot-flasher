@@ -1,6 +1,6 @@
 {
   "name": "Hynhi Robot Camera",
-  "version": "2.5.2-hynhi3.10.38 · 24/11/2026 · màn chờ 3D mới, chỉnh chữ, tra cứu dự phòng, camera ổn định · ESP32-S3 CAM",
+  "version": "2.5.2-hynhi3.10.38 · 24/11/2026 · giao diện Mạch sáng, màn chờ 3D mới, chỉnh chữ, tra cứu dự phòng, camera ổn định · ESP32-S3 CAM",
   "new_install_prompt_erase": true,
   "builds": [
     {
