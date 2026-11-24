@@ -8,8 +8,10 @@
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
 <script>try{var t=localStorage.getItem('hynhi-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="style.css?v=23">
-<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="style.css?v=30">
+<link rel="modulepreload" href="https://unpkg.com/esptool-js@0.5.7/bundle.js">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -55,13 +57,30 @@
           <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><svg class="ic"><use href="#i-camera"/></svg><b data-edit="fw.cam.title">Robot Camera</b><span data-edit="fw.cam.desc">ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
           <button type="button" role="radio" aria-checked="false" data-fw-pick="btbridge"><svg class="ic"><use href="#i-speaker"/></svg><b data-edit="fw.btbridge.title">Loa Bluetooth</b><span data-edit="fw.btbridge.desc">ESP32 classic · phát nhạc robot ra loa BT</span></button>
         </div>
-        <div class="actions">
-          <esp-web-install-button id="installer" manifest="firmware/custom/manifest.json">
-            <button slot="activate" class="button"><svg class="ic"><use href="#i-usb"/></svg>Kết nối và nạp firmware</button>
-            <span slot="unsupported" class="warn">Trình duyệt này không hỗ trợ Web Serial. Hãy mở bằng Chrome hoặc Edge trên máy tính.</span>
-            <span slot="not-allowed" class="warn">Cần mở trang qua HTTPS để dùng cổng USB.</span>
-          </esp-web-install-button>
-          <a class="ghost-link" id="wiring-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối</a>
+        <div class="fl">
+          <div class="fl-mode" role="radiogroup" aria-label="Kiểu nạp">
+            <label class="on"><input type="radio" name="fl-mode" value="update" checked><b>Cập nhật nhanh</b><small>Giữ Wi‑Fi và cài đặt. Chỉ ghi phần thay đổi, thường dưới 1 phút.</small></label>
+            <label><input type="radio" name="fl-mode" value="full"><b>Cài mới hoàn toàn</b><small>Xoá sạch bộ nhớ rồi nạp lại. Dùng cho bo mới hoặc khi robot lỗi.</small></label>
+          </div>
+          <div class="actions">
+            <div id="installer" manifest="firmware/custom/manifest.json">
+              <button slot="activate" type="button" class="button big" id="fl-go"><svg class="ic"><use href="#i-usb"/></svg>Kết nối và nạp firmware</button>
+            </div>
+            <a class="ghost-link" id="wiring-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối</a>
+          </div>
+          <details class="fl-adv"><summary>Tùy chọn nâng cao</summary>
+            <label>Tốc độ cổng USB-UART
+              <select id="fl-baud"><option value="921600" selected>921 600 (nhanh, mặc định)</option><option value="2000000">2 000 000 (rất nhanh, CH343/CP2102N)</option><option value="460800">460 800</option><option value="115200">115 200 (chậm, an toàn)</option></select>
+            </label>
+            <p class="fl-fallback">Bo dùng USB gốc của ESP32-S3 luôn chạy tốc độ tối đa. Nếu trình nạp mới gặp lỗi, dùng <button type="button" id="fl-legacy">trình nạp dự phòng (ESP Web Tools)</button>.</p>
+          </details>
+          <div class="fl-panel" id="fl-panel" hidden aria-live="polite">
+            <ol class="fl-steps" id="fl-steps"></ol>
+            <div class="fl-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="fl-bar" id="fl-bar"></div></div>
+            <div class="fl-meta"><b id="fl-bar-text">Đang chờ…</b><span id="fl-stat"></span></div>
+            <p class="fl-msg" id="fl-msg" role="status"></p>
+            <details class="fl-logwrap"><summary>Nhật ký chi tiết</summary><pre class="fl-log" id="fl-log"></pre><button type="button" class="ghost" id="fl-log-copy"><svg class="ic"><use href="#i-copy"/></svg>Sao chép nhật ký</button></details>
+          </div>
         </div>
         <div class="bridge-note" id="bridge-note" hidden>
           <p><b>Bo ESP32 không tự vào chế độ nạp?</b> Giữ nút <b>BOOT</b>, bấm rồi thả <b>EN</b>, giữ BOOT tới khi trang báo đang nạp.</p>
@@ -73,8 +92,8 @@
       <ol class="steps">
         <li><svg class="ic"><use href="#i-plug"/></svg><b data-edit="firmware.step-title1">Cắm cáp USB dữ liệu</b><span data-edit="firmware.step-text1">Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
         <li><svg class="ic"><use href="#i-usb"/></svg><b data-edit="firmware.step-title2">Bấm “Kết nối”</b><span data-edit="firmware.step-text2">Chọn cổng USB của robot trong danh sách.</span></li>
-        <li><svg class="ic"><use href="#i-trash"/></svg><b data-edit="firmware.step-title3">Chọn xóa bộ nhớ</b><span data-edit="firmware.step-text3">Nên chọn khi nạp lần đầu hoặc khi robot lỗi cấu hình.</span></li>
-        <li><svg class="ic"><use href="#i-clock"/></svg><b data-edit="firmware.step-title4">Chờ robot khởi động lại</b><span data-edit="firmware.step-text4">Mất khoảng 1–2 phút, đừng rút cáp.</span></li>
+        <li><svg class="ic"><use href="#i-trash"/></svg><b data-edit="firmware.step-title3">Chọn kiểu nạp</b><span data-edit="firmware.step-text3">Cập nhật nhanh giữ cài đặt; Cài mới hoàn toàn dùng cho bo mới hoặc khi robot lỗi.</span></li>
+        <li><svg class="ic"><use href="#i-clock"/></svg><b data-edit="firmware.step-title4">Chờ robot khởi động lại</b><span data-edit="firmware.step-text4">Trang hiện từng bước, tốc độ và thời gian còn lại. Đừng rút cáp khi đang ghi.</span></li>
       </ol>
     </section>
 
@@ -244,11 +263,20 @@
     </details>
   </section>
 </main>
-<footer>Hynhi Robot · <a href="https://github.com/esphome/esp-web-tools" rel="noopener">ESP Web Tools</a> · <a href="LICENSE">Giấy phép</a></footer>
+<footer>Hynhi Robot · nạp bằng <a href="https://github.com/espressif/esptool-js" rel="noopener">esptool-js</a> · <a href="LICENSE">Giấy phép</a></footer>
 <script src="site.js?v=1"></script>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
+<script type="module" src="installer.js?v=1"></script>
 <script src="mcp.js?v=1"></script>
 <script src="wiring.js?v=3"></script>
 <script type="module" src="diag.js?v=4"></script>
+<script>
+document.getElementById('fl-legacy')?.addEventListener('click',async e=>{
+  const holder=e.target.closest('.fl-fallback');e.target.disabled=true;e.target.textContent='đang tải…';
+  await import('https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module');
+  const b=document.createElement('esp-web-install-button');b.setAttribute('manifest',document.getElementById('installer').getAttribute('manifest'));
+  b.innerHTML='<button slot="activate" type="button" class="ghost">Mở trình nạp dự phòng</button>';holder.after(b);e.target.textContent='đã sẵn sàng bên dưới';
+});
+</script>
 </body>
 </html>
