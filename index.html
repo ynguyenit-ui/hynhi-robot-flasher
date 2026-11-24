@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#041029">
 <title>Hynhi Robot | Nạp firmware</title>
 <meta name="description" content="Nạp firmware Hynhi Robot (ESP32-S3) qua USB ngay trên trình duyệt, xem sơ đồ đấu nối và chẩn đoán robot.">
 <link rel="icon" href="images/logo.png">
 <script>try{var t=localStorage.getItem('hynhi-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="style.css?v=30">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css?v=31">
 <link rel="modulepreload" href="https://unpkg.com/esptool-js@0.5.7/bundle.js">
 </head>
 <body>
@@ -42,60 +43,64 @@
     <a href="#mcp"><svg class="ic"><use href="#i-puzzle"/></svg>MCP</a>
     <a href="#diag"><svg class="ic"><use href="#i-pulse"/></svg>Chẩn đoán</a>
   </nav>
-  <button type="button" class="iconbtn" id="theme" aria-label="Đổi giao diện sáng/tối"><svg class="ic"><use href="#i-moon"/></svg></button>
+  <button type="button" class="iconbtn" id="theme" hidden aria-label="Đổi giao diện sáng/tối"><svg class="ic"><use href="#i-moon"/></svg></button>
 </header>
 
 <main>
   <div id="firmware" class="view">
-    <section class="card hero">
-      <div class="hero-text">
-        <p class="eyebrow" data-edit="firmware.eyebrow1">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
-        <h1 data-edit="firmware.title1">Nạp firmware<br>cho Hynhi Robot</h1>
-        <p class="lead" data-edit="firmware.lead1">Chọn loại robot, cắm cáp USB rồi bấm nạp. Dùng Chrome hoặc Edge trên máy tính.</p>
+    <section class="hero-a">
+      <div class="halo"><img src="images/logo.png" alt="Hynhi Robot" width="148" height="148"></div>
+      <p class="eyebrow" data-edit="firmware.eyebrow1">NẠP QUA USB · KHÔNG CẦN CÀI PHẦN MỀM</p>
+      <h1 data-edit="firmware.title1">Đánh thức <span class="grad-text">Hynhi Robot</span><br>trong 3 bước</h1>
+      <p class="lead" data-edit="firmware.lead1">Chọn robot, chọn kiểu nạp, cắm cáp USB rồi bấm nạp. Trang hiện tiến độ từng bước. Dùng Chrome hoặc Edge trên máy tính.</p>
+    </section>
+    <div class="wiz">
+      <section class="step">
+        <header><span class="num">1</span><h2>Chọn robot</h2></header>
         <div class="variants" role="radiogroup" aria-label="Chọn firmware">
           <button type="button" role="radio" aria-checked="true" data-fw-pick="custom"><svg class="ic"><use href="#i-desk"/></svg><b data-edit="fw.custom.title">Robot để bàn</b><span data-edit="fw.custom.desc">ESP32-S3 N16R8 · không camera</span></button>
           <button type="button" role="radio" aria-checked="false" data-fw-pick="cam"><svg class="ic"><use href="#i-camera"/></svg><b data-edit="fw.cam.title">Robot Camera</b><span data-edit="fw.cam.desc">ESP32-S3 CAM N16R8 · OV3660 / OV5640</span></button>
           <button type="button" role="radio" aria-checked="false" data-fw-pick="btbridge"><svg class="ic"><use href="#i-speaker"/></svg><b data-edit="fw.btbridge.title">Loa Bluetooth</b><span data-edit="fw.btbridge.desc">ESP32 classic · phát nhạc robot ra loa BT</span></button>
         </div>
-        <div class="fl">
-          <div class="fl-mode" role="radiogroup" aria-label="Kiểu nạp">
-            <label class="on"><input type="radio" name="fl-mode" value="update" checked><b>Cập nhật nhanh</b><small>Giữ Wi‑Fi và cài đặt. Chỉ ghi phần thay đổi, thường dưới 1 phút.</small></label>
-            <label><input type="radio" name="fl-mode" value="full"><b>Cài mới hoàn toàn</b><small>Xoá sạch bộ nhớ rồi nạp lại. Dùng cho bo mới hoặc khi robot lỗi.</small></label>
-          </div>
-          <div class="actions">
-            <div id="installer" manifest="firmware/custom/manifest.json">
-              <button slot="activate" type="button" class="button big" id="fl-go"><svg class="ic"><use href="#i-usb"/></svg>Kết nối và nạp firmware</button>
-            </div>
-            <a class="ghost-link" id="wiring-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối</a>
-          </div>
-          <details class="fl-adv"><summary>Tùy chọn nâng cao</summary>
-            <label>Tốc độ cổng USB-UART
-              <select id="fl-baud"><option value="921600" selected>921 600 (nhanh, mặc định)</option><option value="2000000">2 000 000 (rất nhanh, CH343/CP2102N)</option><option value="460800">460 800</option><option value="115200">115 200 (chậm, an toàn)</option></select>
-            </label>
-            <p class="fl-fallback">Bo dùng USB gốc của ESP32-S3 luôn chạy tốc độ tối đa. Nếu trình nạp mới gặp lỗi, dùng <button type="button" id="fl-legacy">trình nạp dự phòng (ESP Web Tools)</button>.</p>
-          </details>
-          <div class="fl-panel" id="fl-panel" hidden aria-live="polite">
-            <ol class="fl-steps" id="fl-steps"></ol>
-            <div class="fl-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="fl-bar" id="fl-bar"></div></div>
-            <div class="fl-meta"><b id="fl-bar-text">Đang chờ…</b><span id="fl-stat"></span></div>
-            <p class="fl-msg" id="fl-msg" role="status"></p>
-            <details class="fl-logwrap"><summary>Nhật ký chi tiết</summary><pre class="fl-log" id="fl-log"></pre><button type="button" class="ghost" id="fl-log-copy"><svg class="ic"><use href="#i-copy"/></svg>Sao chép nhật ký</button></details>
-          </div>
+        <a class="ghost-link" id="wiring-link" href="#wiring"><svg class="ic"><use href="#i-map"/></svg>Sơ đồ đấu nối của bản này</a>
+      </section>
+      <section class="step">
+        <header><span class="num">2</span><h2>Kiểu nạp</h2></header>
+        <div class="fl-mode" role="radiogroup" aria-label="Kiểu nạp">
+          <label class="on"><input type="radio" name="fl-mode" value="update" checked><svg class="ic"><use href="#i-flash"/></svg><b>Cập nhật nhanh</b><small>Giữ Wi‑Fi và cài đặt. Chỉ ghi phần thay đổi, thường dưới 1 phút.</small></label>
+          <label><input type="radio" name="fl-mode" value="full"><svg class="ic"><use href="#i-trash"/></svg><b>Cài mới hoàn toàn</b><small>Xoá sạch bộ nhớ rồi nạp lại. Cho bo mới hoặc khi robot lỗi.</small></label>
         </div>
+        <details class="fl-adv"><summary>Tùy chọn nâng cao</summary>
+          <label>Tốc độ cổng USB-UART
+            <select id="fl-baud"><option value="921600" selected>921 600 (nhanh, mặc định)</option><option value="2000000">2 000 000 (rất nhanh, CH343/CP2102N)</option><option value="460800">460 800</option><option value="115200">115 200 (chậm, an toàn)</option></select>
+          </label>
+          <p class="fl-fallback">Bo dùng USB gốc của ESP32-S3 luôn chạy tốc độ tối đa. Nếu trình nạp mới gặp lỗi, dùng <button type="button" id="fl-legacy">trình nạp dự phòng (ESP Web Tools)</button>.</p>
+        </details>
         <div class="bridge-note" id="bridge-note" hidden>
           <p><b>Bo ESP32 không tự vào chế độ nạp?</b> Giữ nút <b>BOOT</b>, bấm rồi thả <b>EN</b>, giữ BOOT tới khi trang báo đang nạp.</p>
-          <p><b>Sau khi nạp:</b> điện thoại vào Wi-Fi <b>Hynhi-BT-xxxx</b>, mở <b>192.168.4.1</b>, chọn cùng Wi-Fi với robot. Bật loa ở chế độ ghép đôi (đèn nháy): bridge tự tìm và kết nối. Robot tự thấy bridge ở tab Bluetooth.</p>
+          <p><b>Sau khi nạp:</b> điện thoại vào Wi-Fi <b>Hynhi-BT-xxxx</b>, mở <b>192.168.4.1</b>, chọn cùng Wi-Fi với robot. Bật loa ở chế độ ghép đôi: bridge tự tìm và kết nối.</p>
           <p>Chỉ dùng ESP32 classic (WROOM-32, 32D/E, 32S, 32U). ESP32-S2/S3/C3 không có Bluetooth Classic.</p>
         </div>
-        <ul class="facts" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
-      </div>
-      <ol class="steps">
-        <li><svg class="ic"><use href="#i-plug"/></svg><b data-edit="firmware.step-title1">Cắm cáp USB dữ liệu</b><span data-edit="firmware.step-text1">Dùng cáp có truyền dữ liệu, không phải cáp chỉ sạc.</span></li>
-        <li><svg class="ic"><use href="#i-usb"/></svg><b data-edit="firmware.step-title2">Bấm “Kết nối”</b><span data-edit="firmware.step-text2">Chọn cổng USB của robot trong danh sách.</span></li>
-        <li><svg class="ic"><use href="#i-trash"/></svg><b data-edit="firmware.step-title3">Chọn kiểu nạp</b><span data-edit="firmware.step-text3">Cập nhật nhanh giữ cài đặt; Cài mới hoàn toàn dùng cho bo mới hoặc khi robot lỗi.</span></li>
-        <li><svg class="ic"><use href="#i-clock"/></svg><b data-edit="firmware.step-title4">Chờ robot khởi động lại</b><span data-edit="firmware.step-text4">Trang hiện từng bước, tốc độ và thời gian còn lại. Đừng rút cáp khi đang ghi.</span></li>
-      </ol>
-    </section>
+      </section>
+      <section class="step">
+        <header><span class="num">3</span><h2>Kết nối và nạp</h2></header>
+        <div class="ring" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><linearGradient id="ring-grad" x1="0" x2="1"><stop offset="0" stop-color="#2f9bff"/><stop offset="1" stop-color="#31d0ff"/></linearGradient></defs><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" id="fl-ring" cx="60" cy="60" r="52"/></svg>
+          <div class="ring-mid"><b id="fl-pct">0%</b><span id="fl-bar-text">Sẵn sàng</span></div></div>
+        <div class="actions">
+          <div id="installer" manifest="firmware/custom/manifest.json">
+            <button slot="activate" type="button" class="button big" id="fl-go"><svg class="ic"><use href="#i-usb"/></svg>Kết nối và nạp firmware</button>
+          </div>
+        </div>
+        <div class="fl-panel" id="fl-panel" hidden aria-live="polite">
+          <div class="fl-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="fl-bar" id="fl-bar"></div></div>
+          <ol class="fl-steps" id="fl-steps"></ol>
+          <div class="fl-meta"><span id="fl-stat"></span></div>
+          <p class="fl-msg" id="fl-msg" role="status"></p>
+          <details class="fl-logwrap"><summary>Nhật ký chi tiết</summary><pre class="fl-log" id="fl-log"></pre><button type="button" class="ghost" id="fl-log-copy"><svg class="ic"><use href="#i-copy"/></svg>Sao chép nhật ký</button></details>
+        </div>
+      </section>
+    </div>
+    <ul class="facts center" id="facts" aria-live="polite"><li>Đang đọc gói firmware…</li></ul>
 
     <section id="wiring" class="card">
       <div class="view-head">
@@ -267,6 +272,11 @@
 <script src="site.js?v=1"></script>
 <script src="app.js?v=14"></script>
 <script type="module" src="installer.js?v=1"></script>
+<script>
+/* progress ring follows the installer's bar */
+(()=>{const bar=document.getElementById('fl-bar'),ring=document.getElementById('fl-ring'),pct=document.getElementById('fl-pct');if(!bar||!ring)return;
+new MutationObserver(()=>{const p=parseFloat(bar.style.width)||0;ring.style.strokeDashoffset=326.7*(1-p/100);pct.textContent=Math.round(p)+'%';}).observe(bar,{attributes:true});})();
+</script>
 <script src="mcp.js?v=1"></script>
 <script src="wiring.js?v=3"></script>
 <script type="module" src="diag.js?v=4"></script>
