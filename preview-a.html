@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hynhi Robot · Mạch sáng (phương án A)</title>
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;600&display=swap">
+<link rel="modulepreload" href="https://unpkg.com/esptool-js@0.5.7/bundle.js">
+<style>
+:root{--ink:#eaf3ff;--muted:#93acd2;--line:rgba(120,180,255,.18);--glass:rgba(8,24,54,.62);--glass2:rgba(14,38,82,.55);
+  --blue:#2f9bff;--cyan:#31d0ff;--gold:#ffc93c;--red:#ff4d5e;--ok:#34d98f;--grad:linear-gradient(135deg,#2f9bff,#22c7f5);
+  color-scheme:dark;font:15px/1.6 "Be Vietnam Pro",system-ui,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);background:
+  radial-gradient(900px 520px at 80% -10%,rgba(49,208,255,.20),transparent 60%),
+  radial-gradient(700px 480px at -10% 110%,rgba(255,77,94,.14),transparent 60%),
+  url(images/circuit.svg) 0 0/240px,
+  linear-gradient(180deg,#041029 0%,#030a1d 100%);background-attachment:fixed}
+h1,h2,h3,.brand b{font-family:"Exo 2",system-ui,sans-serif;letter-spacing:.01em}
+a{color:var(--cyan)}
+[hidden]{display:none!important}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* top bar */
+.bar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:16px;padding:12px max(16px,4vw);background:rgba(3,10,29,.55);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto}
+.brand img{width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px rgba(49,208,255,.35),0 0 18px rgba(49,208,255,.35)}
+.brand b{font-size:1.15rem;font-weight:800;background:linear-gradient(180deg,#ffe08a,#e2a000);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav{display:flex;gap:4px}
+.nav a{padding:7px 14px;border-radius:999px;color:var(--muted);text-decoration:none;font-weight:600;font-size:.9rem}
+.nav a.on{color:#fff;background:rgba(47,155,255,.18);box-shadow:inset 0 0 0 1px rgba(47,155,255,.5)}
+/* hero */
+.hero{text-align:center;padding:48px 16px 22px}
+.halo{position:relative;width:148px;height:148px;margin:0 auto 18px}
+.halo img{width:100%;height:100%;border-radius:50%;position:relative;z-index:1}
+.halo::before{content:"";position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,var(--cyan),transparent 40%,var(--red),transparent 75%,var(--cyan));filter:blur(10px);opacity:.55;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.kicker{display:inline-flex;gap:8px;align-items:center;font:700 .72rem/1 "Be Vietnam Pro",sans-serif;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.kicker::before,.kicker::after{content:"";width:22px;height:2px;background:var(--red);border-radius:2px}
+h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.08;margin:12px 0 10px;font-weight:800;text-wrap:balance}
+h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);max-width:56ch;margin:0 auto}
+/* wizard */
+.wiz{max-width:1120px;margin:18px auto 40px;padding:0 16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.step{position:relative;background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:22px;backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:14px;min-width:0}
+.step header{display:flex;align-items:center;gap:12px}
+.num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:800 1rem "Exo 2",sans-serif;background:var(--grad);color:#fff;box-shadow:0 0 18px rgba(47,155,255,.5)}
+.step h2{font-size:1.15rem;margin:0}
+.tiles{display:grid;gap:10px}
+.tile{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center;text-align:left;padding:12px 14px;border-radius:16px;border:1.5px solid var(--line);background:var(--glass2);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,transform .15s}
+.tile:hover{transform:translateY(-1px);border-color:rgba(49,208,255,.45)}
+.tile .ic{grid-row:span 2;width:26px;height:26px;padding:8px;box-sizing:content-box;border-radius:12px;background:rgba(47,155,255,.14);color:var(--cyan)}
+.tile b{font-weight:600}
+.tile small{color:var(--muted);font-size:.78rem;line-height:1.35}
+.tile[aria-checked=true],.tile.on{border-color:var(--cyan);background:rgba(47,155,255,.16);box-shadow:0 0 0 3px rgba(49,208,255,.12)}
+.tile[aria-checked=true] .ic,.tile.on .ic{background:var(--grad);color:#fff}
+.tile input{position:absolute;opacity:0;pointer-events:none}
+details{color:var(--muted);font-size:.82rem}
+details select{font:inherit;margin-top:8px;padding:6px 12px;border-radius:999px;background:#0a1d40;color:var(--ink);border:1px solid var(--line)}
+/* flash step */
+.ring{position:relative;width:170px;height:170px;margin:4px auto 0}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bg{stroke:rgba(120,180,255,.14)}
+.ring .fg{stroke:url(#g);stroke-linecap:round;transition:stroke-dashoffset .3s}
+.ring .mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring .mid b{font:800 2.1rem "Exo 2",sans-serif}
+.ring .mid span{font-size:.75rem;color:var(--muted);max-width:120px}
+.go{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:46px;border:0;border-radius:999px;background:var(--grad);color:#fff;font:700 1rem "Be Vietnam Pro",sans-serif;cursor:pointer;box-shadow:0 8px 26px rgba(34,140,255,.45)}
+.go:disabled{opacity:.6;cursor:wait}
+.fl-track{display:none}
+.fl-steps{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.83rem}
+.fl-steps li{display:flex;gap:9px;align-items:center;color:var(--muted)}
+.fl-steps i{width:9px;height:9px;border-radius:50%;background:rgba(120,180,255,.25);flex:none}
+.fl-steps small{margin-left:auto;font-size:.72rem;opacity:.8;text-align:right}
+.fl-steps li[data-state=run]{color:#fff;font-weight:600}.fl-steps li[data-state=run] i{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.fl-steps li[data-state=done] i{background:var(--ok)}.fl-steps li[data-state=fail]{color:var(--red)}.fl-steps li[data-state=fail] i{background:var(--red)}
+.fl-steps li[data-state=skip]{opacity:.45}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.msg{min-height:1.3em;font-weight:600;font-size:.88rem;margin:0}.msg[data-tone=ok]{color:var(--ok)}.msg[data-tone=bad]{color:var(--red)}
+.log summary{cursor:pointer}.log pre{max-height:160px;overflow:auto;background:#020814;border-radius:12px;padding:10px;font:11px/1.45 ui-monospace,Consolas,monospace;color:#b9cdea;white-space:pre-wrap}
+.ghost{font:inherit;font-size:.78rem;background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer}
+.facts{max-width:1120px;margin:0 auto 46px;padding:0 16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.facts li{list-style:none;font-size:.78rem;color:var(--muted);padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(8,24,54,.5)}
+@media(max-width:900px){.wiz{grid-template-columns:minmax(0,1fr)}.nav{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#2f9bff"/><stop offset="1" stop-color="#31d0ff"/></linearGradient></defs>
+<symbol id="i-desk" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="11" rx="3"/><path d="M9 9h.01M15 9h.01M10 12h4M8 20h8M12 15v5"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+<symbol id="i-spk" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="4"/><circle cx="12" cy="14" r="3"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></symbol>
+<symbol id="i-usb" viewBox="0 0 24 24"><path d="M12 2v14M8 6l4-4 4 4M7 10v3l5 3 5-3v-3"/><circle cx="12" cy="19" r="2.5"/></symbol>
+</svg>
+<header class="bar">
+  <a class="brand" href="#"><img src="images/logo.png" alt=""><b>Hynhi Robot</b></a>
+  <nav class="nav"><a class="on" href="#">Nạp firmware</a><a href="index.html#phicom">Loa Phicom</a><a href="index.html#mcp">MCP</a><a href="index.html#diag">Chẩn đoán</a></nav>
+</header>
+<section class="hero">
+  <div class="halo"><img src="images/logo.png" alt="Hynhi Robot"></div>
+  <span class="kicker">Nạp qua USB · không cần cài phần mềm</span>
+  <h1>Đánh thức <span>Hynhi Robot</span><br>trong 3 bước</h1>
+  <p class="lead">Chọn robot, chọn kiểu nạp, cắm cáp rồi bấm nạp. Trang hiện tiến độ từng bước. Dùng Chrome hoặc Edge trên máy tính.</p>
+</section>
+<main class="wiz">
+  <section class="step">
+    <header><span class="num">1</span><h2>Chọn robot</h2></header>
+    <div class="tiles" role="radiogroup">
+      <button class="tile" role="radio" aria-checked="true" data-fw="custom"><svg class="ic"><use href="#i-desk"/></svg><b>Robot để bàn</b><small>ESP32-S3 N16R8 · không camera</small></button>
+      <button class="tile" role="radio" aria-checked="false" data-fw="cam"><svg class="ic"><use href="#i-cam"/></svg><b>Robot Camera</b><small>ESP32-S3 CAM · OV3660 / OV5640</small></button>
+      <button class="tile" role="radio" aria-checked="false" data-fw="btbridge"><svg class="ic"><use href="#i-spk"/></svg><b>Loa Bluetooth</b><small>ESP32 classic · phát nhạc ra loa BT</small></button>
+    </div>
+  </section>
+  <section class="step">
+    <header><span class="num">2</span><h2>Kiểu nạp</h2></header>
+    <div class="tiles">
+      <label class="tile on" style="position:relative"><input type="radio" name="fl-mode" value="update" checked><svg class="ic"><use href="#i-bolt"/></svg><b>Cập nhật nhanh</b><small>Giữ Wi‑Fi và cài đặt, chỉ ghi phần thay đổi.</small></label>
+      <label class="tile" style="position:relative"><input type="radio" name="fl-mode" value="full"><svg class="ic"><use href="#i-reset"/></svg><b>Cài mới hoàn toàn</b><small>Xoá sạch rồi nạp lại. Cho bo mới hoặc khi lỗi.</small></label>
+    </div>
+    <details><summary>Tùy chọn nâng cao</summary>
+      <select id="fl-baud"><option value="921600" selected>921 600 baud (mặc định)</option><option value="2000000">2 000 000 baud</option><option value="460800">460 800 baud</option><option value="115200">115 200 baud</option></select>
+    </details>
+  </section>
+  <section class="step">
+    <header><span class="num">3</span><h2>Kết nối và nạp</h2></header>
+    <div class="ring" aria-hidden="true"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52" stroke-width="9" fill="none"/><circle class="fg" id="ring" cx="60" cy="60" r="52" stroke-width="9" fill="none" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg>
+      <div class="mid"><b id="pct">0%</b><span id="fl-bar-text">Sẵn sàng</span></div></div>
+    <div id="installer" manifest="firmware/custom/manifest.json"><button class="go" id="fl-go" slot="activate"><svg class="ic"><use href="#i-usb"/></svg>Kết nối và nạp</button></div>
+    <div id="fl-panel" hidden>
+      <div class="fl-track"><div id="fl-bar"></div></div>
+      <ol class="fl-steps" id="fl-steps"></ol>
+      <div class="meta"><span id="fl-stat"></span></div>
+      <p class="msg" id="fl-msg"></p>
+      <details class="log"><summary>Nhật ký</summary><pre id="fl-log"></pre><button class="ghost" id="fl-log-copy">Sao chép</button></details>
+    </div>
+  </section>
+</main>
+<ul class="facts" id="facts"><li>Đang đọc gói firmware…</li></ul>
+<script>
+const $=id=>document.getElementById(id);
+function pick(dir){document.querySelectorAll('[data-fw]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.fw===dir)));$('installer').setAttribute('manifest','firmware/'+dir+'/manifest.json');
+ fetch('firmware/'+dir+'/manifest.json',{cache:'no-cache'}).then(r=>r.json()).then(m=>{$('facts').innerHTML=[m.version,m.builds[0].chipFamily,m.builds[0].parts.length+' phần nạp'].map(t=>'<li>'+t+'</li>').join('')}).catch(()=>{$('facts').innerHTML='<li>Chưa có gói firmware</li>'})}
+document.querySelectorAll('[data-fw]').forEach(b=>b.onclick=()=>pick(b.dataset.fw));
+document.querySelectorAll('input[name=fl-mode]').forEach(i=>i.onchange=()=>document.querySelectorAll('label.tile').forEach(l=>l.classList.toggle('on',l.querySelector('input').checked)));
+new MutationObserver(()=>{const p=parseFloat($('fl-bar').style.width)||0;$('ring').style.strokeDashoffset=326.7*(1-p/100);$('pct').textContent=Math.round(p)+'%'}).observe($('fl-bar'),{attributes:true});
+pick('custom');
+</script>
+<script type="module" src="installer.js?v=1"></script>
+</body>
+</html>
