@@ -1,6 +1,6 @@
 {
   "name": "Hynhi Robot",
-  "version": "2.5.2-hynhi3.10.38 · 24/11/2026 · giao diện Mạch sáng, màn chờ 3D mới, chỉnh chữ, tra cứu dự phòng, camera ổn định · chân custom",
+  "version": "2.5.2-hynhi3.10.39 · 25/11/2026 · giao diện gọn hơn, Mạch sáng, màn chờ 3D mới, chỉnh chữ, tra cứu dự phòng, camera ổn định · chân custom",
   "new_install_prompt_erase": true,
   "builds": [
     {
