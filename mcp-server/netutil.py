@@ -18,7 +18,7 @@ class FetchError(Exception):
     pass
 
 
-def fetch(url, data=None, headers=None, timeout=12, ttl=0, encoding=None):
+def fetch(url, data=None, headers=None, timeout=12, ttl=0, encoding=None, retries=2):
     """Return the body as text. ttl>0 caches successful responses for that many seconds."""
     key = (url, data if isinstance(data, (bytes, str)) else json.dumps(data, sort_keys=True))
     if ttl:
@@ -34,7 +34,7 @@ def fetch(url, data=None, headers=None, timeout=12, ttl=0, encoding=None):
     elif isinstance(data, str):
         data = data.encode()
     last, text = None, None
-    for attempt in range(2):
+    for attempt in range(retries):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, data=data, headers=h), timeout=timeout) as r:
                 raw = r.read()
@@ -119,7 +119,13 @@ def _ddg(query, n):
     global _ddg_block_until
     if time.time() < _ddg_block_until:
         return []
-    page = fetch('https://html.duckduckgo.com/html/?kl=vn-vi&q=' + urllib.parse.quote_plus(query))
+    # DuckDuckGo often hangs for cloud IPs: fail fast (4 s, no retry) and skip it for 10 minutes,
+    # otherwise every search waited ~25 s before Google News answered.
+    try:
+        page = fetch('https://html.duckduckgo.com/html/?kl=vn-vi&q=' + urllib.parse.quote_plus(query), timeout=4, retries=1)
+    except Exception:
+        _ddg_block_until = time.time() + 600
+        return []
     if 'result__a' not in page:  # rate limited ("anomaly" page): back off for 10 minutes
         _ddg_block_until = time.time() + 600
         return []
