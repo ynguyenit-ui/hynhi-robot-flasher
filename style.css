@@ -252,3 +252,21 @@ footer a{color:var(--muted)}
 }
 @media (max-width:440px){.tabs .ic{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* ===== compact pass v1: less dead space, slimmer controls ===== */
+.hero-a{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:20px;row-gap:4px;align-items:center;text-align:left;max-width:1100px;margin:18px auto 14px;padding:0 16px}
+.hero-a .halo{grid-row:1/4;margin:0!important;width:88px;height:88px}
+.hero-a .halo img{width:88px;height:88px}
+.hero-a .eyebrow{margin:0;justify-content:flex-start}
+.hero-a h1{margin:0;font-size:clamp(24px,3.2vw,34px);line-height:1.15}
+.hero-a h1 br{display:none}
+.hero-a .lead{margin:0;font-size:14px;max-width:none}
+.step{padding:14px 16px!important}
+.step .choice,.step label.choice,.step button.choice{padding:10px 12px!important;min-height:0!important}
+.ring{width:120px!important;height:120px!important;margin:6px auto 10px!important}
+.ring-mid b{font-size:24px!important}
+button,.btn{min-height:36px;padding:7px 16px;font-size:14px}
+.hero-text h1{font-size:clamp(24px,3.2vw,34px)!important;margin:4px 0!important}
+.hero-text .lead{font-size:14px!important}
+@media(max-width:700px){.hero-a{grid-template-columns:1fr;text-align:center;justify-items:center}.hero-a .halo{grid-row:auto}.hero-a .eyebrow{justify-content:center}}
+.hero-a h1 .grad-text{margin-right:.28em}
